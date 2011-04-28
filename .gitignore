@@ -1,0 +1,9 @@
+*.6
+*.8
+*.o
+*.a
+_obj
+_cgo*
+demos/hello
+demos/versions
+
