@@ -6,4 +6,4 @@ _obj
 _cgo*
 demos/hello
 demos/versions
-
+demos/test
