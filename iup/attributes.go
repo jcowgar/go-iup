@@ -20,22 +20,28 @@
 package iup
 
 /*
+#include <stdlib.h>
 #include <iup.h>
 */
 import "C"
+import "unsafe"
 
-const (
-	// iup.go version string.
-	//
-	// iup.go version string is based off the built-against version
-	// code of Iup with the addition of a `iup.go' version code
-	// as the forth digit. i.e. 3.5.0.1 means that this version of
-	// iup.go was built with Iup 3.5.0 in mind and is the `.1' release
-	// of iup.go against Iup 3.5.0.
-	IupGoVersion = "3.5.0.1"
-)
+func (ih *Ihandle) StoreAttribute(name, value string) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	cValue := C.CString(value)
+	defer C.free(unsafe.Pointer(cValue))
+	
+	C.IupStoreAttribute(ih.h, cName, cValue)
+}
 
-// Primary widget handle type.
-type Ihandle struct {
-	h *C.Ihandle
+func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	cValue := C.CString(value)
+	defer C.free(unsafe.Pointer(cValue))
+	
+	C.IupStoreAttributeId(ih.h, cName, C.int(id), cValue)
 }

@@ -20,22 +20,41 @@
 package iup
 
 /*
+#include <stdlib.h>
 #include <iup.h>
 */
 import "C"
 
-const (
-	// iup.go version string.
-	//
-	// iup.go version string is based off the built-against version
-	// code of Iup with the addition of a `iup.go' version code
-	// as the forth digit. i.e. 3.5.0.1 means that this version of
-	// iup.go was built with Iup 3.5.0 in mind and is the `.1' release
-	// of iup.go against Iup 3.5.0.
-	IupGoVersion = "3.5.0.1"
-)
+func toC(ihs []*Ihandle) []*C.Ihandle {
+	result := make([]*C.Ihandle, len(ihs))
+	
+	for k, v := range ihs {
+		result[k] = v.h
+	}
+	
+	return result
+}
 
-// Primary widget handle type.
-type Ihandle struct {
-	h *C.Ihandle
+func hboxv(ihs []*C.Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupHboxv(&ihs[0])}
+}
+
+func Hbox(args ...*Ihandle) *Ihandle {
+	return hboxv(toC(args))
+}
+
+func Hboxv(args []*Ihandle) *Ihandle {
+	return hboxv(toC(args))
+}
+
+func vboxv(ihs []*C.Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupVboxv(&ihs[0])}
+}
+
+func Vbox(args ...*Ihandle) *Ihandle {
+	return vboxv(toC(args))
+}
+
+func Vboxv(args []*Ihandle) *Ihandle {
+	return vboxv(toC(args))
 }

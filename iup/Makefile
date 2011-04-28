@@ -24,7 +24,11 @@ TARG=github.com/jcowgar/iup.go
 CGOFILES=\
 	common.go \
 	core.go \
-	dialog.go
+	attributes.go \
+	events.go \
+	layout.go \
+	dialog.go \
+	controls.go
 
 GOFILES=\
 	doc.go

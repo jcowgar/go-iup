@@ -20,22 +20,33 @@
 package iup
 
 /*
+#include <stdlib.h>
 #include <iup.h>
 */
 import "C"
 
-const (
-	// iup.go version string.
-	//
-	// iup.go version string is based off the built-against version
-	// code of Iup with the addition of a `iup.go' version code
-	// as the forth digit. i.e. 3.5.0.1 means that this version of
-	// iup.go was built with Iup 3.5.0 in mind and is the `.1' release
-	// of iup.go against Iup 3.5.0.
-	IupGoVersion = "3.5.0.1"
-)
+//import "unsafe"
 
-// Primary widget handle type.
-type Ihandle struct {
-	h *C.Ihandle
+func MainLoop() int {
+	return int(C.IupMainLoop())
+}
+
+func MainLoopLevel() int {
+	return int(C.IupMainLoopLevel())
+}
+
+func LoopStep() int {
+	return int(C.IupLoopStep())
+}
+
+func LoopStepWait() int {
+	return int(C.IupLoopStepWait())
+}
+
+func ExitLoop() {
+	C.IupExitLoop()
+}
+
+func Flush() {
+	C.IupFlush()
 }

@@ -27,6 +27,14 @@ import "C"
 
 import "unsafe"
 
+func Dialog(child *Ihandle) (ih *Ihandle) {
+	return &Ihandle{h: C.IupDialog(child.h)}
+}
+
+func Show(ih *Ihandle) int {
+	return int(C.IupShow(ih.h))
+}
+
 func Message(title, message string) {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))

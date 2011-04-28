@@ -20,22 +20,26 @@
 package iup
 
 /*
+#include <stdlib.h>
 #include <iup.h>
 */
 import "C"
 
-const (
-	// iup.go version string.
-	//
-	// iup.go version string is based off the built-against version
-	// code of Iup with the addition of a `iup.go' version code
-	// as the forth digit. i.e. 3.5.0.1 means that this version of
-	// iup.go was built with Iup 3.5.0 in mind and is the `.1' release
-	// of iup.go against Iup 3.5.0.
-	IupGoVersion = "3.5.0.1"
-)
+import "unsafe"
 
-// Primary widget handle type.
-type Ihandle struct {
-	h *C.Ihandle
+func Button(title, action string) *Ihandle {
+	cTitle := C.CString(title)
+	defer C.free(unsafe.Pointer(cTitle))
+	
+	cAction := C.CString(action)
+	defer C.free(unsafe.Pointer(cAction))
+	
+	return &Ihandle{h: C.IupButton(cTitle, cAction)}
+}
+
+func Label(title string) *Ihandle {
+	cTitle := C.CString(title)
+	defer C.free(unsafe.Pointer(cTitle))
+	
+	return &Ihandle{h: C.IupLabel(cTitle)}
 }
