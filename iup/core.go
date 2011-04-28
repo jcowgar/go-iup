@@ -20,9 +20,15 @@
 package iup
 
 /*
+#include <stdlib.h>
 #include <iup.h>
 */
 import "C"
+
+import (
+	"os"
+	"unsafe"
+)
 
 func Open() int {
 	return int(C.IupOpen(nil, nil))
@@ -34,4 +40,39 @@ func Close() {
 
 func Version() string {
 	return C.GoString(C.IupVersion())
+}
+
+func Load(filename string) (err os.Error) {
+	cFilename := C.CString(filename)
+	defer C.free(unsafe.Pointer(cFilename))
+
+	cResult := C.IupLoad(cFilename)
+	if cResult != nil {
+		err = os.NewError(C.GoString(cResult))
+	}
+
+	return
+}
+
+func LoadBuffer(buffer string) (err os.Error) {
+	cBuffer := C.CString(buffer)
+	defer C.free(unsafe.Pointer(cBuffer))
+	
+	cResult := C.IupLoadBuffer(cBuffer)
+	if cResult != nil {
+		err = os.NewError(C.GoString(cResult))
+	}
+	
+	return
+}
+
+func SetLanguage(lng string) {
+	cLng := C.CString(lng)
+	defer C.free(unsafe.Pointer(cLng))
+	
+	C.IupSetLanguage(cLng)
+}
+
+func GetLanguage() string {
+	return C.GoString(C.IupGetLanguage())
 }
