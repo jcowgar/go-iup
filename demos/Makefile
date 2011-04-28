@@ -17,7 +17,7 @@
 
 include $(GOROOT)/src/Make.inc
 
-ALL=versions hello
+ALL=test versions hello
 
 INC_DIRS=-I../iup/_obj
 LIB_DIRS=-L../iup/_obj
