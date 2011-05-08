@@ -20,17 +20,18 @@
 package iup
 
 /*
-#include <stdlib.h>
 #include <iup.h>
 */
 import "C"
 
 func toC(ihs []*Ihandle) []*C.Ihandle {
-	result := make([]*C.Ihandle, len(ihs))
+	max := len(ihs) + 1
+	result := make([]*C.Ihandle, max)
 	
 	for k, v := range ihs {
 		result[k] = v.h
-	}
+	}	
+	result[max - 1] = nil
 	
 	return result
 }
