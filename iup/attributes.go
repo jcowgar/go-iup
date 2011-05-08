@@ -36,6 +36,13 @@ func (ih *Ihandle) StoreAttribute(name, value string) {
 	C.IupStoreAttribute(ih.h, cName, cValue)
 }
 
+func (ih *Ihandle) SetAttributes(values string) {
+	cValues := C.CString(values)
+	defer C.free(unsafe.Pointer(cValues))
+	
+	C.IupSetAttributes(ih.h, cValues)
+}
+
 func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
