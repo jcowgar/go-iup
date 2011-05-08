@@ -28,6 +28,8 @@ func main() {
 
 	lb := iup.Label("Press button below...")
 	ok := iup.Button("Say Hello", "SAY_HELLO")
+	iup.SetButtonCallback(ok)
+	
 	bx := iup.Vbox(lb, ok)
 	dg := iup.Dialog(bx)
 	

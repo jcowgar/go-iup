@@ -22,10 +22,24 @@ package iup
 /*
 #include <stdlib.h>
 #include <iup.h>
+
+extern int buttonCB(void*);
+
+void _IupSetButtonCallback(Ihandle *ih, void *p) {
+	IupSetAttribute(ih, "GO_ACTION_P", p);
+	IupSetCallback(ih, "ACTION", (Icallback)buttonCB);
+}
 */
 import "C"
 
 import "unsafe"
+import "fmt"
+
+//export buttonCB
+func buttonCB(ih unsafe.Pointer) int {
+	fmt.Printf("Button Callback Got!\n")	
+	return 0
+}
 
 func Button(title, action string) *Ihandle {
 	cTitle := C.CString(title)
@@ -35,6 +49,10 @@ func Button(title, action string) *Ihandle {
 	defer C.free(unsafe.Pointer(cAction))
 	
 	return &Ihandle{h: C.IupButton(cTitle, cAction)}
+}
+
+func SetButtonCallback(ih *Ihandle) {
+	C._IupSetButtonCallback(ih.h, unsafe.Pointer(ih))
 }
 
 func Label(title string) *Ihandle {

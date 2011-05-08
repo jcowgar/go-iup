@@ -34,6 +34,6 @@ GOFILES=\
 	doc.go
 
 CGO_CFLAGS=-I/usr/include/iup
-CGO_LDFLAGS=-liup
+CGO_LDFLAGS=-liupgtk
 
 include $(GOROOT)/src/Make.pkg
