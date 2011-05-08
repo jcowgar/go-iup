@@ -22,24 +22,29 @@ package iup
 /*
 #include <stdlib.h>
 #include <iup.h>
+
+extern int goIupButtonActionCB(void *);
+
+void goIupSetButtonActionFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_ACTION", f);
+	IupSetCallback(ih, "ACTION", (Icallback) goIupButtonActionCB);
+}
 */
 import "C"
-
 import "unsafe"
 
-func Button(title, action string) *Ihandle {
-	cTitle := C.CString(title)
-	defer C.free(unsafe.Pointer(cTitle))
+type ButtonActionFunc func(*Ihandle) int
+
+//export goIupButtonActionCB
+func goIupButtonActionCB(ih unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_ACTION")
+	defer C.free(unsafe.Pointer(cName))
 	
-	cAction := C.CString(action)
-	defer C.free(unsafe.Pointer(cAction))
-	
-	return &Ihandle{h: C.IupButton(cTitle, cAction)}
+	f := *(*ButtonActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
 
-func Label(title string) *Ihandle {
-	cTitle := C.CString(title)
-	defer C.free(unsafe.Pointer(cTitle))
-	
-	return &Ihandle{h: C.IupLabel(cTitle)}
+func (ih *Ihandle) SetButtonActionFunc(f ButtonActionFunc) {
+	C.goIupSetButtonActionFunc(ih.h, unsafe.Pointer(&f))
 }

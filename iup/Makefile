@@ -26,6 +26,7 @@ CGOFILES=\
 	core.go \
 	attributes.go \
 	events.go \
+	callback.go \
 	layout.go \
 	dialog.go \
 	controls.go

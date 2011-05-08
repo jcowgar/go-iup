@@ -36,11 +36,11 @@ func main() {
 	lb := iup.Label("Press button below...")
 	
 	helloJohn := iup.Button("Hello John", "SAY_HELLO")
-	helloJohn.SetButtonCallback(sayHello)
+	helloJohn.SetButtonActionFunc(sayHello)
 	helloJohn.StoreAttribute("TO_WHO", "John Doe")
 	
 	helloJim := iup.Button("Hello Jim", "SAY_HELLO")
-	helloJim.SetButtonCallback(sayHello)
+	helloJim.SetButtonActionFunc(sayHello)
 	helloJim.StoreAttribute("TO_WHO", "Jim Doe")
 	
 	helloBx := iup.Hbox(helloJohn, helloJim)
