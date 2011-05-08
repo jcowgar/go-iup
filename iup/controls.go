@@ -43,3 +43,10 @@ func Label(title string) *Ihandle {
 	
 	return &Ihandle{h: C.IupLabel(cTitle)}
 }
+
+func Text(action string) *Ihandle {
+	cAction := C.CString(action)
+	defer C.free(unsafe.Pointer(cAction))
+	
+	return &Ihandle{h: C.IupText(cAction)}
+}

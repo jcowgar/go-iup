@@ -29,6 +29,14 @@ void goIupSetButtonActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_ACTION", f);
 	IupSetCallback(ih, "ACTION", (Icallback) goIupButtonActionCB);
 }
+
+extern int goIupTextActionCB(void *ih, int ch, void *newValue);
+
+void goIupSetTextActionFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_ACTION", f);
+	IupSetCallback(ih, "ACTION", (Icallback) goIupTextActionCB);
+}
+
 */
 import "C"
 import "unsafe"
@@ -47,4 +55,21 @@ func goIupButtonActionCB(ih unsafe.Pointer) int {
 
 func (ih *Ihandle) SetButtonActionFunc(f ButtonActionFunc) {
 	C.goIupSetButtonActionFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type TextActionFunc func(ih *Ihandle, ch int, newValue string) int
+
+//export goIupTextActionCB
+func goIupTextActionCB(ih unsafe.Pointer, ch int, newValue unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_ACTION")
+	defer C.free(unsafe.Pointer(cName))
+	
+	f := *(*TextActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	goNewValue := C.GoString((*C.char)(newValue))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, ch, goNewValue)
+}
+
+func (ih *Ihandle) SetTextActionFunc(f TextActionFunc) {
+	C.goIupSetTextActionFunc(ih.h, unsafe.Pointer(&f))
 }
