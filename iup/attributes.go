@@ -45,3 +45,12 @@ func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
 	
 	C.IupStoreAttributeId(ih.h, cName, C.int(id), cValue)
 }
+
+func (ih *Ihandle) GetAttribute(name string) string {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	cVal := C.IupGetAttribute(ih.h, cName)
+	
+	return C.GoString(cVal)
+}

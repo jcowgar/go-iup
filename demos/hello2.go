@@ -21,16 +21,31 @@
 package main
 
 import "github.com/jcowgar/iup.go"
+import "fmt"
+
+func sayHello(ih *iup.Ihandle) int {
+	fmt.Printf("Hello, %s!\n", ih.GetAttribute("TO_WHO"))
+	
+	return 0
+}
 
 func main() {
 	iup.Open()
 	defer iup.Close()
 
 	lb := iup.Label("Press button below...")
-	ok := iup.Button("Say Hello", "SAY_HELLO")
-	iup.SetButtonCallback(ok)
 	
-	bx := iup.Vbox(lb, ok)
+	helloJohn := iup.Button("Hello John", "SAY_HELLO")
+	helloJohn.SetButtonCallback(sayHello)
+	helloJohn.StoreAttribute("TO_WHO", "John Doe")
+	
+	helloJim := iup.Button("Hello Jim", "SAY_HELLO")
+	helloJim.SetButtonCallback(sayHello)
+	helloJim.StoreAttribute("TO_WHO", "Jim Doe")
+	
+	helloBx := iup.Hbox(helloJohn, helloJim)
+	bx := iup.Vbox(lb, helloBx)
+	
 	dg := iup.Dialog(bx)
 	
 	iup.Show(dg)

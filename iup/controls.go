@@ -25,21 +25,28 @@ package iup
 
 extern int buttonCB(void*);
 
-void _IupSetButtonCallback(Ihandle *ih, void *p) {
-	IupSetAttribute(ih, "GO_ACTION_P", p);
-	IupSetCallback(ih, "ACTION", (Icallback)buttonCB);
+void _IupSetButtonCallback(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "GO_ACTION_FUNC", f);
+	IupSetCallback(ih, "ACTION", (Icallback) buttonCB);
 }
 */
 import "C"
 
 import "unsafe"
-import "fmt"
 
 //export buttonCB
 func buttonCB(ih unsafe.Pointer) int {
-	fmt.Printf("Button Callback Got!\n")	
-	return 0
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("GO_ACTION_FUNC")
+	defer C.free(unsafe.Pointer(cName))
+	
+	f := *(*ButtonActionCallback)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	f(&Ihandle{h: (*C.Ihandle)(ih)})
+		
+	return C.IUP_DEFAULT
 }
+
+type ButtonActionCallback func(*Ihandle) int
 
 func Button(title, action string) *Ihandle {
 	cTitle := C.CString(title)
@@ -51,8 +58,8 @@ func Button(title, action string) *Ihandle {
 	return &Ihandle{h: C.IupButton(cTitle, cAction)}
 }
 
-func SetButtonCallback(ih *Ihandle) {
-	C._IupSetButtonCallback(ih.h, unsafe.Pointer(ih))
+func (ih *Ihandle) SetButtonCallback(f ButtonActionCallback) {
+	C._IupSetButtonCallback(ih.h, unsafe.Pointer(&f))
 }
 
 func Label(title string) *Ihandle {
