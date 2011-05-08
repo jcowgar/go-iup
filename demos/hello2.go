@@ -23,18 +23,38 @@ package main
 import "github.com/jcowgar/iup.go"
 import "fmt"
 
-func sayHello(ih *iup.Ihandle) int {
-	fmt.Printf("Hello, %s!\n", ih.GetAttribute("TO_WHO"))
-	
+func nameKeyEntry(ih *iup.Ihandle, ch int, newValue string) int {
+	fmt.Printf("Char Pressed: %d, New Value: %s\n", ch, newValue)
 	return 0
 }
+
+func sayHello(ih *iup.Ihandle) int {
+	fmt.Printf("Hello, %s!\n", ih.GetAttribute("TO_WHO"))
+	return 0
+}
+
+func sayHelloToSomeone(ih *iup.Ihandle) int {
+	fmt.Printf("Hello, %s!\n", someone.GetAttribute("VALUE"))
+	return 0
+}
+
+var someone *iup.Ihandle
 
 func main() {
 	iup.Open()
 	defer iup.Close()
-
-	lb := iup.Label("Press button below...")
 	
+	// Line one contains a name entry box and a hello button
+	someone = iup.Text("NAME")
+	someone.SetTextActionFunc(nameKeyEntry)
+	
+	helloSomeone := iup.Button("Say Hello", "SAY_HELLO")
+	helloSomeone.SetButtonActionFunc(sayHelloToSomeone)
+	
+	line1 := iup.Hbox(iup.Label("Name:"), someone, helloSomeone)
+	line1.SetAttributes("ALIGNMENT=ACENTER,GAP=5")
+	
+	// Line two contains two pre-defined hello buttons
 	helloJohn := iup.Button("Hello John", "SAY_HELLO")
 	helloJohn.SetButtonActionFunc(sayHello)
 	helloJohn.StoreAttribute("TO_WHO", "John Doe")
@@ -43,11 +63,15 @@ func main() {
 	helloJim.SetButtonActionFunc(sayHello)
 	helloJim.StoreAttribute("TO_WHO", "Jim Doe")
 	
-	helloBx := iup.Hbox(helloJohn, helloJim)
-	bx := iup.Vbox(lb, helloBx)
+	line2 := iup.Hbox(iup.Label("Predefined greeters:"), helloJohn, helloJim)
+	line2.SetAttributes("ALIGNMENT=ACENTER,GAP=5")
 	
-	dg := iup.Dialog(bx)
+	form := iup.Vbox(line1, line2)
+	form.SetAttributes("GAP=5,MARGIN=3x3")
 	
-	iup.Show(dg)
+	dlg := iup.Dialog(form)
+	dlg.StoreAttribute("TITLE", "Greeter")
+	iup.Show(dlg)
+	
 	iup.MainLoop()
 }
