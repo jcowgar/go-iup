@@ -123,7 +123,7 @@ func main() {
 	
 	mainDlg = iup.Dialog(mainBox, "TITLE=\"Rot 13\"")
 	mainDlg.SetAttributeHandle("MENU", menu)
-	iup.Show(mainDlg)
+	mainDlg.Show()
 	
 	iup.MainLoop()
 }

@@ -217,13 +217,13 @@ Dialogs/Predefined
 ------------------
 
 * **DONE** IupFileDlg
-* IupMessageDlg
-* IupColorDlg
-* IupFontDlg
-* IupAlarm
+* **DONE** IupMessageDlg
+* **DONE** IupColorDlg
+* **DONE** IupFontDlg
+* **DONE** IupAlarm
 * IupGetFile
 * IupGetColor
-* IupGetParam
+* *In Progress* IupGetParam
 * IupGetText
 * IupListDialog
 * **DONE** IupMessage

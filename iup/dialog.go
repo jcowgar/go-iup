@@ -21,7 +21,12 @@ package iup
 
 /*
 #include <stdlib.h>
+#include <stdio.h>
 #include <iup.h>
+
+int _IupGetParam(const char *title, const char *format, void **args) {
+	return IupGetParam(title, NULL, 0, format, args[0], args[1], args[2]);
+}
 */
 import "C"
 
@@ -58,6 +63,12 @@ func Popup(ih *Ihandle, x, y int) int {
 	return int(C.IupPopup(ih.h, C.int(x), C.int(y)))
 }
 
+/*******************************************************************************
+**
+** Predefined
+**
+*******************************************************************************/
+
 func FileDlg(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupFileDlg()}
 	
@@ -69,6 +80,136 @@ func FileDlg(opts ...interface{}) *Ihandle {
 	}
 	
 	return ih
+}
+
+func MessageDlg(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupMessageDlg()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func ColorDlg(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupColorDlg()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func FontDlg(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupFontDlg()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func Alarm(t, m string, buttons ...string) int {
+	var b1, b2, b3 *C.char;
+	
+	cT := C.CString(t)
+	defer C.free(unsafe.Pointer(cT))
+	
+	cM := C.CString(m)
+	defer C.free(unsafe.Pointer(cM))
+	
+	switch len(buttons) {
+	case 1:
+		b1 = C.CString(buttons[0])
+		b2 = nil
+		b3 = nil
+		
+		defer C.free(unsafe.Pointer(b1))
+		
+	case 2:
+		b1 = C.CString(buttons[0])
+		b2 = C.CString(buttons[1])
+		b3 = nil
+		
+		defer C.free(unsafe.Pointer(b1))
+		defer C.free(unsafe.Pointer(b2))
+		
+	case 3:
+		b1 = C.CString(buttons[0])
+		b2 = C.CString(buttons[1])
+		b3 = C.CString(buttons[2])
+		
+		defer C.free(unsafe.Pointer(b1))
+		defer C.free(unsafe.Pointer(b2))
+		defer C.free(unsafe.Pointer(b3))
+	}		
+	
+	return int(C.IupAlarm(cT, cM, b1, b2, b3))
+}
+
+const maxArgs = 3
+
+func GetParam(title string, format string, args ...interface{}) bool {
+	if len(args) > maxArgs {
+		panic("too many args")
+	}
+	
+	cargs := new([maxArgs]unsafe.Pointer)
+	
+	// copy values in
+	for i, a := range args {
+		switch v := a.(type) {
+		case *int:
+			p := new(C.int)
+			*p = C.int(*v)
+			cargs[i] = unsafe.Pointer(p)
+			
+		case *float64:
+			p := new(C.float)
+			*p = C.float(*v)
+			cargs[i] = unsafe.Pointer(p)
+			
+		default:
+			panic("unknown type")
+		}
+	}
+	
+	cTitle := C.CString(title)
+	defer C.free(unsafe.Pointer(cTitle))
+	
+	cFormat := C.CString(format)
+	defer C.free(unsafe.Pointer(cFormat))
+	
+	result := int(C._IupGetParam(cTitle, cFormat, (*unsafe.Pointer)(unsafe.Pointer(cargs))))
+	
+	if result == 0 {
+		return false
+	}
+	
+	for i, a := range args {
+		switch v := a.(type) {
+		case *int:
+			*v = int(*(*C.int)(cargs[i]))
+			
+		case *float64:
+			*v = float64(*(*C.float)(cargs[i]))
+			
+		}
+	}
+	
+	return true
 }
 
 func Message(title, message string) {

@@ -68,7 +68,7 @@ func main() {
 	form.SetAttributes("GAP=5,MARGIN=3x3")
 	
 	dlg := iup.Dialog(form, "TITLE=Greeter")
-	iup.Show(dlg)
+	dlg.Show()
 	
 	iup.MainLoop()
 }
