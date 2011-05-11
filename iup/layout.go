@@ -203,3 +203,70 @@ func Sbox(child *Ihandle) *Ihandle {
 func Split(child1, child2 *Ihandle) *Ihandle {
 	return &Ihandle{h: C.IupSplit(child1.h, child2.h)}
 }
+
+/*******************************************************************************
+** 
+** Hierarchy
+**
+*******************************************************************************/
+
+func (ih *Ihandle) Append(new_child *Ihandle) *Ihandle {
+	result := C.IupAppend(ih.h, new_child.h)
+	if result == nil {
+		return nil
+	}
+	
+	return ih
+}
+
+func (ih *Ihandle) Detach() {
+	C.IupDetach(ih.h)
+}
+
+func (ih *Ihandle) Insert(ref_child, new_child *Ihandle) *Ihandle {
+	result := C.IupInsert(ih.h, ref_child.h, new_child.h)
+	if result == nil {
+		return nil
+	}
+	
+	return ih
+}
+
+func (child *Ihandle) Reparent(new_parent, ref_child *Ihandle) int {
+	return int(C.IupReparent(child.h, new_parent.h, ref_child.h))
+}
+
+func (ih *Ihandle) GetParent() *Ihandle {
+	return &Ihandle{h: C.IupGetParent(ih.h)}
+}
+
+func (ih *Ihandle) GetChild(pos int) *Ihandle {
+	return &Ihandle{h: C.IupGetChild(ih.h, C.int(pos))}
+}
+
+func (ih *Ihandle) GetChildPos(child *Ihandle) int {
+	return int(C.IupGetChildPos(ih.h, child.h))
+}
+
+func (ih *Ihandle) GetChildCount() int {
+	return int(C.IupGetChildCount(ih.h))
+}
+
+func (ih *Ihandle) GetNextChild(child *Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupGetNextChild(ih.h, child.h)}
+}
+
+func (ih *Ihandle) GetBrother() *Ihandle {
+	return &Ihandle{h: C.IupGetBrother(ih.h)}
+}
+
+func (ih *Ihandle) GetDialog() *Ihandle {
+	return &Ihandle{h: C.IupGetDialog(ih.h)}
+}
+
+func (ih *Ihandle) GetDialogChild(name string) *Ihandle {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	return &Ihandle{h: C.IupGetDialogChild(ih.h, cName)}
+}

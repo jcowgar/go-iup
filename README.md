@@ -181,18 +181,18 @@ Layout/Composition
 Layout/Hierarchy
 ----------------
 
-* IupAppend
-* IupDetach
-* IupInsert
-* IupReparent
-* IupGetParent
-* IupGetChild
-* IupGetChildPos
-* IupGetChildCount
-* IupGetNextChild
-* IupGetBrother
-* IupGetDialog
-* IupGetDialogChild
+* **DONE** IupAppend
+* **DONE** IupDetach
+* **DONE** IupInsert
+* **DONE** IupReparent
+* **DONE** IupGetParent
+* **DONE** IupGetChild
+* **DONE** IupGetChildPos
+* **DONE** IupGetChildCount
+* **DONE** IupGetNextChild
+* **DONE** IupGetBrother
+* **DONE** IupGetDialog
+* **DONE** IupGetDialogChild
 
 Layout/Utilities
 ----------------
