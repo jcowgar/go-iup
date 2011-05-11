@@ -17,6 +17,12 @@
 
 include $(GOROOT)/src/Make.inc
 
+ifeq ($(GOOS),windows)
+EXE_EXT=.exe
+else
+EXE_EXT=
+endif
+
 ALL=test versions hello greeter rot13
 
 INC_DIRS=-I../iup/_obj
@@ -29,4 +35,4 @@ clean:
 
 %: %.go
 	$(GC) $(INC_DIRS) $*.go
-	$(LD) $(LIB_DIRS) -o $@ $*.$O
+	$(LD) $(LIB_DIRS) -o $@$(EXE_EXT) $*.$O

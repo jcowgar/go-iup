@@ -4,6 +4,8 @@
 *.a
 _obj
 _cgo*
+demos/*.exe
+demos/*.dll
 demos/hello
 demos/greeter
 demos/versions
