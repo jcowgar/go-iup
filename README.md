@@ -163,20 +163,20 @@ Layout/Construction
 Layout/Composition
 ------------------
 
-* IupFill
+* **DONE** IupFill
 * **DONE** IupHbox
 * **DONE** IupHboxv
 * **DONE** IupVbox
 * **DONE** IupVboxv
-* IupZbox
-* IupZboxv
-* IupRadio
-* IupNormalizer
-* IupNormalizerv
-* IupCbox
-* IupCboxv
-* IupSbox
-* IupSplit
+* **DONE** IupZbox
+* **DONE** IupZboxv
+* **DONE** IupRadio
+* **DONE** IupNormalizer
+* **DONE** IupNormalizerv
+* **DONE** IupCbox
+* **DONE** IupCboxv
+* **DONE** IupSbox
+* **DONE** IupSplit
 
 Layout/Hierarchy
 ----------------

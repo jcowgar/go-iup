@@ -113,6 +113,25 @@ func SetClassDefaultAttribute(classname, name, value string) {
 	C.IupSetClassDefaultAttribute(cClassname, cName, cValue)
 }
 
+/*******************************************************************************
+** 
+** Composition
+**
+*******************************************************************************/
+
+func Fill(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupFill()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+		
+	return ih
+}
+
 func hboxv(ihs []*C.Ihandle) *Ihandle {
 	return &Ihandle{h: C.IupHboxv(&ihs[0])}
 }
@@ -135,4 +154,52 @@ func Vbox(args ...*Ihandle) *Ihandle {
 
 func Vboxv(args []*Ihandle) *Ihandle {
 	return vboxv(iHandleArrayToC(args))
+}
+
+func zboxv(ihs []*C.Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupZboxv(&ihs[0])}
+}
+
+func Zbox(args ...*Ihandle) *Ihandle {
+	return zboxv(iHandleArrayToC(args))
+}
+
+func Zboxv(args []*Ihandle) *Ihandle {
+	return zboxv(iHandleArrayToC(args))
+}
+
+func Radio(child *Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupRadio(child.h)}
+}
+
+func normalizerv(ihs []*C.Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupNormalizerv(&ihs[0])}
+}
+
+func Normalizer(args ...*Ihandle) *Ihandle {
+	return normalizerv(iHandleArrayToC(args))
+}
+
+func Normalizerv(args []*Ihandle) *Ihandle {
+	return normalizerv(iHandleArrayToC(args))
+}
+
+func cboxv(ihs []*C.Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupCboxv(&ihs[0])}
+}
+
+func Cbox(args ...*Ihandle) *Ihandle {
+	return cboxv(iHandleArrayToC(args))
+}
+
+func Cboxv(args []*Ihandle) *Ihandle {
+	return cboxv(iHandleArrayToC(args))
+}
+
+func Sbox(child *Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupSbox(child.h)}
+}
+
+func Split(child1, child2 *Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupSplit(child1.h, child2.h)}
 }
