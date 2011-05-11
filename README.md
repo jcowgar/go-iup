@@ -285,8 +285,8 @@ Controls/Additional
 Resources/Fonts
 ---------------
 
-* IupMapFont
-* IupUnMapFont
+* **DONE** IupMapFont
+* **DONE** IupUnMapFont
 
 Resources/Images
 ----------------
@@ -304,10 +304,10 @@ Resources/Images
 Resources/Keyboard
 ------------------
 
-* IupNextField
-* IupPreviousField
-* IupGetFocus
-* IupSetFocus
+* **DONE** IupNextField
+* **DONE** IupPreviousField
+* **DONE** IupGetFocus
+* **DONE** IupSetFocus
 
 Resources/Menus
 ---------------

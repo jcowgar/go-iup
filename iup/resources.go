@@ -29,6 +29,48 @@ import "unsafe"
 
 /*******************************************************************************
 **
+** Fonts
+**
+*******************************************************************************/
+
+func MapFont(iupfont string) string {
+	cIupfont := C.CString(iupfont)
+	defer C.free(unsafe.Pointer(cIupfont))
+	
+	return C.GoString(C.IupMapFont(cIupfont))
+}
+
+func UnMapFont(driverfont string) string {
+	cDriverfont := C.CString(driverfont)
+	defer C.free(unsafe.Pointer(cDriverfont))
+	
+	return C.GoString(C.IupUnMapFont(cDriverfont))
+}
+
+/*******************************************************************************
+**
+** Keyboard
+**
+*******************************************************************************/
+
+func (ih *Ihandle) NextField() *Ihandle {
+	return &Ihandle{h: C.IupNextField(ih.h)}
+}
+
+func (ih *Ihandle) PreviousField() *Ihandle {
+	return &Ihandle{h: C.IupPreviousField(ih.h)}
+}
+
+func GetFocus() *Ihandle {
+	return &Ihandle{h: C.IupGetFocus()}
+}
+
+func (ih *Ihandle) SetFocus() *Ihandle {
+	return &Ihandle{h: C.IupSetFocus(ih.h)}
+}
+
+/*******************************************************************************
+**
 ** Menus
 **
 *******************************************************************************/
