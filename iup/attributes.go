@@ -36,6 +36,51 @@ func (ih *Ihandle) StoreAttribute(name, value string) {
 	C.IupStoreAttribute(ih.h, cName, cValue)
 }
 
+func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	cValue := C.CString(value)
+	defer C.free(unsafe.Pointer(cValue))
+	
+	C.IupStoreAttributeId(ih.h, cName, C.int(id), cValue)
+}
+
+/*
+
+func (ih *Ihandle) SetAttribute(name string, value unsafe.Pointer) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	C.IupSetAttribute(ih.h, cName, value)
+}
+
+func (ih *Ihandle) SetAttributeId(name string, id int, value unsafe.Pointer) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	C.IupSetAttributeId(ih.h, cName, C.int(id), value)
+}
+*/
+/*
+func (ih *Ihandle) SetfAttribute(name, format string, args ...interface{}) {
+	ih.StoreAttribute(name, fmt.Sprintf(format, args...))
+}
+
+func (ih *Ihandle) SetfAttributeId(name string, id int, format string, args ...interface{}) {
+	ih.StoreAttributeId(name, id, fmt.Sprintf(format, args...))
+}
+
+func (ih *Ihandle) SetfAttributeId2(name string, lin, col int, format string, args ...interface{}) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	cValue := C.CString(fmt.Sprintf(format, args...))
+	defer C.free(unsafe.Pointer(cValue))
+	
+	C.IupSetfAttributeId2(ih.h, cName, C.int(lin), C.int(col), cValue)
+}
+*/
 func (ih *Ihandle) SetAttributes(values string) {
 	cValues := C.CString(values)
 	defer C.free(unsafe.Pointer(cValues))
@@ -48,16 +93,6 @@ func (ih *Ihandle) SetAttributeHandle(name string, ihNamed *Ihandle) {
 	defer C.free(unsafe.Pointer(cName))
 	
 	C.IupSetAttributeHandle(ih.h, cName, ihNamed.h)
-}
-
-func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
-	cName := C.CString(name)
-	defer C.free(unsafe.Pointer(cName))
-	
-	cValue := C.CString(value)
-	defer C.free(unsafe.Pointer(cValue))
-	
-	C.IupStoreAttributeId(ih.h, cName, C.int(id), cValue)
 }
 
 func (ih *Ihandle) GetAttribute(name string) string {
