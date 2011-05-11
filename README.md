@@ -197,12 +197,12 @@ Layout/Hierarchy
 Layout/Utilities
 ----------------
 
-* IupRefresh
-* IupRefreshChildren
-* IupUpdate
-* IupUpdateChildren
-* IupRedraw
-* IupConvertXYToPos
+* **DONE** IupRefresh
+* **DONE** IupRefreshChildren
+* **DONE** IupUpdate
+* **DONE** IupUpdateChildren
+* **DONE** IupRedraw
+* **DONE** IupConvertXYToPos
 
 Dialogs/Reference
 -----------------

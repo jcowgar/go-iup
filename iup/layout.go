@@ -270,3 +270,39 @@ func (ih *Ihandle) GetDialogChild(name string) *Ihandle {
 	
 	return &Ihandle{h: C.IupGetDialogChild(ih.h, cName)}
 }
+
+/*******************************************************************************
+** 
+** Utilities
+**
+*******************************************************************************/
+
+func (ih *Ihandle) Refresh() {
+	C.IupRefresh(ih.h)
+}
+
+func (ih *Ihandle) RefreshChildren() {
+	C.IupRefreshChildren(ih.h)
+}
+
+func (ih *Ihandle) Update() {
+	C.IupUpdate(ih.h)
+}
+
+func (ih *Ihandle) UpdateChildren() {
+	C.IupUpdateChildren(ih.h)
+}
+
+func (ih *Ihandle) Redraw(children bool) {
+	updateChildren := 0
+	if children {
+		updateChildren = 1
+	}
+	
+	C.IupRedraw(ih.h, C.int(updateChildren))
+}
+
+func (ih *Ihandle) ConvertXYToPos(x, y int) int {
+	return int(C.IupConvertXYToPos(ih.h, C.int(x), C.int(y)))
+}
+
