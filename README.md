@@ -193,8 +193,8 @@ Controls/Standard
 * **DONE** IupTabs
 * **DONE** IupTabsv
 * **DONE** IupText
-** IupTextConvertLinColToPos
-** IupTextConvertPosToLinCol
+    * IupTextConvertLinColToPos
+    * IupTextConvertPosToLinCol
 * **DONE** IupToggle
 * **DONE** IupTree
 * **DONE** IupVal
@@ -207,26 +207,26 @@ Controls/Additional
 * **DONE** IupColorBrowser
 * **DONE** IupDial
 * **DONE** IupMatrix
-** IupMatSetAttribute
-** IupMatStoreAttribute
-** IupMatGetAttribute
-** IupMatGetInt
-** IupMatGetFloat
-** IupMatSetfAttribute
+    * IupMatSetAttribute
+    * IupMatStoreAttribute
+    * IupMatGetAttribute
+    * IupMatGetInt
+    * IupMatGetFloat
+    * IupMatSetfAttribute
 * **DONE** IupGLCanvas
 * **DONE** IupPPlot
-** IupPlotBegin
-** IupPlotAdd
-** IupPlotAddStr
-** IupPlotEnd
-** IupPlotInsert
-** IupPlotInsertStr
-** IupPlotInsertPoints
-** IupPlotInsertStrPoints
-** IupPlotAddPoints
-** IupPlotAddStrPoints
-** IupPlotTransform
-** IupPlotPaintTo
+    * IupPlotBegin
+    * IupPlotAdd
+    * IupPlotAddStr
+    * IupPlotEnd
+    * IupPlotInsert
+    * IupPlotInsertStr
+    * IupPlotInsertPoints
+    * IupPlotInsertStrPoints
+    * IupPlotAddPoints
+    * IupPlotAddStrPoints
+    * IupPlotTransform
+    * IupPlotPaintTo
 * IupOleControl
 * IupWebBrowser
 
