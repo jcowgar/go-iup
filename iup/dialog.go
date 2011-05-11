@@ -42,6 +42,14 @@ func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
 	return ih
 }
 
+func Show(ih *Ihandle) int {
+	return int(C.IupShow(ih.h))
+}
+
+func Popup(ih *Ihandle, x, y int) int {
+	return int(C.IupPopup(ih.h, C.int(x), C.int(y)))
+}
+
 func FileDlg(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupFileDlg()}
 	
@@ -53,14 +61,6 @@ func FileDlg(opts ...interface{}) *Ihandle {
 	}
 	
 	return ih
-}
-
-func Show(ih *Ihandle) int {
-	return int(C.IupShow(ih.h))
-}
-
-func Popup(ih *Ihandle, x, y int) int {
-	return int(C.IupPopup(ih.h, C.int(x), C.int(y)))
 }
 
 func Message(title, message string) {
