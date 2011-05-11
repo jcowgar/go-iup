@@ -17,14 +17,6 @@
 	License along with iup.go.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// *****************************************************************************
-//
-// NOTICE: rot13char and rot13 functions borrowed from Rosetta Code. No
-// original author information was given.
-//
-// *****************************************************************************
-
-// Hello World using a custom dialog.
 package main
 
 import (
