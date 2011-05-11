@@ -27,26 +27,74 @@ import "C"
 
 import "unsafe"
 
-func Button(title, action string) *Ihandle {
+// Create a new button widget. Differs from Iup implementation in that ACTION
+// is not the second parameter. Instead, any number of optional parameters can
+// be supplied. The only types understood are:
+//
+//   1. string: sent to the newly created widget as an attribute to be set
+//   2. ButtonActionFunc: sets the ACTION callback to the value
+//
+func Button(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 	
-	cAction := C.CString(action)
-	defer C.free(unsafe.Pointer(cAction))
+	ih := &Ihandle{h: C.IupButton(cTitle, nil)}
 	
-	return &Ihandle{h: C.IupButton(cTitle, cAction)}
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+			
+		case ButtonActionFunc:
+			ih.SetButtonActionFunc(v)
+				
+		default:
+			// TODO: Do something here, runtime error?
+		}
+	}
+	
+	return ih
 }
 
-func Label(title string) *Ihandle {
+// Differs from IupLabel in that any number of optional parameters may be passed. Strings
+// will be interpreted as attributes to set on the newly created widget.
+func Label(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 	
-	return &Ihandle{h: C.IupLabel(cTitle)}
+	ih := &Ihandle{h: C.IupLabel(cTitle)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+			
+		default:
+			// TODO: Do something here, runtime error?
+		}
+	}
+	
+	return ih
 }
 
-func Text(action string) *Ihandle {
-	cAction := C.CString(action)
-	defer C.free(unsafe.Pointer(cAction))
+// Differs from IupText in that any number of optional parameters may be passed. Strings
+// will be interpreted as attributes that will be set on the newly created widget. Any
+// Callback functions supplied will be assigned to the correct callback attribute.
+func Text(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupText(nil)}
 	
-	return &Ihandle{h: C.IupText(cAction)}
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+			
+		case TextActionFunc:
+			ih.SetTextActionFunc(v)
+			
+		default:
+			// TODO: Do something here, runtime error?
+		}
+	}
+	
+	return ih
 }

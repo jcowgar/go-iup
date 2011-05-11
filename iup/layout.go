@@ -25,13 +25,13 @@ package iup
 import "C"
 
 func toC(ihs []*Ihandle) []*C.Ihandle {
-	max := len(ihs) + 1
-	result := make([]*C.Ihandle, max)
+	max := len(ihs)
+	result := make([]*C.Ihandle, max + 1)
 	
 	for k, v := range ihs {
 		result[k] = v.h
 	}	
-	result[max - 1] = nil
+	result[max] = nil
 	
 	return result
 }

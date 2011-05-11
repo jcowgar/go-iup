@@ -23,6 +23,8 @@ package main
 import "github.com/jcowgar/iup.go"
 import "fmt"
 
+var someone *iup.Ihandle
+
 func nameKeyEntry(ih *iup.Ihandle, ch int, newValue string) int {
 	fmt.Printf("Char Pressed: %d, New Value: %s\n", ch, newValue)
 	return 0
@@ -38,30 +40,26 @@ func sayHelloToSomeone(ih *iup.Ihandle) int {
 	return 0
 }
 
-var someone *iup.Ihandle
-
 func main() {
 	iup.Open()
 	defer iup.Close()
 	
 	// Line one contains a name entry box and a hello button
-	someone = iup.Text("NAME")
-	someone.SetTextActionFunc(nameKeyEntry)
-	
-	helloSomeone := iup.Button("Say Hello", "SAY_HELLO")
-	helloSomeone.SetButtonActionFunc(sayHelloToSomeone)
+	someone = iup.Text((iup.TextActionFunc)(nameKeyEntry))	
+	helloSomeone := iup.Button("Say Hello", 
+		(iup.ButtonActionFunc)(sayHelloToSomeone))
 	
 	line1 := iup.Hbox(iup.Label("Name:"), someone, helloSomeone)
 	line1.SetAttributes("ALIGNMENT=ACENTER,GAP=5")
 	
 	// Line two contains two pre-defined hello buttons
-	helloJohn := iup.Button("Hello John", "SAY_HELLO")
-	helloJohn.SetButtonActionFunc(sayHello)
-	helloJohn.StoreAttribute("TO_WHO", "John Doe")
+	helloJohn := iup.Button("Hello John", 
+		(iup.ButtonActionFunc)(sayHello),
+		"TO_WHO=\"John Doe\"")
 	
-	helloJim := iup.Button("Hello Jim", "SAY_HELLO")
-	helloJim.SetButtonActionFunc(sayHello)
-	helloJim.StoreAttribute("TO_WHO", "Jim Doe")
+	helloJim := iup.Button("Hello Jim", 
+		(iup.ButtonActionFunc)(sayHello),
+		"TO_WHO=\"Jim Doe\"")
 	
 	line2 := iup.Hbox(iup.Label("Predefined greeters:"), helloJohn, helloJim)
 	line2.SetAttributes("ALIGNMENT=ACENTER,GAP=5")
@@ -69,8 +67,7 @@ func main() {
 	form := iup.Vbox(line1, line2)
 	form.SetAttributes("GAP=5,MARGIN=3x3")
 	
-	dlg := iup.Dialog(form)
-	dlg.StoreAttribute("TITLE", "Greeter")
+	dlg := iup.Dialog(form, "TITLE=Greeter")
 	iup.Show(dlg)
 	
 	iup.MainLoop()

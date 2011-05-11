@@ -27,8 +27,22 @@ import "C"
 
 import "unsafe"
 
-func Dialog(child *Ihandle) (ih *Ihandle) {
-	return &Ihandle{h: C.IupDialog(child.h)}
+// Differs from IupDialog in that any number of parameters may be passed after the child
+// widget. Strings will be interpreted as attributes to set on the newly created dialog.
+func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupDialog(child.h)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+			
+		default:
+			// TODO: Do something here, runtime error?
+		}
+	}
+	
+	return ih
 }
 
 func Show(ih *Ihandle) int {

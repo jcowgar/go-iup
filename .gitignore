@@ -5,6 +5,6 @@
 _obj
 _cgo*
 demos/hello
-demos/hello2
+demos/greeter
 demos/versions
 demos/test
