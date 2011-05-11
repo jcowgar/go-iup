@@ -329,28 +329,11 @@ Resources/Names
 Resources/Miscellaneous
 -----------------------
 
-* IupClipboard
-* IupTimer
-* IupTuioClient
-* IupUser
+* **DONE** IupClipboard
+* **DONE** IupTimer
+* **DONE** IupTuioClient
+* **DONE** IupUser
 * **DONE** IupHelp
-* iupMaskSet
-* iupMaskMatSet
-* iupMaskSetInt
-* iupMaskSetFloat
-* iupMaskMatSetInt
-* iupMaskMatSetFloat
-* iupMaskRemove
-* iupMaskMatRemove
-* iupMaskCheck
-* iupMaskMatCheck
-* iupMaskGet
-* iupMaskGetFloat
-* iupMaskGetInt
-* iupMaskMatGet
-* iupMaskMatGetFloat
-* iupMaskMatGetDouble
-* iupMaskMatGetInt
 
 [1]: http://golang.org                                       "Go"
 [2]: http://www.tecgraf.puc-rio.br/iup/                      "Iup"

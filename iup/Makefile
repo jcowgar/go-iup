@@ -36,7 +36,7 @@ CGOFILES=\
 GOFILES=\
 	doc.go
 
-CGO_LDFLAGS_BASE=-liupcontrols -liupcd -liup_pplot -liupgl
+CGO_LDFLAGS_BASE=-liupcontrols -liupcd -liup_pplot -liupgl -liuptuio
 
 ifeq ($(GOOS),windows)
 CGO_LDFLAGS=-liup $(CGO_LDFLAGS_BASE) -lgdi32 -lole32 -lcomdlg32 -lcomctl32

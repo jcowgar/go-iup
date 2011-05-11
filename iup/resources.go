@@ -22,6 +22,7 @@ package iup
 /*
 #include <stdlib.h>
 #include <iup.h>
+#include <iuptuio.h>
 */
 import "C"
 
@@ -140,6 +141,22 @@ func Submenu(title string, menu *Ihandle, opts ...interface{}) *Ihandle {
 ** Miscellaneous
 **
 *******************************************************************************/
+
+func Clipboard() *Ihandle {
+	return &Ihandle{h: C.IupClipboard()}
+}
+
+func Timer() *Ihandle {
+	return &Ihandle{h: C.IupTimer()}
+}
+
+func TuioClient(port int) *Ihandle {
+	return &Ihandle{h: C.IupTuioClient(C.int(port))}
+}
+
+func User() *Ihandle {
+	return &Ihandle{h: C.IupUser()}
+}
 
 func Help(url string) int {
 	cUrl := C.CString(url)
