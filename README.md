@@ -210,8 +210,8 @@ Dialogs/Reference
 * **DONE** IupDialog
 * **DONE** IupPopup
 * **DONE** IupShow
-* IupShowXY
-* IupHide
+* **DONE** IupShowXY
+* **DONE** IupHide
 
 Dialogs/Predefined
 ------------------

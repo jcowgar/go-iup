@@ -42,8 +42,16 @@ func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
 	return ih
 }
 
-func Show(ih *Ihandle) int {
+func (ih *Ihandle) Show() int {
 	return int(C.IupShow(ih.h))
+}
+
+func (ih *Ihandle) ShowXY(x, y int) int {
+	return int(C.IupShowXY(ih.h, C.int(x), C.int(y)))
+}
+
+func (ih *Ihandle) Hide() int {
+	return int(C.IupHide(ih.h))
 }
 
 func Popup(ih *Ihandle, x, y int) int {
