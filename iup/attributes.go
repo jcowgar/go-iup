@@ -125,6 +125,20 @@ func (ih *Ihandle) GetAttributeId(name string, id int) string {
 	return C.GoString(C.IupGetAttributeId(ih.h, cName, C.int(id)))
 }
 
+func (ih *Ihandle) GetIntId(name string, id int) int {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+
+	return int(C.IupGetIntId(ih.h, cName, C.int(id)))
+}
+
+func (ih *Ihandle) GetFloatId(name string, id int) float64 {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+
+	return float64(C.IupGetFloatId(ih.h, cName, C.int(id)))
+}
+
 func (ih *Ihandle) GetAttributes() string {
 	return C.GoString(C.IupGetAttributes(ih.h))
 }

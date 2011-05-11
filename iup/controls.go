@@ -180,6 +180,21 @@ func Text(opts ...interface{}) *Ihandle {
 	return ih
 }
 
+func (ih *Ihandle) TextConvertLinColToPos(lin, col int) int {
+	pos := new(C.int)
+	C.IupTextConvertLinColToPos(ih.h, C.int(lin), C.int(col), pos)	
+	return int(*pos)
+}
+
+func (ih *Ihandle) TextConvertPosToLinCol(pos int) (int, int) {
+	lin := new(C.int)
+	col := new(C.int)
+	
+	C.IupTextConvertPosToLinCol(ih.h, C.int(pos), lin, col)
+	
+	return int(*lin), int(*col)
+}
+
 func Toggle(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))

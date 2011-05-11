@@ -115,6 +115,8 @@ Attributes
 * **DONE** IupGetAttributeHandle
 * **DONE** IupGetAttribute
 * **DONE** IupGetAttributeId
+* **DONE** IupGetIntId - IupList additional function
+* **DONE** IupGetFloatId - IupList additional function
 * IupGetAllAttributes
 * **DONE** IupGetAttributes
 * **DONE** IupGetFloat
@@ -243,8 +245,8 @@ Controls/Standard
 * **DONE** IupTabs
 * **DONE** IupTabsv
 * **DONE** IupText
-    * IupTextConvertLinColToPos
-    * IupTextConvertPosToLinCol
+    * **DONE** IupTextConvertLinColToPos
+    * **DONE** IupTextConvertPosToLinCol
 * **DONE** IupToggle
 * **DONE** IupTree
 * **DONE** IupVal
