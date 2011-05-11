@@ -1,4 +1,4 @@
-/* 
+ /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
 	
 	This file is part of iup.go.
@@ -29,15 +29,11 @@ func main() {
 	iup.Open()
 	defer iup.Close()
 	
-	var age int
-	var salary float64
-	var wantRaise bool
-	
-	age = 10
-	salary = 1293.55
-	wantRaise = true
-	
-	if iup.GetParam("Age", "Age: %i\nSalary: %r\nWant Raise: %b[No,Yes]\n", &age, &salary, &wantRaise) {
-		fmt.Printf("age is %d\nsalary is %f\nwant raise %v\n", age, salary, wantRaise)
+	switch iup.Alarm("Question", "Are you enjoying iup.go?", "Yes!", "Of course!") {
+	case 1:
+		fmt.Printf("I knew you were!\n")
+		
+	case 2:
+		fmt.Printf("Yeah, why wouldn't you be?\n")
 	}
 }

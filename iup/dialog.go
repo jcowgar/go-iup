@@ -25,7 +25,11 @@ package iup
 #include <iup.h>
 
 int _IupGetParam(const char *title, const char *format, void **args) {
-	return IupGetParam(title, NULL, 0, format, args[0], args[1], args[2]);
+	return IupGetParam(title, NULL, 0, format, 
+		args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9],
+		args[10], args[11], args[12], args[13], args[14], args[15], args[16], args[17], args[18], 
+		args[19]
+	);
 }
 */
 import "C"
@@ -154,12 +158,15 @@ func Alarm(t, m string, buttons ...string) int {
 		defer C.free(unsafe.Pointer(b1))
 		defer C.free(unsafe.Pointer(b2))
 		defer C.free(unsafe.Pointer(b3))
+		
+	default:
+		panic("iup.Alarm() requires at least 1 button and at most 3 buttons")
 	}		
 	
 	return int(C.IupAlarm(cT, cM, b1, b2, b3))
 }
 
-const maxArgs = 3
+const maxArgs = 20
 
 func GetParam(title string, format string, args ...interface{}) bool {
 	if len(args) > maxArgs {
@@ -179,6 +186,15 @@ func GetParam(title string, format string, args ...interface{}) bool {
 		case *float64:
 			p := new(C.float)
 			*p = C.float(*v)
+			cargs[i] = unsafe.Pointer(p)
+			
+		case *bool:
+			p := new(C.int)
+			if *v {
+				*p = 1
+			} else {
+				*p = 0
+			}
 			cargs[i] = unsafe.Pointer(p)
 			
 		default:
@@ -206,6 +222,8 @@ func GetParam(title string, format string, args ...interface{}) bool {
 		case *float64:
 			*v = float64(*(*C.float)(cargs[i]))
 			
+		case *bool:
+			*v = int(*(*C.int)(cargs[i])) == 1
 		}
 	}
 	
