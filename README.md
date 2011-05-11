@@ -144,21 +144,21 @@ Events
 Layout/Construction
 -------------------
 
-* IupCreate
+* **DONE** IupCreate
 * IupCreatev
 * IupCreatep
 * **DONE** IupDestroy
-* IupMap
-* IupUnmap
+* **DONE** IupMap
+* **DONE** IupUnmap
 * IupGetAllClasses
-* IupGetClassName
-* IupGetClassType
-* IupClassMatch
+* **DONE** IupGetClassName
+* **DONE** IupGetClassType
+* **DONE** IupClassMatch
 * IupGetClassAttributes
 * IupGetClassCallbacks
-* IupSaveClassAttributes
-* IupCopyClassAttributes
-* IupSetClassDefaultAttribute
+* **DONE** IupSaveClassAttributes
+* **DONE** IupCopyClassAttributes
+* **DONE** IupSetClassDefaultAttribute
 
 Layout/Composition
 ------------------

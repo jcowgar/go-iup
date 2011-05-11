@@ -57,11 +57,11 @@ func menuv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Menu(args ...*Ihandle) *Ihandle {
-	return menuv(toC(args))
+	return menuv(iHandleArrayToC(args))
 }
 
 func Menuv(args []*Ihandle, opts ...interface{}) *Ihandle {
-	ih := menuv(toC(args))
+	ih := menuv(iHandleArrayToC(args))
 	
 	for _, o := range opts {
 		switch v := o.(type) {
