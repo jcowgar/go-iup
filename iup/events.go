@@ -24,8 +24,7 @@ package iup
 #include <iup.h>
 */
 import "C"
-
-//import "unsafe"
+import "unsafe"
 
 func MainLoop() int {
 	return int(C.IupMainLoop())
@@ -49,4 +48,18 @@ func ExitLoop() {
 
 func Flush() {
 	C.IupFlush()
+}
+
+func RecordInput(filename string, mode int) int {
+	cFilename := C.CString(filename)
+	defer C.free(unsafe.Pointer(cFilename))
+	
+	return int(C.IupRecordInput(cFilename, C.int(mode)))
+}
+
+func PlayInput(filename string) int {
+	cFilename := C.CString(filename)
+	defer C.free(unsafe.Pointer(cFilename))
+	
+	return int(C.IupPlayInput(cFilename))
 }

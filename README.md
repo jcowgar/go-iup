@@ -88,8 +88,8 @@ Events
 * IupGetActionName
 * IupGetFunction
 * IupSetFunction
-* IupRecordInput
-* IupPlayInput
+* **DONE** IupRecordInput
+* **DONE** IupPlayInput
 
 Layout/Construction
 -------------------
