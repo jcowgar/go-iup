@@ -22,10 +22,20 @@ package iup
 /*
 #include <stdlib.h>
 #include <iup.h>
+#include <iupcontrols.h>
+//#include <iupweb.h>
+#include <iup_pplot.h>
+#include <iupgl.h>
 */
 import "C"
 
 import "unsafe"
+
+/*******************************************************************************
+**
+** Basic Controls
+**
+*******************************************************************************/
 
 // Create a new button widget. Differs from Iup implementation in that ACTION
 // is not the second parameter. Instead, any number of optional parameters can
@@ -82,6 +92,24 @@ func Frame(child *Ihandle, opts ...interface{}) *Ihandle {
 	return ih
 }
 	
+// Differs from IupLabel in that any number of optional parameters may be passed. Strings
+// will be interpreted as attributes to set on the newly created widget.
+func Label(title string, opts ...interface{}) *Ihandle {
+	cTitle := C.CString(title)
+	defer C.free(unsafe.Pointer(cTitle))
+	
+	ih := &Ihandle{h: C.IupLabel(cTitle)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
 func List(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupList(nil)}
 	
@@ -142,6 +170,28 @@ func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
 	return ih	
 }
 
+// Differs from IupText in that any number of optional parameters may be passed. Strings
+// will be interpreted as attributes that will be set on the newly created widget. Any
+// Callback functions supplied will be assigned to the correct callback attribute.
+func Text(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupText(nil)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+			
+		case TextActionFunc:
+			ih.SetTextActionFunc(v)
+			
+		default:
+			// TODO: Do something here, runtime error?
+		}
+	}
+	
+	return ih
+}
+
 func Toggle(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
@@ -187,13 +237,14 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 	return ih	
 }
 
-// Differs from IupLabel in that any number of optional parameters may be passed. Strings
-// will be interpreted as attributes to set on the newly created widget.
-func Label(title string, opts ...interface{}) *Ihandle {
-	cTitle := C.CString(title)
-	defer C.free(unsafe.Pointer(cTitle))
-	
-	ih := &Ihandle{h: C.IupLabel(cTitle)}
+/*******************************************************************************
+**
+** Additional Controls
+**
+*******************************************************************************/
+
+func Cells(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupCells()}
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -205,24 +256,106 @@ func Label(title string, opts ...interface{}) *Ihandle {
 	return ih
 }
 
-// Differs from IupText in that any number of optional parameters may be passed. Strings
-// will be interpreted as attributes that will be set on the newly created widget. Any
-// Callback functions supplied will be assigned to the correct callback attribute.
-func Text(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupText(nil)}
+func Colorbar(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupColorbar()}
 	
 	for _, o := range opts {
 		switch v := o.(type) {
 		case string:
 			ih.SetAttributes(v)
-			
-		case TextActionFunc:
-			ih.SetTextActionFunc(v)
-			
-		default:
-			// TODO: Do something here, runtime error?
 		}
 	}
 	
 	return ih
+}
+
+func ColorBrowser(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupColorBrowser()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func Dial(orientation string, opts ...interface{}) *Ihandle {
+	cOrientation := C.CString(orientation)
+	defer C.free(unsafe.Pointer(cOrientation))
+	
+	ih := &Ihandle{h: C.IupDial(cOrientation)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih	
+}
+
+func Matrix(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupMatrix(nil)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func GLCanvas(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupGLCanvas(nil)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func PPlot(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupPPlot()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func OleControl(opts ...interface{}) *Ihandle {
+	// TODO: FAIL, Not Implemented
+	
+	return nil
+}
+
+func WebBrowser(opts ...interface{}) *Ihandle {
+	// TODO: FAIL, Not Implemented
+	return nil
+	/*
+	ih := &Ihandle{h: C.IupWebBrowser()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+	*/
 }
