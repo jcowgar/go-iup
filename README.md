@@ -53,25 +53,25 @@ Attributes
 
 * **DONE** IupStoreAttribute
 * **DONE** IupStoreAttributeId
-* IupSetAttribute
-* IupSetAttributeId
-* IupSetfAttribute
-* IupSetfAttributeId
-* IupSetfAttributeId2
+* **DONE** IupSetAttribute
+* **DONE** IupSetAttributeId
+* **DONE** IupSetfAttribute
+* **DONE** IupSetfAttributeId
+* **DONE** IupSetfAttributeId2
 * **DONE** IupSetAttributes
-* IupResetAttribute
+* **DONE** IupResetAttribute
 * IupSetAtt
 * **DONE** IupSetAttributeHandle
-* IupGetAttributeHandle
+* **DONE** IupGetAttributeHandle
 * **DONE** IupGetAttribute
-* IupGetAttributeId
+* **DONE** IupGetAttributeId
 * IupGetAllAttributes
-* IupGetAttributes
+* **DONE** IupGetAttributes
 * **DONE** IupGetFloat
 * **DONE** IupGetInt
-* IupStoreGlobal
-* IupSetGlobal
-* IupGetGlobal
+* **DONE** IupStoreGlobal
+* **DONE** IupSetGlobal
+* **DONE** IupGetGlobal
 
 Events
 ------
