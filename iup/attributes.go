@@ -43,6 +43,13 @@ func (ih *Ihandle) SetAttributes(values string) {
 	C.IupSetAttributes(ih.h, cValues)
 }
 
+func (ih *Ihandle) SetAttributeHandle(name string, ihNamed *Ihandle) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	C.IupSetAttributeHandle(ih.h, cName, ihNamed.h)
+}
+
 func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
@@ -60,4 +67,18 @@ func (ih *Ihandle) GetAttribute(name string) string {
 	cVal := C.IupGetAttribute(ih.h, cName)
 	
 	return C.GoString(cVal)
+}
+
+func (ih *Ihandle) GetFloat(name string) float64 {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	return float64(C.IupGetFloat(ih.h, cName))
+}
+
+func (ih *Ihandle) GetInt(name string) int64 {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	return int64(C.IupGetInt(ih.h, cName))
 }

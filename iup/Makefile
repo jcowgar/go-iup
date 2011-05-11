@@ -22,6 +22,7 @@ include $(GOROOT)/src/Make.inc
 TARG=github.com/jcowgar/iup.go
 
 CGOFILES=\
+	constants.go \
 	common.go \
 	core.go \
 	attributes.go \
@@ -29,7 +30,8 @@ CGOFILES=\
 	callback.go \
 	layout.go \
 	dialog.go \
-	controls.go
+	controls.go \
+	resources.go
 
 GOFILES=\
 	doc.go

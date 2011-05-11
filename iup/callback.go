@@ -23,11 +23,11 @@ package iup
 #include <stdlib.h>
 #include <iup.h>
 
-extern int goIupButtonActionCB(void *);
+extern int goIupActionCB(void *);
 
-void goIupSetButtonActionFunc(Ihandle *ih, void *f) {
+void goIupSetActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_ACTION", f);
-	IupSetCallback(ih, "ACTION", (Icallback) goIupButtonActionCB);
+	IupSetCallback(ih, "ACTION", (Icallback) goIupActionCB);
 }
 
 extern int goIupTextActionCB(void *ih, int ch, void *newValue);
@@ -41,20 +41,20 @@ void goIupSetTextActionFunc(Ihandle *ih, void *f) {
 import "C"
 import "unsafe"
 
-type ButtonActionFunc func(*Ihandle) int
+type ActionFunc func(*Ihandle) int
 
-//export goIupButtonActionCB
-func goIupButtonActionCB(ih unsafe.Pointer) int {
+//export goIupActionCB
+func goIupActionCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_ACTION")
 	defer C.free(unsafe.Pointer(cName))
 	
-	f := *(*ButtonActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	f := *(*ActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetButtonActionFunc(f ButtonActionFunc) {
-	C.goIupSetButtonActionFunc(ih.h, unsafe.Pointer(&f))
+func (ih *Ihandle) SetActionFunc(f ActionFunc) {
+	C.goIupSetActionFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type TextActionFunc func(ih *Ihandle, ch int, newValue string) int

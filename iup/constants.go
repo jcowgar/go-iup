@@ -24,42 +24,14 @@ package iup
 */
 import "C"
 
-func (ih *Ihandle) Destroy() {
-	C.IupDestroy(ih.h)
-}
+const DEFAULT      = C.IUP_DEFAULT
+const CLOSE        = C.IUP_CLOSE
+const IGNORE       = C.IUP_IGNORE
+const CONTINUE     = C.IUP_CONTINUE
 
-func toC(ihs []*Ihandle) []*C.Ihandle {
-	max := len(ihs)
-	result := make([]*C.Ihandle, max + 1)
-	
-	for k, v := range ihs {
-		result[k] = v.h
-	}	
-	result[max] = nil
-	
-	return result
-}
-
-func hboxv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupHboxv(&ihs[0])}
-}
-
-func Hbox(args ...*Ihandle) *Ihandle {
-	return hboxv(toC(args))
-}
-
-func Hboxv(args []*Ihandle) *Ihandle {
-	return hboxv(toC(args))
-}
-
-func vboxv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupVboxv(&ihs[0])}
-}
-
-func Vbox(args ...*Ihandle) *Ihandle {
-	return vboxv(toC(args))
-}
-
-func Vboxv(args []*Ihandle) *Ihandle {
-	return vboxv(toC(args))
-}
+const LEFT         = C.IUP_LEFT
+const CENTER       = C.IUP_CENTER
+const RIGHT        = C.IUP_RIGHT
+const MOUSEPOS     = C.IUP_MOUSEPOS
+const CENTERPARENT = C.IUP_CENTERPARENT
+const CURRENT      = C.IUP_CURRENT

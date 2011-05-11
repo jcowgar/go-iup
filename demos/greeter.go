@@ -47,18 +47,18 @@ func main() {
 	// Line one contains a name entry box and a hello button
 	someone = iup.Text((iup.TextActionFunc)(nameKeyEntry))	
 	helloSomeone := iup.Button("Say Hello", 
-		(iup.ButtonActionFunc)(sayHelloToSomeone))
+		(iup.ActionFunc)(sayHelloToSomeone))
 	
 	line1 := iup.Hbox(iup.Label("Name:"), someone, helloSomeone)
 	line1.SetAttributes("ALIGNMENT=ACENTER,GAP=5")
 	
 	// Line two contains two pre-defined hello buttons
 	helloJohn := iup.Button("Hello John", 
-		(iup.ButtonActionFunc)(sayHello),
+		(iup.ActionFunc)(sayHello),
 		"TO_WHO=\"John Doe\"")
 	
 	helloJim := iup.Button("Hello Jim", 
-		(iup.ButtonActionFunc)(sayHello),
+		(iup.ActionFunc)(sayHello),
 		"TO_WHO=\"Jim Doe\"")
 	
 	line2 := iup.Hbox(iup.Label("Predefined greeters:"), helloJohn, helloJim)

@@ -36,9 +36,19 @@ func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
 		switch v := o.(type) {
 		case string:
 			ih.SetAttributes(v)
-			
-		default:
-			// TODO: Do something here, runtime error?
+		}
+	}
+	
+	return ih
+}
+
+func FileDlg(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupFileDlg()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
 		}
 	}
 	
@@ -47,6 +57,10 @@ func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
 
 func Show(ih *Ihandle) int {
 	return int(C.IupShow(ih.h))
+}
+
+func Popup(ih *Ihandle, x, y int) int {
+	return int(C.IupPopup(ih.h, C.int(x), C.int(y)))
 }
 
 func Message(title, message string) {
