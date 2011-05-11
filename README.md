@@ -227,8 +227,8 @@ Dialogs/Predefined
 * IupGetText
 * IupListDialog
 * **DONE** IupMessage
-* IupLayoutDialog
-* IupElementPropertiesDialog
+* **DONE** IupLayoutDialog
+* **DONE** IupElementPropertiesDialog
 
 Controls/Standard
 -----------------

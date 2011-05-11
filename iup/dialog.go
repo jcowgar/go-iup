@@ -239,3 +239,12 @@ func Message(title, message string) {
 	
 	C.IupMessage(cTitle, cMessage)
 }
+
+func LayoutDialog(ih *Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupLayoutDialog(ih.h)}
+}
+
+func ElementPropertiesDialog(ih *Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupElementPropertiesDialog(ih.h)}
+}
+
