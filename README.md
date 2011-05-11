@@ -4,6 +4,56 @@ Iup Go Wrapper
 iup.go is a [Go][1] wrapper around the [Iup][2] GUI toolkit. The project
 was started on April 27, 2011.
 
+Changes in iup.go vs. Iup in C
+------------------------------
+
+Documentation is minimal with Iup.go because Iup's documentation is very good and valid since 
+iup.go strives for a 1-to-1 mapping. However, there are some general changes to better fit into
+the Go language.
+
+1. Iup has been dropped from the function names. iup.go functions are already accessed by the 
+   iup package name. So, IupOpen becomes iup.Open(), IupVersion() becomes iup.Version(), etc...
+2. IUP_ has been dropped from the constant names for the same reason as #1. Thus, IUP_IGNORE becomes
+   iup.IGNORE, IUP_DEFAULT becomes iup.DEFAULT, etc...
+3. Functions that work directly on an Ihandle pointer are referenced as a receiver. For example
+   IupSetAttribute(textWidget, "VALUE", "Hello, World!") becomes 
+   textWidget.SetAttribute("VALUE", "Hello, World!"). IupShow(dialog) becomes dialog.Show(), 
+   etc...
+4. Anything as of Iup 3.5 that has been marked as deprecated has not and will not be wrapped in
+   iup.go. No sense in wrapping it and then next release removing it. Just don't even start with it.
+5. The old ACTION name has been replaced by a SetCallback method in Iup. Thus, any widget that
+   expects an ACTION name on control creation in Iup C does not in Iup.go. For example, 
+   IupButton("Press Me", "PRESS_ME_ACTION") no longer takes the "PRESS_ME_ACTION" parameter.
+6. All widgets can accept a variable number of optional parameters. These parameters, if a string,
+   are considered attributes to be set on the newly created widget. If a valid Icallback type, then
+   they are considered callbacks to be set on the newly created widget.
+
+### Callbacks, Actions ... Old and New ###
+
+```c
+button = IupButton("Say Hello", "SAY_HELLO")
+IupSetAttributes(button, "FLAT=YES,ALIGNMENT=ALEFT")
+IupSetFunction("SAY_HELLO", printHello)
+```
+
+has been replaced with
+
+```go
+button := iup.Button("Say Hello", 
+    "FLAT=YES,ALIGNMENT=ALEFT",
+    (iup.ActionFunc)(printHello))
+```
+
+The optional parameters can appear in any order. For example the following is the same as the
+prior:
+
+```go
+button := iup.Button("Say Hello", 
+    "FLAT=YES", 
+    (iup.ActionFunc)(printHello)), 
+    "ALIGNMENT=ALEFT")
+```
+
 Installing the Iup library
 --------------------------
 
