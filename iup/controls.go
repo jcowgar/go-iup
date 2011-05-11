@@ -56,6 +56,137 @@ func Button(title string, opts ...interface{}) *Ihandle {
 	return ih
 }
 
+func Canvas(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupCanvas(nil)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func Frame(child *Ihandle, opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupFrame(child.h)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+	
+func List(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupList(nil)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func ProgressBar(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupProgressBar()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func Spin(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupSpin()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func tabsv(ihs []*C.Ihandle) *Ihandle {
+	return &Ihandle{h: C.IupTabsv(&ihs[0])}
+}
+
+func Tabs(args ...*Ihandle) *Ihandle {
+	return tabsv(toC(args))
+}
+
+func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
+	ih := tabsv(toC(args))
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih	
+}
+
+func Toggle(title string, opts ...interface{}) *Ihandle {
+	cTitle := C.CString(title)
+	defer C.free(unsafe.Pointer(cTitle))
+	
+	ih := &Ihandle{h: C.IupToggle(cTitle, nil)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih	
+}
+
+func Tree(opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupTree()}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih
+}
+
+func Val(orientation string, opts ...interface{}) *Ihandle {
+	cOrientation := C.CString(orientation)
+	defer C.free(unsafe.Pointer(cOrientation))
+	
+	ih := &Ihandle{h: C.IupVal(cOrientation)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+	
+	return ih	
+}
+
 // Differs from IupLabel in that any number of optional parameters may be passed. Strings
 // will be interpreted as attributes to set on the newly created widget.
 func Label(title string, opts ...interface{}) *Ihandle {
@@ -68,9 +199,6 @@ func Label(title string, opts ...interface{}) *Ihandle {
 		switch v := o.(type) {
 		case string:
 			ih.SetAttributes(v)
-			
-		default:
-			// TODO: Do something here, runtime error?
 		}
 	}
 	
