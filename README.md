@@ -259,12 +259,12 @@ Controls/Additional
 * **DONE** IupColorBrowser
 * **DONE** IupDial
 * **DONE** IupMatrix
-    * IupMatSetAttribute
-    * IupMatStoreAttribute
-    * IupMatGetAttribute
-    * IupMatGetInt
-    * IupMatGetFloat
-    * IupMatSetfAttribute
+    * **DONE** IupMatSetAttribute
+    * **DONE** IupMatStoreAttribute
+    * **DONE** IupMatGetAttribute
+    * **DONE** IupMatGetInt
+    * **DONE** IupMatGetFloat
+    * **DONE** IupMatSetfAttribute
 * **DONE** IupGLCanvas
 * **DONE** IupPPlot
     * IupPlotBegin

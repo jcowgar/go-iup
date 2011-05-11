@@ -28,8 +28,8 @@ package iup
 #include <iupgl.h>
 */
 import "C"
-
 import "unsafe"
+import "fmt"
 
 /*******************************************************************************
 **
@@ -312,6 +312,48 @@ func Matrix(opts ...interface{}) *Ihandle {
 	}
 	
 	return ih
+}
+
+func (ih *Ihandle) MatSetAttribute(name string, lin int, col int, value unsafe.Pointer) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	C.IupMatSetAttribute(ih.h, cName, C.int(lin), C.int(col), (*C.char)(value))
+}
+
+func (ih *Ihandle) MatStoreAttribute(name string, lin int, col int, value string) {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	cValue := C.CString(value)
+	defer C.free(unsafe.Pointer(cValue))
+	
+	C.IupMatStoreAttribute(ih.h, cName, C.int(lin), C.int(col), cValue)
+}
+
+func (ih *Ihandle) MatGetAttribute(name string, lin int, col int) string {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	return C.GoString(C.IupMatGetAttribute(ih.h, cName, C.int(lin), C.int(col)))
+}
+
+func (ih *Ihandle) MatGetInt(name string, lin int, col int) int64 {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	return int64(C.IupMatGetInt(ih.h, cName, C.int(lin), C.int(col)))	
+}
+
+func (ih *Ihandle) MatGetFloat(name string, lin int, col int) float64 {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	return float64(C.IupMatGetFloat(ih.h, cName, C.int(lin), C.int(col)))
+}
+
+func (ih *Ihandle) MatSetfAttribute(name string, lin int, col int, format string, args ...interface{}) {
+	ih.MatStoreAttribute(name, lin, col, fmt.Sprintf(format, args...))
 }
 
 func GLCanvas(opts ...interface{}) *Ihandle {
