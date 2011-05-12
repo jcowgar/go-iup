@@ -22,10 +22,6 @@ package iup
 /*
 #include <stdlib.h>
 #include <iup.h>
-
-Ihandle *_IupCreatev(const char *classname, char *params[]) {
-	return IupCreatev(classname, (void *)params);
-}
 */
 import "C"
 import "unsafe"
@@ -44,7 +40,8 @@ func Createv(classname string, args []string) *Ihandle {
 	cArgs := stringArrayToC(args)
 	defer freeCStringArray(cArgs)
 	
-	return &Ihandle{h: C._IupCreatev(cClassname, cArgs)}
+	
+	return &Ihandle{h: C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0])))}
 }
 
 func Createp(classname string, args ...string) *Ihandle {
@@ -54,7 +51,7 @@ func Createp(classname string, args ...string) *Ihandle {
 	cArgs := stringArrayToC(args)
 	defer freeCStringArray(cArgs)
 	
-	return &Ihandle{h: C._IupCreatev(cClassname, cArgs)}
+	return &Ihandle{h: C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0])))}
 }
 
 func (ih *Ihandle) Destroy() {

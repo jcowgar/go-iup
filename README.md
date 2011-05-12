@@ -147,8 +147,8 @@ Layout/Construction
 -------------------
 
 * **DONE** IupCreate
-* IupCreatev
-* IupCreatep
+* **DONE** IupCreatev
+* **DONE** IupCreatep
 * **DONE** IupDestroy
 * **DONE** IupMap
 * **DONE** IupUnmap
