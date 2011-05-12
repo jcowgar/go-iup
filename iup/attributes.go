@@ -30,6 +30,7 @@ void _IupSetfAttributeId2(Ihandle *ih, const char *name, int lin, int col, const
 import "C"
 import "unsafe"
 import "fmt"
+import "bytes"
 
 func (ih *Ihandle) StoreAttribute(name, value string) {
 	cName := C.CString(name)
@@ -95,6 +96,32 @@ func (ih *Ihandle) ResetAttribute(name string) {
 	defer C.free(unsafe.Pointer(cName))
 
 	C.IupResetAttribute(ih.h, cName)
+}
+
+// Warning: handle_name is ignored
+func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
+	attrs := bytes.NewBufferString("")
+	for i := 0; i < len(args); i += 2 {
+		if i > 0 {
+			attrs.WriteString(",")
+		}
+		attrs.WriteString(fmt.Sprintf("%s=\"%s\"", args[i], args[i+1]))
+	}
+	
+	ih.SetAttributes(attrs.String())
+	
+	return ih
+}
+
+// This method does not exist in C Iup. It has been provided as a convience function to allow
+// code such as:
+//
+//     box := iup.Hbox(button1, button2).SetAttrs("GAP", "5", "MARGIN", "8x8")
+//
+// C Iup provides SetAtt for this purpose but in Go Iup SetAttrs is an easier method to
+// accomplish this task due to no necessity of handle_name.
+func (ih *Ihandle) SetAttrs(args ...string) *Ihandle {
+	return ih.SetAtt("", args...)
 }
 
 func (ih *Ihandle) SetAttributeHandle(name string, ihNamed *Ihandle) {

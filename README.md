@@ -110,7 +110,7 @@ Attributes
 * **DONE** IupSetfAttributeId2
 * **DONE** IupSetAttributes
 * **DONE** IupResetAttribute
-* IupSetAtt
+* **DONE** IupSetAtt see also iup.SetAttrs
 * **DONE** IupSetAttributeHandle
 * **DONE** IupGetAttributeHandle
 * **DONE** IupGetAttribute
