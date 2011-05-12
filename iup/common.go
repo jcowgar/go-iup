@@ -20,9 +20,11 @@
 package iup
 
 /*
+#include <stdlib.h>
 #include <iup.h>
 */
 import "C"
+import "unsafe"
 
 const (
 	// iup.go version string.
@@ -38,4 +40,36 @@ const (
 // Primary widget handle type.
 type Ihandle struct {
 	h *C.Ihandle
+}
+
+func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
+	max := len(ihs)
+	result := make([]*C.Ihandle, max + 1)
+	
+	for k, v := range ihs {
+		result[k] = v.h
+	}	
+	result[max] = nil
+	
+	return result
+}
+
+func stringArrayToC(strs []string) []*C.char {
+	max := len(strs)
+	result := make([]*C.char, max + 1)
+	
+	for k, v := range strs {
+		result[k] = C.CString(v)
+	}
+	result[max] = nil
+	
+	return result
+}
+
+func freeCStringArray(strs []*C.char) {
+	for _, v := range strs {
+		if v != nil {
+			C.free(unsafe.Pointer(v))
+		}
+	}
 }

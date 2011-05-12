@@ -22,47 +22,39 @@ package iup
 /*
 #include <stdlib.h>
 #include <iup.h>
+
+Ihandle *_IupCreatev(const char *classname, char *params[]) {
+	return IupCreatev(classname, (void *)params);
+}
 */
 import "C"
 import "unsafe"
-
-func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
-	max := len(ihs)
-	result := make([]*C.Ihandle, max + 1)
-	
-	for k, v := range ihs {
-		result[k] = v.h
-	}	
-	result[max] = nil
-	
-	return result
-}
-
-func stringArrayToC(strs []string) []*C.char {
-	max := len(strs)
-	result := make([]*C.char, max + 1)
-	
-	for k, v := range strs {
-		result[k] = C.CString(v)
-	}
-	result[max] = nil
-	
-	return result
-}
-
-func freeCStringArray(strs []*C.char) {
-	for _, v := range strs {
-		if v != nil {
-			C.free(unsafe.Pointer(v))
-		}
-	}
-}
 
 func Create(classname string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
 	
 	return &Ihandle{h: C.IupCreate(cClassname)}
+}
+
+func Createv(classname string, args []string) *Ihandle {
+	cClassname := C.CString(classname)
+	defer C.free(unsafe.Pointer(cClassname))
+	
+	cArgs := stringArrayToC(args)
+	defer freeCStringArray(cArgs)
+	
+	return &Ihandle{h: C._IupCreatev(cClassname, cArgs)}
+}
+
+func Createp(classname string, args ...string) *Ihandle {
+	cClassname := C.CString(classname)
+	defer C.free(unsafe.Pointer(cClassname))
+	
+	cArgs := stringArrayToC(args)
+	defer freeCStringArray(cArgs)
+	
+	return &Ihandle{h: C._IupCreatev(cClassname, cArgs)}
 }
 
 func (ih *Ihandle) Destroy() {
