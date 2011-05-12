@@ -23,6 +23,7 @@ package iup
 #include <stdlib.h>
 #include <iup.h>
 #include <iuptuio.h>
+#include <iupim.h>
 */
 import "C"
 
@@ -48,6 +49,61 @@ func UnMapFont(driverfont string) string {
 	return C.GoString(C.IupUnMapFont(cDriverfont))
 }
 
+
+/*******************************************************************************
+**
+** Images
+**
+*******************************************************************************/
+
+func Image(width, height int, pixels []byte) *Ihandle {
+	cPixels := byteArrayToCUCharArray(pixels)
+	
+	return &Ihandle{h: C.IupImage(C.int(width), C.int(height), &cPixels[0])}
+}
+
+func ImageRGB(width, height int, pixels []byte) *Ihandle {
+	cPixels := byteArrayToCUCharArray(pixels)
+	
+	return &Ihandle{h: C.IupImageRGB(C.int(width), C.int(height), &cPixels[0])}
+}
+
+func ImageRGBA(width, height int, pixels []byte) *Ihandle {
+	cPixels := byteArrayToCUCharArray(pixels)
+	
+	return &Ihandle{h: C.IupImageRGBA(C.int(width), C.int(height), &cPixels[0])}
+}
+
+func LoadImage(file_name string) *Ihandle {
+	cFile_Name := C.CString(file_name)
+	defer C.free(unsafe.Pointer(cFile_Name))
+	
+	return &Ihandle{h: C.IupLoadImage(cFile_Name)}
+}
+
+func (ih *Ihandle) SaveImage(file_name, format string) int {
+	cFile_Name := C.CString(file_name)
+	defer C.free(unsafe.Pointer(cFile_Name))
+	
+	cFormat := C.CString(format)
+	defer C.free(unsafe.Pointer(cFormat))
+	
+	return int(C.IupSaveImage(ih.h, cFile_Name, cFormat))
+}
+
+func (ih *Ihandle) SaveImageAsText(file_name, format, name string) int {
+	cFile_Name := C.CString(file_name)
+	defer C.free(unsafe.Pointer(cFile_Name))
+	
+	cFormat := C.CString(format)
+	defer C.free(unsafe.Pointer(cFormat))
+	
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	
+	return int(C.IupSaveImageAsText(ih.h, cFile_Name, cFormat, cName))
+}
+	
 /*******************************************************************************
 **
 ** Keyboard

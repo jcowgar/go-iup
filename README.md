@@ -291,15 +291,15 @@ Resources/Fonts
 Resources/Images
 ----------------
 
-* IupImage
-* IupImageRGB
-* IupImageRGBA
+* **DONE** IupImage
+* **DONE** IupImageRGB
+* **DONE** IupImageRGBA
 * IupImageLibOpen
-* IupLoadImage
-* IupSaveImage
-* IupGetNativeHandleImage
-* IupGetImageNativeHandle
-* IupSaveImageAsText
+* **DONE** IupLoadImage
+* **DONE** IupSaveImage
+* *Waiting on im* IupGetNativeHandleImage
+* *Waiting on im* IupGetImageNativeHandle
+* **DONE** IupSaveImageAsText
 
 Resources/Keyboard
 ------------------

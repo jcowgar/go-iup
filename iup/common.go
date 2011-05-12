@@ -83,3 +83,13 @@ func float64ArrayToC(nums []float64) []C.float {
 	
 	return result
 }
+
+func byteArrayToCUCharArray(content []byte) []C.uchar {
+	cContent := make([]C.uchar, len(content))
+	for i, v := range content {
+		cContent[i] = (C.uchar)(v)
+	}
+	cContent[len(content)] = 0
+	
+	return cContent
+}

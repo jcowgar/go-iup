@@ -39,8 +39,7 @@ func Createv(classname string, args []string) *Ihandle {
 	
 	cArgs := stringArrayToC(args)
 	defer freeCStringArray(cArgs)
-	
-	
+		
 	return &Ihandle{h: C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0])))}
 }
 
