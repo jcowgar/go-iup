@@ -223,7 +223,7 @@ Dialogs/Predefined
 * **DONE** IupColorDlg
 * **DONE** IupFontDlg
 * **DONE** IupAlarm
-* IupGetFile
+* **DONE** IupGetFile
 * IupGetColor
 * *In Progress* IupGetParam
 * IupGetText
