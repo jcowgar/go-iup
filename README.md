@@ -1,17 +1,17 @@
 Iup Go Wrapper
 ==============
 
-iup.go is a [Go][1] wrapper around the [Iup][2] GUI toolkit. The project
+go-iup is a [Go][1] wrapper around the [Iup][2] GUI toolkit. The project
 was started on April 27, 2011.
 
-Changes in iup.go vs. Iup in C
+Changes in go-iup vs. Iup in C
 ------------------------------
 
-Documentation is minimal with Iup.go because Iup's documentation is very good and valid since 
-iup.go strives for a 1-to-1 mapping. However, there are some general changes to better fit into
+Documentation is minimal with go-iup because Iup's documentation is very good and valid since 
+go-iup strives for a 1-to-1 mapping. However, there are some general changes to better fit into
 the Go language.
 
-1. Iup has been dropped from the function names. iup.go functions are already accessed by the 
+1. Iup has been dropped from the function names. go-iup functions are already accessed by the 
    iup package name. So, IupOpen becomes iup.Open(), IupVersion() becomes iup.Version(), etc...
 2. IUP_ has been dropped from the constant names for the same reason as #1. Thus, IUP_IGNORE becomes
    iup.IGNORE, IUP_DEFAULT becomes iup.DEFAULT, etc...
@@ -20,9 +20,9 @@ the Go language.
    textWidget.SetAttribute("VALUE", "Hello, World!"). IupShow(dialog) becomes dialog.Show(), 
    etc...
 4. Anything as of Iup 3.5 that has been marked as deprecated has not and will not be wrapped in
-   iup.go. No sense in wrapping it and then next release removing it. Just don't even start with it.
+   go-iup. No sense in wrapping it and then next release removing it. Just don't even start with it.
 5. The old ACTION name has been replaced by a SetCallback method in Iup. Thus, any widget that
-   expects an ACTION name on control creation in Iup C does not in Iup.go. For example, 
+   expects an ACTION name on control creation in Iup C does not in go-iup. For example, 
    IupButton("Press Me", "PRESS_ME_ACTION") no longer takes the "PRESS_ME_ACTION" parameter.
 6. All widgets can accept a variable number of optional parameters. These parameters, if a string,
    are considered attributes to be set on the newly created widget. If a valid Icallback type, then
@@ -57,22 +57,22 @@ button := iup.Button("Say Hello",
 Installing the Iup library
 --------------------------
 
-Iup.go deals with three projects from [Tecgraf][4]:
+go-iup deals with three projects from [Tecgraf][4]:
 
 * Iup - Cross platform native control GUI library
 * Cd - Cross platform canvas drawing library
 * Im - Cross platform image library
 
-To use iup.go you must install all three libraries. Download the appropriate archive files
+To use go-iup you must install all three libraries. Download the appropriate archive files
 from the [Iup Download Tips][3] page. You should then place the .a (library) files in
 your lib/ directory and .h (header) files in your include/ directory. If compiling on 
 Windows, .dll (dynamically linked library) files in your %PATH%.
 
-Building Iup.go
+Building go-iup
 ---------------
 
-    $ git clone https://github.com/jcowgar/iup.go.git
-    $ cd iup.go
+    $ git clone https://github.com/jcowgar/go-iup.git
+    $ cd go-iup
     $ ./all.bash
     
 Special notes for Windows
