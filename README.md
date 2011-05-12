@@ -267,17 +267,17 @@ Controls/Additional
     * **DONE** IupMatSetfAttribute
 * **DONE** IupGLCanvas
 * **DONE** IupPPlot
-    * IupPlotBegin
-    * IupPlotAdd
-    * IupPlotAddStr
-    * IupPlotEnd
-    * IupPlotInsert
-    * IupPlotInsertStr
-    * IupPlotInsertPoints
-    * IupPlotInsertStrPoints
-    * IupPlotAddPoints
-    * IupPlotAddStrPoints
-    * IupPlotTransform
+    * **DONE** IupPlotBegin
+    * **DONE** IupPlotAdd
+    * **DONE** IupPlotAddStr
+    * **DONE** IupPlotEnd
+    * **DONE** IupPlotInsert
+    * **DONE** IupPlotInsertStr
+    * **DONE** IupPlotInsertPoints
+    * **DONE** IupPlotInsertStrPoints
+    * **DONE** IupPlotAddPoints
+    * **DONE** IupPlotAddStrPoints
+    * **DONE** IupPlotTransform
     * IupPlotPaintTo
 * IupOleControl
 * IupWebBrowser

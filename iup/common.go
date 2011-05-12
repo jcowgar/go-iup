@@ -73,3 +73,13 @@ func freeCStringArray(strs []*C.char) {
 		}
 	}
 }
+
+func float64ArrayToC(nums []float64) []C.float {
+	result := make([]C.float, len(nums))
+	
+	for k, v := range nums {
+		result[k] = C.float(v)
+	}
+	
+	return result
+}
