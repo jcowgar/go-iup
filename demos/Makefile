@@ -23,7 +23,7 @@ else
 EXE_EXT=
 endif
 
-ALL=test versions hello greeter rot13 getparam alarm
+ALL=test versions hello greeter rot13 getparam alarm dlgs
 
 INC_DIRS=-I../iup/_obj
 LIB_DIRS=-L../iup/_obj

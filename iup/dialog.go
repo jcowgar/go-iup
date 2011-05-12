@@ -33,7 +33,6 @@ int _IupGetParam(const char *title, const char *format, void **args) {
 }
 */
 import "C"
-
 import "unsafe"
 
 // Differs from IupDialog in that any number of parameters may be passed after the child
@@ -166,8 +165,21 @@ func Alarm(t, m string, buttons ...string) int {
 	return int(C.IupAlarm(cT, cM, b1, b2, b3))
 }
 
+// Return value is empty if cancel was pressed or no file was selected
+func GetFile(filename string) (string, int) {
+	cFilename := make([]C.char, 2048)
+	for i, v := range filename {
+		cFilename[i] = (C.char)(v)
+	}
+	
+	result := C.IupGetFile(&cFilename[0])
+	return C.GoString(&cFilename[0]), int(result)
+}
+
 const maxArgs = 20
 
+// Warning: Incompelete, only supports int64, float64 and bool variable types. This
+// method is a work in progress
 func GetParam(title string, format string, args ...interface{}) bool {
 	if len(args) > maxArgs {
 		panic("too many args")
