@@ -165,7 +165,10 @@ func Alarm(t, m string, buttons ...string) int {
 	return int(C.IupAlarm(cT, cM, b1, b2, b3))
 }
 
-// Return value is empty if cancel was pressed or no file was selected
+// Warning: This allocates 2048 for an incoming buffer size for the filename but if 
+// the user selects a filename more than 2048 characters a buffer over run WILL 
+// occur. This problem has been brought to the attention of the Iup maintainers as 
+// there is no way to tell GetFile how large the receiving buffer actually is.
 func GetFile(filename string) (string, int) {
 	cFilename := make([]C.char, 2048)
 	for i, v := range filename {
@@ -176,6 +179,20 @@ func GetFile(filename string) (string, int) {
 	return C.GoString(&cFilename[0]), int(result)
 }
 
+// Return value is r, g, b. Each will contain -1 if cancel was pressed
+func GetColor(x, y, r, g, b int) (int, int, int) {
+	cR := (C.uchar)(r)
+	cG := (C.uchar)(g)
+	cB := (C.uchar)(b)
+	
+	result := C.IupGetColor(C.int(x), C.int(y), &cR, &cG, &cB)
+	if int(result) == 1 {
+		return int(cR), int(cG), int(cB)
+	}
+	
+	return -1, -1, -1
+}
+	
 const maxArgs = 20
 
 // Warning: Incompelete, only supports int64, float64 and bool variable types. This
@@ -240,6 +257,25 @@ func GetParam(title string, format string, args ...interface{}) bool {
 	}
 	
 	return true
+}
+
+// Warning: This allocates 4096 for an incoming buffer size but if the user enters
+// more than 4096 characters a buffer over run WILL occur. This problem has been
+// brought to the attention of the Iup maintainers as there is no way to tell
+// IupGetText how large the receiving buffer actually is.
+func GetText(title, text string) (string, int) {
+	cTitle := C.CString(title)
+	defer C.free(unsafe.Pointer(cTitle))
+	
+	cText := make([]C.char, 4096)
+	for i, v := range text {
+		cText[i] = (C.char)(v)
+	}
+	
+	result := C.IupGetText(cTitle, &cText[0])
+	
+	return C.GoString(&cText[0]), int(result)
+
 }
 
 func Message(title, message string) {

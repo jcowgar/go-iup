@@ -32,6 +32,12 @@ func main() {
 	iup.Open()
 	defer iup.Close()
 	
-	filename, code := iup.GetFile("./*.go")	
-	fmt.Printf("code=%d, filename='%s'\n", code, filename)
+	//filename, code := iup.GetFile("./*.go")	
+	//fmt.Printf("code=%d, filename='%s'\n", code, filename)
+	
+	//r,g,b := iup.GetColor(0,0,150,180,200)
+	//fmt.Printf("r=%d, g=%d, b=%d\n", r, g, b)
+	
+	value, code := iup.GetText("Address", "123 Main St.\nSmall Town, TN 12345")
+	fmt.Printf("code=%d value='%s'\n", code, value)
 }

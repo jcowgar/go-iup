@@ -224,9 +224,9 @@ Dialogs/Predefined
 * **DONE** IupFontDlg
 * **DONE** IupAlarm
 * **DONE** IupGetFile
-* IupGetColor
+* **DONE** IupGetColor
 * *In Progress* IupGetParam
-* IupGetText
+* **DONE** IupGetText
 * IupListDialog
 * **DONE** IupMessage
 * **DONE** IupLayoutDialog
