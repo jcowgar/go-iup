@@ -22,7 +22,7 @@ package iup
 /*
 #cgo LDFLAGS: -liupcontrols -liupcd -liup_pplot -liupgl -liuptuio -liupim
 #cgo linux LDFLAGS:  -lXm
-#cgo windows LDFLAGS: -lgdi32 -lole32 -lcomdlg32 -lcomctl32
+#cgo windows LDFLAGS: -liup -lgdi32 -lole32 -lcomdlg32 -lcomctl32
 
 #include <stdlib.h>
 #include <iup.h>
