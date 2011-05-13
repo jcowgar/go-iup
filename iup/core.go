@@ -20,6 +20,7 @@
 package iup
 
 /*
+#cgo LDFLAGS: -liupcontrols -liupcd -liup_pplot -liupgl -liuptuio -liupim -lXm
 #include <stdlib.h>
 #include <iup.h>
 */
