@@ -116,12 +116,13 @@ func main() {
 		iup.Label("Text to be rotated:"),
 		text,
 		iup.Hbox(
-			iup.Button("Load File", (iup.ActionFunc)(onLoadFile)),
-			iup.Button("Rotate", (iup.ActionFunc)(onRotate)),
-			iup.Button("Quit", (iup.ActionFunc)(onQuit))))
-	mainBox.SetAttributes("GAP=5,MARGIN=5x5")
+			iup.Button("Load File", "PADDING=3x3", (iup.ActionFunc)(onLoadFile)),
+			iup.Button("Rotate", "PADDING=3x3", (iup.ActionFunc)(onRotate)),
+			iup.Button("Quit", "PADDING=3x3", (iup.ActionFunc)(onQuit)),
+		).SetAttrs("MARGIN", "0x0"),
+	).SetAttrs("MARGIN","5x5", "GAP", "3")
 	
-	mainDlg = iup.Dialog(mainBox, "TITLE=\"Rot 13\"")
+	mainDlg = iup.Dialog(mainBox).SetAttrs("TITLE","Rot 13")
 	mainDlg.SetAttributeHandle("MENU", menu)
 	mainDlg.Show()
 	
