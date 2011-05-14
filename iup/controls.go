@@ -31,6 +31,8 @@ import "C"
 import "unsafe"
 import "fmt"
 
+var controlsLibOpened = false
+
 /*******************************************************************************
 **
 ** Basic Controls
@@ -246,7 +248,16 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 **
 *******************************************************************************/
 
+func ensureControlLibOpened() {
+	if controlsLibOpened == false {
+		C.IupControlsOpen()
+		controlsLibOpened = true
+	}
+}
+
 func Cells(opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+	
 	ih := &Ihandle{h: C.IupCells()}
 	
 	for _, o := range opts {
@@ -260,6 +271,8 @@ func Cells(opts ...interface{}) *Ihandle {
 }
 
 func Colorbar(opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+	
 	ih := &Ihandle{h: C.IupColorbar()}
 	
 	for _, o := range opts {
@@ -273,6 +286,8 @@ func Colorbar(opts ...interface{}) *Ihandle {
 }
 
 func ColorBrowser(opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+	
 	ih := &Ihandle{h: C.IupColorBrowser()}
 	
 	for _, o := range opts {
@@ -286,6 +301,8 @@ func ColorBrowser(opts ...interface{}) *Ihandle {
 }
 
 func Dial(orientation string, opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+	
 	cOrientation := C.CString(orientation)
 	defer C.free(unsafe.Pointer(cOrientation))
 	
@@ -302,6 +319,8 @@ func Dial(orientation string, opts ...interface{}) *Ihandle {
 }
 
 func Matrix(opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+	
 	ih := &Ihandle{h: C.IupMatrix(nil)}
 	
 	for _, o := range opts {
@@ -357,6 +376,8 @@ func (ih *Ihandle) MatSetfAttribute(name string, lin int, col int, format string
 }
 
 func GLCanvas(opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+	
 	ih := &Ihandle{h: C.IupGLCanvas(nil)}
 	
 	for _, o := range opts {
@@ -370,6 +391,8 @@ func GLCanvas(opts ...interface{}) *Ihandle {
 }
 
 func PPlot(opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+	
 	ih := &Ihandle{h: C.IupPPlot()}
 	
 	for _, o := range opts {
