@@ -188,8 +188,17 @@ func Sbox(child *Ihandle) *Ihandle {
 	return &Ihandle{h: C.IupSbox(child.h)}
 }
 
-func Split(child1, child2 *Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupSplit(child1.h, child2.h)}
+func Split(child1, child2 *Ihandle, opts ...interface{}) *Ihandle {
+	ih := &Ihandle{h: C.IupSplit(child1.h, child2.h)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+		
+	return ih
 }
 
 /*******************************************************************************
