@@ -406,13 +406,14 @@ func PPlot(opts ...interface{}) *Ihandle {
 }
 
 func OleControl(opts ...interface{}) *Ihandle {
-	// TODO: FAIL, Not Implemented
+	panic("OleControl is not yet implemented")
 	
 	return nil
 }
 
 func WebBrowser(opts ...interface{}) *Ihandle {
-	// TODO: FAIL, Not Implemented
+	panic("WebBrowser is not yet implemented")
+	
 	return nil
 	/*
 	ih := &Ihandle{h: C.IupWebBrowser()}
