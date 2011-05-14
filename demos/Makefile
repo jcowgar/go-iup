@@ -18,12 +18,12 @@
 include $(GOROOT)/src/Make.inc
 
 ifeq ($(GOOS),windows)
-EXE_EXT=.exe
+EXE=.exe
 else
-EXE_EXT=
+EXE=
 endif
 
-ALL=test versions hello greeter rot13 getparam alarm dlgs
+ALL=test$(EXE) versions$(EXE) hello$(EXE) greeter$(EXE) rot13$(EXE) getparam$(EXE) alarm$(EXE) dlgs$(EXE)
 
 INC_DIRS=-I../iup/_obj
 LIB_DIRS=-L../iup/_obj
@@ -33,6 +33,6 @@ all: $(ALL)
 clean:
 	rm -rf *.[68] $(ALL)
 
-%: %.go
+%$(EXE): %.go
 	$(GC) $(INC_DIRS) $*.go
-	$(LD) $(LIB_DIRS) -o $@$(EXE_EXT) $*.$O
+	$(LD) $(LIB_DIRS) -o $@ $*.$O
