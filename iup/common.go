@@ -93,3 +93,14 @@ func byteArrayToCUCharArray(content []byte) []C.uchar {
 	
 	return cContent
 }
+
+func intArrayToC(nums []int) []C.int {
+	result := make([]C.int, len(nums))
+	
+	for k, v := range nums {
+		result[k] = C.int(v)
+	}
+	
+	return result
+}
+

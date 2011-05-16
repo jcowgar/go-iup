@@ -192,7 +192,27 @@ func GetColor(x, y, r, g, b int) (int, int, int) {
 	
 	return -1, -1, -1
 }
+
+// Differs in that size is derrived from the list array
+func ListDialog(typ int, title string, list []string, opt, max_col, max_lin int, marks []int) (int, []int) {
+	cTitle := C.CString(title)
+	defer C.free(unsafe.Pointer(cTitle))
 	
+	cList := stringArrayToC(list)
+	defer freeCStringArray(cList)
+	
+	cMarks := intArrayToC(marks)
+	
+	result := C.IupListDialog(C.int(typ), cTitle, C.int(len(list)), &cList[0], C.int(opt), C.int(max_col), 
+		C.int(max_lin), &cMarks[0])
+	
+	for k, v := range cMarks {
+		marks[k] = int(v)
+	}
+	
+	return int(result), marks
+}
+
 const maxArgs = 20
 
 // Warning: Incompelete, only supports int64, float64 and bool variable types. This

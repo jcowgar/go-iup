@@ -38,6 +38,13 @@ func main() {
 	//r,g,b := iup.GetColor(0,0,150,180,200)
 	//fmt.Printf("r=%d, g=%d, b=%d\n", r, g, b)
 	
-	value, code := iup.GetText("Address", "123 Main St.\nSmall Town, TN 12345")
-	fmt.Printf("code=%d value='%s'\n", code, value)
+	//value, code := iup.GetText("Address", "123 Main St.\nSmall Town, TN 12345")
+	//fmt.Printf("code=%d value='%s'\n", code, value)
+	
+	opts := []string{"John", "Doe", "Jim"}
+	marks := []int{0,0,1}
+	
+	result, marks := iup.ListDialog(2, "Hello", opts, -1, 1, 10, marks)
+	
+	fmt.Printf("%v, %v\n", result, marks)
 }
