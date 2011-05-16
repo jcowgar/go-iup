@@ -23,7 +23,16 @@ else
 EXE=
 endif
 
-ALL=test$(EXE) versions$(EXE) hello$(EXE) greeter$(EXE) rot13$(EXE) getparam$(EXE) alarm$(EXE) dlgs$(EXE)
+ALL = \
+	test$(EXE) \
+	versions$(EXE) \
+	hello$(EXE) \
+	greeter$(EXE) \
+	rot13$(EXE) \
+	getparam$(EXE) \
+	alarm$(EXE) \
+	dlgs$(EXE) \
+	webbrowser$(EXE)
 
 INC_DIRS=-I../iup/_obj
 LIB_DIRS=-L../iup/_obj

@@ -411,24 +411,3 @@ func OleControl(opts ...interface{}) *Ihandle {
 
 	return nil
 }
-
-func WebBrowser(opts ...interface{}) *Ihandle {
-	if webBrowserLibOpened == false {
-		C.IupWebBrowserOpen()
-		webBrowserLibOpened = true
-	}
-
-	//panic("WebBrowser is not yet implemented")
-
-	//return nil
-	ih := &Ihandle{h: C.IupWebBrowser()}
-
-	for _, o := range opts {
-		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-		}
-	}
-
-	return ih
-}
