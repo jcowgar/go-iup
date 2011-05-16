@@ -29,15 +29,56 @@ func main() {
 	iup.Open()
 	defer iup.Close()
 	
-	var age int
-	var salary float64
-	var wantRaise bool
+	abool   := true
+	aint    := 10
+	afloat  := 1293.33
+	aint2   := 192
+	afloat2 := 0.5
+	aangle  := 90.0
+	astr    := "string text"
+	aopt    := 1                 // opt/list defined in format string
+	alist   := 1                 // this is the selected item
+	afile   := "hello.txt"
+	acolor  := "255 122 255"
+	afont   := "Courier, 24"
+	astr2   := "hello\nworld"
 	
-	age = 10
-	salary = 1293.55
-	wantRaise = true
+	result := iup.GetParam("Sample", 
+		"Boolean: %b[No,Yes]\n" +
+		"Integer 1: %i\n" +
+		"Real 1: %r\n" +
+		"Sep1 %t\n" +
+		"Integer 2: %i[0,255]\n" +
+		"Real 2: %r[-1.5,1.5,0.05]\n" +
+		"Sep2 %t\n" +
+		"Angle %a[0,360]\n" +
+		"String: %s\n" +
+		"Options: %o|item0|item1|item2|item3\n" +
+		"List: %l|item0|item1|item2|item3\n" +
+		"File: %f[OPEN|*.txt;*.asc|CURRENT|NO|NO]\n" +
+		"Color: %c{Color Tip}\n" + 
+		"Font: %n\n" +
+		"Sep3 %t\n" +
+		"Multiline: %m\n",
+		&abool, &aint, &afloat, &aint2, &afloat2, &aangle, &astr, &aopt, &alist, &afile,
+		&acolor, &afont, &astr2)
 	
-	if iup.GetParam("Age", "Age: %i\nSalary: %r\nWant Raise: %b[No,Yes]\n", &age, &salary, &wantRaise) {
-		fmt.Printf("age is %d\nsalary is %f\nwant raise %v\n", age, salary, wantRaise)
+	if result {
+		fmt.Printf(
+			"Boolean: %v\n" +
+			"Integer 1: %v\n" +
+			"Real 1: %v\n" +
+			"Integer 2: %v\n" +
+			"Real 2: %v\n" +
+			"Angle %v\n" +
+			"String: %v\n" +
+			"Options: %v\n" +
+			"List: %v\n" +
+			"File: %v\n" +
+			"Color: %v\n" + 
+			"Font: %v\n" +
+			"Multiline: %v\n",
+			abool, aint, afloat, aint2, afloat2, aangle, astr, aopt, alist, afile,
+			acolor, afont, astr2)
 	}
 }

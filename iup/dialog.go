@@ -246,6 +246,12 @@ func GetParam(title string, format string, args ...interface{}) bool {
 			}
 			cargs[i] = unsafe.Pointer(p)
 			
+		case *string:
+			p := make([]byte, 4096)
+			copy(p, *v)
+			p[len(*v)] = 0
+			cargs[i] = unsafe.Pointer(&p[0])
+			
 		default:
 			panic("unknown type")
 		}
@@ -273,6 +279,9 @@ func GetParam(title string, format string, args ...interface{}) bool {
 			
 		case *bool:
 			*v = int(*(*C.int)(cargs[i])) == 1
+			
+		case *string:
+			*v = C.GoString((*C.char)(cargs[i]))
 		}
 	}
 	
