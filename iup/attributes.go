@@ -77,7 +77,7 @@ func (ih *Ihandle) SetfAttributeId(name string, id int, format string, args ...i
 func (ih *Ihandle) SetfAttributeId2(name string, lin int, col int, format string, args ...interface{}) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	cValue := C.CString(fmt.Sprintf(format, args...))
 	defer C.free(unsafe.Pointer(cValue))
 
@@ -107,9 +107,9 @@ func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
 		}
 		attrs.WriteString(fmt.Sprintf("%s=\"%s\"", args[i], args[i+1]))
 	}
-	
+
 	ih.SetAttributes(attrs.String())
-	
+
 	return ih
 }
 
@@ -134,7 +134,7 @@ func (ih *Ihandle) SetAttributeHandle(name string, ihNamed *Ihandle) {
 func (ih *Ihandle) GetAttributeHandle(name string) *Ihandle {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	return &Ihandle{h: C.IupGetAttributeHandle(ih.h, cName)}
 }
 
@@ -201,9 +201,9 @@ func SetGlobal(name string, value unsafe.Pointer) {
 	C.IupSetGlobal(cName, (*C.char)(value))
 }
 
-func GetGlobal(name string) string {	
+func GetGlobal(name string) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	return C.GoString(C.IupGetGlobal(cName))
 }

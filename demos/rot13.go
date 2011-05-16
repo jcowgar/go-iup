@@ -1,18 +1,18 @@
 /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
-	
+
 	This file is part of go-iup.
 
 	go-iup is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as
 	published by the Free Software Foundation, either version 3 of
 	the License, or (at your option) any later version.
-	
+
 	go-iup is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -30,7 +30,7 @@ package main
 import (
 	"strings"
 	"io/ioutil"
-	
+
 	"github.com/jcowgar/go-iup"
 )
 
@@ -42,10 +42,10 @@ func rot13char(c int) int {
 	} else if c >= 'n' && c <= 'z' || c >= 'N' && c <= 'Z' {
 		return c - 13
 	}
-	
+
 	return c
 }
- 
+
 func rot13(s string) string {
 	return strings.Map(rot13char, s)
 }
@@ -57,18 +57,18 @@ func onLoadFile(ih *iup.Ihandle) int {
 	if dlg.GetInt("STATUS") == -1 {
 		return iup.IGNORE
 	}
-	
+
 	filename := dlg.GetAttribute("VALUE")
 	dlg.Destroy()
-	
+
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
-		iup.Message("Error", "Error: " + err.String())
+		iup.Message("Error", "Error: "+err.String())
 		return iup.IGNORE
 	}
-	
+
 	text.StoreAttribute("VALUE", string(content))
-	
+
 	return iup.IGNORE
 }
 
@@ -76,7 +76,7 @@ func onRotate(ih *iup.Ihandle) int {
 	content := text.GetAttribute("VALUE")
 	content = rot13(content)
 	text.StoreAttribute("VALUE", string(content))
-	
+
 	return iup.DEFAULT
 }
 
@@ -86,20 +86,20 @@ func onQuit(ih *iup.Ihandle) int {
 
 func onAboutIup(ih *iup.Ihandle) int {
 	iup.Help("http://www.tecgraf.puc-rio.br/iup/")
-	
+
 	return iup.DEFAULT
 }
 
 func onAboutIupGo(ih *iup.Ihandle) int {
 	iup.Help("http://github.com/jcowgar/go-iup")
-	
+
 	return iup.DEFAULT
 }
 
 func main() {
 	iup.Open()
 	defer iup.Close()
-	
+
 	menu := iup.Menu(
 		iup.Submenu("File",
 			iup.Menu(
@@ -110,7 +110,7 @@ func main() {
 			iup.Menu(
 				iup.Item("About Iup", (iup.ActionFunc)(onAboutIup)),
 				iup.Item("About go-iup", (iup.ActionFunc)(onAboutIupGo)))))
-	
+
 	text = iup.Text("MULTILINE=YES,EXPAND=YES,WORDWRAP=YES,SIZE=250x100,SCROLLBAR=YES")
 	mainBox := iup.Vbox(
 		iup.Label("Text to be rotated:"),
@@ -120,11 +120,11 @@ func main() {
 			iup.Button("Rotate", "PADDING=3x3", (iup.ActionFunc)(onRotate)),
 			iup.Button("Quit", "PADDING=3x3", (iup.ActionFunc)(onQuit)),
 		).SetAttrs("MARGIN", "0x0"),
-	).SetAttrs("MARGIN","5x5", "GAP", "3")
-	
-	mainDlg = iup.Dialog(mainBox).SetAttrs("TITLE","Rot 13")
+	).SetAttrs("MARGIN", "5x5", "GAP", "3")
+
+	mainDlg = iup.Dialog(mainBox).SetAttrs("TITLE", "Rot 13")
 	mainDlg.SetAttributeHandle("MENU", menu)
 	mainDlg.Show()
-	
+
 	iup.MainLoop()
 }

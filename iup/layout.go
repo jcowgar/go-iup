@@ -1,18 +1,18 @@
 /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
-	
+
 	This file is part of go-iup.
 
 	go-iup is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as
 	published by the Free Software Foundation, either version 3 of
 	the License, or (at your option) any later version.
-	
+
 	go-iup is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -29,27 +29,27 @@ import "unsafe"
 func Create(classname string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
+
 	return &Ihandle{h: C.IupCreate(cClassname)}
 }
 
 func Createv(classname string, args []string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
+
 	cArgs := stringArrayToC(args)
 	defer freeCStringArray(cArgs)
-		
+
 	return &Ihandle{h: C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0])))}
 }
 
 func Createp(classname string, args ...string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
+
 	cArgs := stringArrayToC(args)
 	defer freeCStringArray(cArgs)
-	
+
 	return &Ihandle{h: C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0])))}
 }
 
@@ -76,7 +76,7 @@ func (ih *Ihandle) GetClassType() string {
 func (ih *Ihandle) ClassMatch(classname string) bool {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
+
 	return int(C.IupClassMatch(ih.h, cClassname)) == 1
 }
 
@@ -91,10 +91,10 @@ func (ih *Ihandle) CopyClassAttributes(dest *Ihandle) {
 func SetClassDefaultAttribute(classname, name, value string) {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
+
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
 
@@ -109,14 +109,14 @@ func SetClassDefaultAttribute(classname, name, value string) {
 
 func Fill(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupFill()}
-	
+
 	for _, o := range opts {
 		switch v := o.(type) {
 		case string:
 			ih.SetAttributes(v)
 		}
 	}
-		
+
 	return ih
 }
 
@@ -190,14 +190,14 @@ func Sbox(child *Ihandle) *Ihandle {
 
 func Split(child1, child2 *Ihandle, opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupSplit(child1.h, child2.h)}
-	
+
 	for _, o := range opts {
 		switch v := o.(type) {
 		case string:
 			ih.SetAttributes(v)
 		}
 	}
-		
+
 	return ih
 }
 
@@ -212,7 +212,7 @@ func (ih *Ihandle) Append(new_child *Ihandle) *Ihandle {
 	if result == nil {
 		return nil
 	}
-	
+
 	return ih
 }
 
@@ -225,7 +225,7 @@ func (ih *Ihandle) Insert(ref_child, new_child *Ihandle) *Ihandle {
 	if result == nil {
 		return nil
 	}
-	
+
 	return ih
 }
 
@@ -264,7 +264,7 @@ func (ih *Ihandle) GetDialog() *Ihandle {
 func (ih *Ihandle) GetDialogChild(name string) *Ihandle {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	return &Ihandle{h: C.IupGetDialogChild(ih.h, cName)}
 }
 
@@ -295,11 +295,10 @@ func (ih *Ihandle) Redraw(children bool) {
 	if children {
 		updateChildren = 1
 	}
-	
+
 	C.IupRedraw(ih.h, C.int(updateChildren))
 }
 
 func (ih *Ihandle) ConvertXYToPos(x, y int) int {
 	return int(C.IupConvertXYToPos(ih.h, C.int(x), C.int(y)))
 }
-

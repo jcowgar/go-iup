@@ -1,18 +1,18 @@
 /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
-	
+
 	This file is part of go-iup.
 
 	go-iup is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as
 	published by the Free Software Foundation, either version 3 of
 	the License, or (at your option) any later version.
-	
+
 	go-iup is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -102,7 +102,7 @@ func goIupMapCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_MAP_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*MapFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -114,7 +114,7 @@ func goIupUnmapCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_UNMAP_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*UnmapFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -126,7 +126,7 @@ func goIupDestroyCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_DESTROY_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*DestroyFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -138,7 +138,7 @@ func goIupGetFocusCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_GETFOCUS_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*GetFocusFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -150,7 +150,7 @@ func goIupKillFocusCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_KILLFOCUS_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*KillFocusFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -162,7 +162,7 @@ func goIupEnterWindowCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_ENTERWINDOW_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*EnterWindowFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -174,7 +174,7 @@ func goIupLeaveWindowCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_LEAVEWINDOW_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*LeaveWindowFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -186,7 +186,7 @@ func goIupKAnyCB(ih unsafe.Pointer, c C.int) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_K_ANY")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*KAnyFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)}, int(c))
 }
@@ -198,7 +198,7 @@ func goIupHelpCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_HELP_CB")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*HelpFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -210,7 +210,7 @@ func goIupActionCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_ACTION")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*ActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
@@ -226,7 +226,7 @@ func goIupTextActionCB(ih unsafe.Pointer, ch int, newValue unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	cName := C.CString("_GO_ACTION")
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	f := *(*TextActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	goNewValue := C.GoString((*C.char)(newValue))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)}, ch, goNewValue)
