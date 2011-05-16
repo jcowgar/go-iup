@@ -37,6 +37,12 @@ func WebBrowser(opts ...interface{}) *Ihandle {
 		switch v := o.(type) {
 		case string:
 			ih.SetAttributes(v)
+			
+		case CompletedFunc:
+			ih.SetCompletedFunc(v)
+			
+		case NavigateFunc:
+			ih.SetNavigateFunc(v)
 		}
 	}
 

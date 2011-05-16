@@ -66,7 +66,7 @@ void goIupLeaveWindowFunc(Ihandle *ih, void *f) {
 }
 
 extern int goIupKAnyCB(void *);
-void goIupKAnyFunc(Ihandle *ih, void *f) {
+void goIupSetKAnyFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_K_ANY", f);
 	IupSetCallback(ih, "K_ANY", (Icallback) goIupKAnyCB);
 }
@@ -189,6 +189,10 @@ func goIupKAnyCB(ih unsafe.Pointer, c C.int) int {
 
 	f := *(*KAnyFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)}, int(c))
+}
+
+func (ih *Ihandle) SetKAnyFunc(f KAnyFunc) {
+	C.goIupSetKAnyFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type HelpFunc func(*Ihandle) int

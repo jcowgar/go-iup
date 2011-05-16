@@ -31,6 +31,7 @@ CGOFILES=\
 	layout.go \
 	dialog.go \
 	controls.go \
+	webbrowser.go \
 	webbrowser_$(GOOS).go \
 	resources.go \
 	pplot.go
