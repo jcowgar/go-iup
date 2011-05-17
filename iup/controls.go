@@ -271,8 +271,8 @@ func Toggle(title string, opts ...interface{}) *Ihandle {
 		case ToggleActionFunc:
 			ih.SetToggleActionFunc(v)
 			
-		case ValuechangedFunc:
-			ih.SetValuechangedFunc(v)
+		case ValueChangedFunc:
+			ih.SetValueChangedFunc(v)
 			
 		default:
 			decorate(ih, o)

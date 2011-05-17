@@ -186,11 +186,11 @@ void goIupSetMultiselectFunc(Ihandle *ih, void *f) {
 }
 
 const char *GO_VALUECHANGED_CB = GO_PREFIX IUP_VALUECHANGED_CB;
-extern int goIupValuechangedCB(void *);
+extern int goIupValueChangedCB(void *);
 
-void goIupSetValuechangedFunc(Ihandle *ih, void *f) {
+void goIupSetValueChangedFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, GO_VALUECHANGED_CB, f);
-	IupSetCallback(ih, IUP_VALUECHANGED_CB, (Icallback) goIupValuechangedCB);
+	IupSetCallback(ih, IUP_VALUECHANGED_CB, (Icallback) goIupValueChangedCB);
 }
 
 extern int goIupTextActionCB(void *ih, int ch, void *newValue);
@@ -465,17 +465,17 @@ func (ih *Ihandle) SetMultiselectFunc(f MultiselectFunc) {
 	C.goIupSetMultiselectFunc(ih.h, unsafe.Pointer(&f))
 }
 
-type ValuechangedFunc func(ih *Ihandle) int
+type ValueChangedFunc func(ih *Ihandle) int
 
-//export goIupValuechangedCB
-func goIupValuechangedCB(ih unsafe.Pointer) int {
+//export goIupValueChangedCB
+func goIupValueChangedCB(ih unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
-	f := *(*ValuechangedFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_VALUECHANGED_CB)))
+	f := *(*ValueChangedFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_VALUECHANGED_CB)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetValuechangedFunc(f ValuechangedFunc) {
-	C.goIupSetValuechangedFunc(ih.h, unsafe.Pointer(&f))
+func (ih *Ihandle) SetValueChangedFunc(f ValueChangedFunc) {
+	C.goIupSetValueChangedFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type TextActionFunc func(ih *Ihandle, ch int, newValue string) int
