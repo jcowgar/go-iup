@@ -31,6 +31,8 @@ package iup
 #define IUP_EDIT_CB         "EDIT_CB"
 #define IUP_MULTISELECT_CB  "MULTISELECT_CB"
 #define IUP_VALUECHANGED_CB "VALUECHANGED_CB"
+#define IUP_TABCHANGE_CB    "TABCHANGE_CB"
+#define IUP_TABCHANGEPOS_CB "TABCHANGEPOS_CB"
 
 #define GO_PREFIX "_GO_"
 
@@ -201,6 +203,20 @@ extern int goIupToggleActionCB(void *, int state);
 void goIupSetToggleActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, GO_ACTION, f);
 	IupSetCallback(ih, IUP_ACTION, (Icallback) goIupToggleActionCB);
+}
+
+const char *GO_TABCHANGE_CB = GO_PREFIX IUP_TABCHANGE_CB;
+extern int goIupTabChangeCB(void *ih, void *new_tab, void *old_tab);
+void goIupSetTabChangeFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, GO_TABCHANGE_CB, f);
+	IupSetCallback(ih, IUP_TABCHANGE_CB, (Icallback) goIupTabChangeCB);
+}
+
+const char *GO_TABCHANGEPOS_CB = GO_PREFIX IUP_TABCHANGEPOS_CB;
+extern int goIupTabChangePosCB(void *ih, int old_pos, int new_pos);
+void goIupSetTabChangePosFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, GO_TABCHANGEPOS_CB, f);
+	IupSetCallback(ih, IUP_TABCHANGEPOS_CB, (Icallback) goIupTabChangePosCB);
 }
 */
 import "C"
@@ -488,3 +504,30 @@ func goIupToggleActionCB(ih unsafe.Pointer, state int) int {
 func (ih *Ihandle) SetToggleActionFunc(f ToggleActionFunc) {
 	C.goIupSetToggleActionFunc(ih.h, unsafe.Pointer(&f))
 }
+
+type TabChangeFunc func(ih, new_tab, old_tab *Ihandle) int
+
+//export goIupTabChangeCB
+func goIupTabChangeCB(ih, new_tab, old_tab unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	f := *(*TabChangeFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_TABCHANGE_CB)))
+	return f(&Ihandle{h}, &Ihandle{(*C.Ihandle)(new_tab)}, &Ihandle{(*C.Ihandle)(old_tab)})
+}
+
+func (ih *Ihandle) SetTabChangeFunc(f TabChangeFunc) {
+	C.goIupSetTabChangeFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type TabChangePosFunc func(ih *Ihandle, new_pos, old_pos int) int
+
+//export goIupTabChangePosCB
+func goIupTabChangePosCB(ih unsafe.Pointer, new_pos, old_pos int) int {
+	h := (*C.Ihandle)(ih)
+	f := *(*TabChangePosFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_TABCHANGEPOS_CB)))
+	return f(&Ihandle{h}, new_pos, old_pos)
+}
+
+func (ih *Ihandle) SetTabChangePosFunc(f TabChangePosFunc) {
+	C.goIupSetTabChangePosFunc(ih.h, unsafe.Pointer(&f))
+}
+
