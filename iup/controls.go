@@ -303,6 +303,9 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
+		case ValueChangedFunc:
+			ih.SetValueChangedFunc(v)
+			
 		default:
 			decorate(ih, o)
 		}
