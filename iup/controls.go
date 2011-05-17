@@ -147,6 +147,27 @@ func List(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
+		case ListActionFunc:
+			ih.SetListActionFunc(v)
+			
+		case CaretFunc:
+			ih.SetCaretFunc(v)
+			
+		case DblclickFunc:
+			ih.SetDblclickFunc(v)
+			
+		case EditFunc:
+			ih.SetEditFunc(v)
+			
+		case MotionFunc:
+			ih.SetMotionFunc(v)
+			
+		case MultiselectFunc:
+			ih.SetMultiselectFunc(v)
+			
+		case ValuechangedFunc:
+			ih.SetValuechangedFunc(v)
+			
 		default:
 			decorate(ih, o)
 		}

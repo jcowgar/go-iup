@@ -95,6 +95,48 @@ void goIupSetActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "ACTION", (Icallback) goIupActionCB);
 }
 
+extern int goIupListActionCB(void *, void *text, int item, int state);
+void goIupSetListActionFunc(Ihandle *ih, void *f) {	
+	IupSetCallback(ih, "_GO_LIST_ACTION", f);
+	IupSetCallback(ih, "ACTION", (Icallback) goIupListActionCB);
+}
+
+extern int goIupCaretCB(void *, int lin, int col, int pos);
+void goIupSetCaretFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_CARET_CB", f);
+	IupSetCallback(ih, "CARET_CB", (Icallback) goIupCaretCB);
+}
+
+extern int goIupDblclickCB(void *, int item, void *text);
+void goIupSetDblclickFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_DBLCLICK_CB", f);
+	IupSetCallback(ih, "DBLCLICK_CB", (Icallback) goIupDblclickCB);
+}
+
+extern int goIupEditCB(void *, int c, void *new_value);
+void goIupSetEditFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_EDIT_CB", f);
+	IupSetCallback(ih, "EDIT_CB", (Icallback) goIupEditCB);
+}
+
+extern int goIupMotionCB(void *, int x, int y, void *status);
+void goIupSetMotionFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_MOTION_CB", f);
+	IupSetCallback(ih, "MOTION_CB", (Icallback) goIupMotionCB);
+}
+
+extern int goIupMultiselectCB(void *, void *text);
+void goIupSetMultiselectFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_MULTISELECT_CB", f);
+	IupSetCallback(ih, "MULTISELECT_CB", (Icallback) goIupMultiselectCB);
+}
+
+extern int goIupValuechangedCB(void *);
+void goIupSetValuechangedFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_VALUECHANGED_CB", f);
+	IupSetCallback(ih, "VALUECHANGED_CB", (Icallback) goIupValuechangedCB);
+}
+
 extern int goIupTextActionCB(void *ih, int ch, void *newValue);
 void goIupSetTextActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_ACTION", f);
@@ -259,10 +301,8 @@ func goIupButtonCB(ih unsafe.Pointer, button, pressed, x, y int, status unsafe.P
 	cName := C.CString("_GO_BUTTON_CB")
 	defer C.free(unsafe.Pointer(cName))
 	
-	goStatus := C.GoString((*C.char)(status))
-	
 	f := *(*ButtonFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
-	
+	goStatus := C.GoString((*C.char)(status))	
 	return f(&Ihandle{h}, button, pressed, x, y, goStatus)
 }
 
@@ -304,6 +344,123 @@ func goIupActionCB(ih unsafe.Pointer) int {
 
 func (ih *Ihandle) SetActionFunc(f ActionFunc) {
 	C.goIupSetActionFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type ListActionFunc func(ih *Ihandle, text string, item, state int) int
+
+//export goIupListActionCB
+func goIupListActionCB(ih, text unsafe.Pointer, item, state int) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_CARET_CB")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*ListActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	goText := C.GoString((*C.char)(text))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, goText, int(item), int(state))
+}
+
+func (ih *Ihandle) SetListActionFunc(f ListActionFunc) {
+	C.goIupSetListActionFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type CaretFunc func(ih *Ihandle, lin, col, pos int) int
+
+//export goIupCaretCB
+func goIupCaretCB(ih unsafe.Pointer, lin, col, pos int) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_CARET_CB")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*CaretFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, int(lin), int(col), int(pos))
+}
+
+func (ih *Ihandle) SetCaretFunc(f CaretFunc) {
+	C.goIupSetCaretFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type DblclickFunc func(ih *Ihandle, item int, text string) int
+
+//export goIupDblclickCB
+func goIupDblclickCB(ih unsafe.Pointer, item int, text unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_DBLCLICK_CB")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*DblclickFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	goText := C.GoString((*C.char)(text))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, int(item), goText)
+}
+
+func (ih *Ihandle) SetDblclickFunc(f DblclickFunc) {
+	C.goIupSetDblclickFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type EditFunc func(ih *Ihandle, item int, text string) int
+
+//export goIupEditCB
+func goIupEditCB(ih unsafe.Pointer, item int, text unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_EDIT_CB")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*EditFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	goText := C.GoString((*C.char)(text))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, item, goText)
+}
+
+func (ih *Ihandle) SetEditFunc(f EditFunc) {
+	C.goIupSetEditFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type MotionFunc func(ih *Ihandle, x, y int, status string) int
+
+//export goIupMotionCB
+func goIupMotionCB(ih unsafe.Pointer, x, y int, status unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_MOTION_CB")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*MotionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	goStatus := C.GoString((*C.char)(status))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, x, y, goStatus)
+}
+
+func (ih *Ihandle) SetMotionFunc(f MotionFunc) {
+	C.goIupSetMotionFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type MultiselectFunc func(ih *Ihandle, text string) int
+
+//export goIupMultiselectCB
+func goIupMultiselectCB(ih, text unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_MULTISELECT_CB")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*MultiselectFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	goText := C.GoString((*C.char)(text))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, goText)
+}
+
+func (ih *Ihandle) SetMultiselectFunc(f MultiselectFunc) {
+	C.goIupSetMultiselectFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type ValuechangedFunc func(ih *Ihandle) int
+
+//export goIupValuechangedCB
+func goIupValuechangedCB(ih unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_VALUECHANGED_CB")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*ValuechangedFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)})
+}
+
+func (ih *Ihandle) SetValuechangedFunc(f ValuechangedFunc) {
+	C.goIupSetValuechangedFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type TextActionFunc func(ih *Ihandle, ch int, newValue string) int
