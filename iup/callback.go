@@ -77,6 +77,12 @@ void goIupSetHelpFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "HELP_CB", (Icallback) goIupHelpCB);
 }
 
+extern int goIupButtonCB(void *, int button, int pressed, int x, int y, void *status);
+void goIupSetButtonFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_BUTTON_CB", f);
+	IupSetCallback(ih, "BUTTON_CB", (Icallback) goIupButtonCB);
+}
+
 extern int goIupActionCB(void *);
 void goIupSetActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_ACTION", f);
@@ -237,6 +243,25 @@ func goIupHelpCB(ih unsafe.Pointer) int {
 
 func (ih *Ihandle) SetHelpFunc(f HelpFunc) {
 	C.goIupSetHelpFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type ButtonFunc func(*Ihandle, int, int, int, int, string) int
+
+//export goIupButtonCB
+func goIupButtonCB(ih unsafe.Pointer, button, pressed, x, y int, status unsafe.Pointer) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_BUTTON_CB")
+	defer C.free(unsafe.Pointer(cName))
+	
+	goStatus := C.GoString((*C.char)(status))
+	
+	f := *(*ButtonFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	
+	return f(&Ihandle{h}, button, pressed, x, y, goStatus)
+}
+
+func (ih *Ihandle) SetButtonFunc(f ButtonFunc) {
+	C.goIupSetButtonFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type ActionFunc func(*Ihandle) int

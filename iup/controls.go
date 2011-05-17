@@ -66,6 +66,9 @@ func decorate(ih *Ihandle, opt interface{}) {
 		
 	case HelpFunc:
 		ih.SetHelpFunc(v)
+		
+	case ButtonFunc:
+		ih.SetButtonFunc(v)
 	}
 }
 
