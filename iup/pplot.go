@@ -28,6 +28,21 @@ package iup
 import "C"
 import "unsafe"
 
+func PPlot(opts ...interface{}) *Ihandle {
+	ensureControlLibOpened()
+
+	ih := &Ihandle{h: C.IupPPlot()}
+
+	for _, o := range opts {
+		switch v := o.(type) {
+		case string:
+			ih.SetAttributes(v)
+		}
+	}
+
+	return ih
+}
+
 func (ih *Ihandle) PlotBegin(strXdata int) {
 	C.IupPlotBegin(ih.h, C.int(strXdata))
 }

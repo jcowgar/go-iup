@@ -31,9 +31,10 @@ CGOFILES=\
 	layout.go \
 	dialog.go \
 	controls.go \
-	webbrowser.go \
 	resources.go \
-	pplot.go
+	pplot.go \
+	webbrowser.go \
+	glcanvas.go
 
 GOFILES=\
 	doc.go

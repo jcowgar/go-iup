@@ -23,9 +23,6 @@ package iup
 #include <stdlib.h>
 #include <iup.h>
 #include <iupcontrols.h>
-#include <iupweb.h>
-#include <iup_pplot.h>
-#include <iupgl.h>
 */
 import "C"
 import "unsafe"
@@ -374,36 +371,6 @@ func (ih *Ihandle) MatGetFloat(name string, lin int, col int) float64 {
 
 func (ih *Ihandle) MatSetfAttribute(name string, lin int, col int, format string, args ...interface{}) {
 	ih.MatStoreAttribute(name, lin, col, fmt.Sprintf(format, args...))
-}
-
-func GLCanvas(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-
-	ih := &Ihandle{h: C.IupGLCanvas(nil)}
-
-	for _, o := range opts {
-		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-		}
-	}
-
-	return ih
-}
-
-func PPlot(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-
-	ih := &Ihandle{h: C.IupPPlot()}
-
-	for _, o := range opts {
-		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-		}
-	}
-
-	return ih
 }
 
 func OleControl(opts ...interface{}) *Ihandle {
