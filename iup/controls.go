@@ -165,8 +165,8 @@ func List(opts ...interface{}) *Ihandle {
 		case MultiselectFunc:
 			ih.SetMultiselectFunc(v)
 			
-		case ValuechangedFunc:
-			ih.SetValuechangedFunc(v)
+		case ValueChangedFunc:
+			ih.SetValueChangedFunc(v)
 			
 		default:
 			decorate(ih, o)

@@ -33,6 +33,7 @@ package iup
 #define IUP_VALUECHANGED_CB "VALUECHANGED_CB"
 #define IUP_TABCHANGE_CB    "TABCHANGE_CB"
 #define IUP_TABCHANGEPOS_CB "TABCHANGEPOS_CB"
+#define IUP_SPIN_CB         "SPIN_CB"
 
 #define GO_PREFIX "_GO_"
 
@@ -217,6 +218,13 @@ extern int goIupTabChangePosCB(void *ih, int old_pos, int new_pos);
 void goIupSetTabChangePosFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, GO_TABCHANGEPOS_CB, f);
 	IupSetCallback(ih, IUP_TABCHANGEPOS_CB, (Icallback) goIupTabChangePosCB);
+}
+
+const char *GO_SPIN_CB = GO_PREFIX IUP_SPIN_CB;
+extern int goIupSpinCB(void *ih, int inc);
+void goIupSetSpinFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, GO_SPIN_CB, f);
+	IupSetCallback(ih, IUP_SPIN_CB, (Icallback) goIupSpinCB);
 }
 */
 import "C"
@@ -531,3 +539,15 @@ func (ih *Ihandle) SetTabChangePosFunc(f TabChangePosFunc) {
 	C.goIupSetTabChangePosFunc(ih.h, unsafe.Pointer(&f))
 }
 
+type SpinFunc func(ih *Ihandle, inc int) int
+
+//export goIupSpinCB
+func goIupSpinCB(ih unsafe.Pointer, inc int) int {
+	h := (*C.Ihandle)(ih)
+	f := *(*SpinFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_SPIN_CB)))
+	return f(&Ihandle{h}, inc)
+}
+
+func (ih *Ihandle) SetSpinFunc(f SpinFunc) {
+	C.goIupSetSpinFunc(ih.h, unsafe.Pointer(&f))
+}
