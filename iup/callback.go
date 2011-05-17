@@ -83,6 +83,12 @@ void goIupSetButtonFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "BUTTON_CB", (Icallback) goIupButtonCB);
 }
 
+extern int goIupDropFilesCB(void *, void *filename, int num, int x, int y);
+void goIupSetDropFilesFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_DROPFILES_CB", f);
+	IupSetCallback(ih, "DROPFILES_CB", (Icallback) goIupDropFilesCB);	
+}
+
 extern int goIupActionCB(void *);
 void goIupSetActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_ACTION", f);
@@ -262,6 +268,26 @@ func goIupButtonCB(ih unsafe.Pointer, button, pressed, x, y int, status unsafe.P
 
 func (ih *Ihandle) SetButtonFunc(f ButtonFunc) {
 	C.goIupSetButtonFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type DropFilesFunc func(*Ihandle, string, int, int, int) int
+
+//export goIupDropFilesCB
+func goIupDropFilesCB(ih, filename unsafe.Pointer, num, x, y int) int {
+	h := (*C.Ihandle)(ih)
+	
+	cName := C.CString("_GO_DROPFILES_CB")
+	defer C.free(unsafe.Pointer(cName))
+	
+	f := *(*DropFilesFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	
+	goFilename := C.GoString((*C.char)(filename))
+	
+	return f(&Ihandle{h}, goFilename, int(num), int(x), int(y))
+}
+
+func (ih *Ihandle) SetDropFilesFunc(f DropFilesFunc) {
+	C.goIupSetDropFilesFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type ActionFunc func(*Ihandle) int
