@@ -215,6 +215,12 @@ func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
+		case TabChangeFunc:
+			ih.SetTabChangeFunc(v)
+			
+		case TabChangePosFunc:
+			ih.SetTabChangePosFunc(v)
+			
 		default:
 			decorate(ih, o)
 		}
