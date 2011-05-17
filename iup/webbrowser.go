@@ -137,9 +137,6 @@ func WebBrowser(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-			
 		case CompletedFunc:
 			ih.SetCompletedFunc(v)
 			
@@ -151,6 +148,9 @@ func WebBrowser(opts ...interface{}) *Ihandle {
 			
 		case NewWindowFunc:
 			ih.SetNewWindowFunc(v)
+		
+		default:
+			decorate(ih, o)
 		}
 	}
 

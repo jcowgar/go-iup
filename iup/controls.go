@@ -32,6 +32,17 @@ var controlsLibOpened = false
 var webBrowserLibOpened = false
 
 /*******************************************************************************
+ * Supporting Methods
+ */
+
+func decorate(ih *Ihandle, opt interface{}) {
+	switch v := opt.(type) {
+	case string:
+		ih.SetAttributes(v)
+	}
+}
+
+/*******************************************************************************
 **
 ** Basic Controls
 **
@@ -42,20 +53,17 @@ func Button(title string, opts ...interface{}) *Ihandle {
 	defer C.free(unsafe.Pointer(cTitle))
 
 	ih := &Ihandle{h: C.IupButton(cTitle, nil)}
-
+	
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-
 		case ActionFunc:
 			ih.SetActionFunc(v)
-
+			
 		default:
-			// TODO: Do something here, runtime error?
+			decorate(ih, o)
 		}
 	}
-
+	
 	return ih
 }
 
@@ -64,8 +72,8 @@ func Canvas(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -77,8 +85,8 @@ func Frame(child *Ihandle, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -93,8 +101,8 @@ func Label(title string, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -106,8 +114,8 @@ func List(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -119,11 +127,11 @@ func ProgressBar(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
-
+	
 	return ih
 }
 
@@ -132,11 +140,11 @@ func Spin(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
-
+	
 	return ih
 }
 
@@ -153,8 +161,8 @@ func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -166,14 +174,11 @@ func Text(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-
 		case TextActionFunc:
 			ih.SetTextActionFunc(v)
 
 		default:
-			// TODO: Do something here, runtime error?
+			decorate(ih, o)
 		}
 	}
 
@@ -203,8 +208,8 @@ func Toggle(title string, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -216,8 +221,8 @@ func Tree(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -232,8 +237,8 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -260,8 +265,8 @@ func Cells(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -275,8 +280,8 @@ func Colorbar(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -290,8 +295,8 @@ func ColorBrowser(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -308,8 +313,8 @@ func Dial(orientation string, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -323,8 +328,8 @@ func Matrix(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 

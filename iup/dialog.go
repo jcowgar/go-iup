@@ -39,7 +39,7 @@ import "unsafe"
 // widget. Strings will be interpreted as attributes to set on the newly created dialog.
 func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupDialog(child.h)}
-
+	
 	for _, o := range opts {
 		switch v := o.(type) {
 		case string:
@@ -74,11 +74,11 @@ func Popup(ih *Ihandle, x, y int) int {
 
 func FileDlg(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupFileDlg()}
-
+	
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -87,11 +87,11 @@ func FileDlg(opts ...interface{}) *Ihandle {
 
 func MessageDlg(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupMessageDlg()}
-
+	
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -100,11 +100,11 @@ func MessageDlg(opts ...interface{}) *Ihandle {
 
 func ColorDlg(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupColorDlg()}
-
+	
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -113,11 +113,11 @@ func ColorDlg(opts ...interface{}) *Ihandle {
 
 func FontDlg(opts ...interface{}) *Ihandle {
 	ih := &Ihandle{h: C.IupFontDlg()}
-
+	
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
@@ -317,10 +317,28 @@ func Message(title, message string) {
 	C.IupMessage(cTitle, cMessage)
 }
 
-func LayoutDialog(ih *Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupLayoutDialog(ih.h)}
+func LayoutDialog(ih *Ihandle, opts ...interface{}) *Ihandle {
+	newih := &Ihandle{h: C.IupLayoutDialog(ih.h)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		default:
+			decorate(newih, o)
+		}
+	}
+	
+	return newih
 }
 
-func ElementPropertiesDialog(ih *Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupElementPropertiesDialog(ih.h)}
+func ElementPropertiesDialog(ih *Ihandle, opts ...interface{}) *Ihandle {
+	newih := &Ihandle{h: C.IupElementPropertiesDialog(ih.h)}
+	
+	for _, o := range opts {
+		switch v := o.(type) {
+		default:
+			decorate(newih, o)
+		}
+	}
+	
+	return newih
 }

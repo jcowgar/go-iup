@@ -33,8 +33,8 @@ func GLCanvas(opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, o)
 		}
 	}
 
