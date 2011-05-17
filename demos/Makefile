@@ -32,7 +32,8 @@ ALL = \
 	getparam$(EXE) \
 	alarm$(EXE) \
 	dlgs$(EXE) \
-	webbrowser$(EXE)
+	webbrowser$(EXE) \
+	pplot$(EXE)
 
 INC_DIRS=-I../iup/_obj
 LIB_DIRS=-L../iup/_obj

@@ -28,8 +28,15 @@ package iup
 import "C"
 import "unsafe"
 
+var pplotLibOpened = false
+
 func PPlot(opts ...interface{}) *Ihandle {
 	ensureControlLibOpened()
+	
+	if pplotLibOpened == false {
+		C.IupPPlotOpen()
+		pplotLibOpened = true
+	}
 
 	ih := &Ihandle{h: C.IupPPlot()}
 
@@ -96,7 +103,7 @@ func (ih *Ihandle) PlotInsertStrPoints(index, sample_index int, x []string, y []
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func (ih *Ihandle) IupPlotAddPoints(index int, x, y []float64) {
+func (ih *Ihandle) PlotAddPoints(index int, x, y []float64) {
 	count := len(x)
 	cX := float64ArrayToC(x)
 	cY := float64ArrayToC(y)
@@ -105,7 +112,7 @@ func (ih *Ihandle) IupPlotAddPoints(index int, x, y []float64) {
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func (ih *Ihandle) IupPlotAddStrPoints(index int, x []string, y []float64) {
+func (ih *Ihandle) PlotAddStrPoints(index int, x []string, y []float64) {
 	count := len(x)
 
 	cX := stringArrayToC(x)
