@@ -28,7 +28,6 @@ import "C"
 import "unsafe"
 import "fmt"
 
-var controlsLibOpened = false
 var webBrowserLibOpened = false
 
 /*******************************************************************************
@@ -82,7 +81,7 @@ func Button(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 
-	ih := &Ihandle{h: C.IupButton(cTitle, nil)}
+	ih := &Ihandle{H: C.IupButton(cTitle, nil)}
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -98,7 +97,7 @@ func Button(title string, opts ...interface{}) *Ihandle {
 }
 
 func Canvas(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupCanvas(nil)}
+	ih := &Ihandle{H: C.IupCanvas(nil)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -111,7 +110,7 @@ func Canvas(opts ...interface{}) *Ihandle {
 }
 
 func Frame(child *Ihandle, opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupFrame(child.h)}
+	ih := &Ihandle{H: C.IupFrame(child.H)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -127,7 +126,7 @@ func Label(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 
-	ih := &Ihandle{h: C.IupLabel(cTitle)}
+	ih := &Ihandle{H: C.IupLabel(cTitle)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -143,7 +142,7 @@ func Label(title string, opts ...interface{}) *Ihandle {
 }
 
 func List(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupList(nil)}
+	ih := &Ihandle{H: C.IupList(nil)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -177,7 +176,7 @@ func List(opts ...interface{}) *Ihandle {
 }
 
 func ProgressBar(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupProgressBar()}
+	ih := &Ihandle{H: C.IupProgressBar()}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -190,7 +189,7 @@ func ProgressBar(opts ...interface{}) *Ihandle {
 }
 
 func Spin(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupSpin()}
+	ih := &Ihandle{H: C.IupSpin()}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -203,7 +202,7 @@ func Spin(opts ...interface{}) *Ihandle {
 }
 
 func tabsv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupTabsv(&ihs[0])}
+	return &Ihandle{H: C.IupTabsv(&ihs[0])}
 }
 
 func Tabs(args ...*Ihandle) *Ihandle {
@@ -230,7 +229,7 @@ func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
 }
 
 func Text(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupText(nil)}
+	ih := &Ihandle{H: C.IupText(nil)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -247,7 +246,7 @@ func Text(opts ...interface{}) *Ihandle {
 
 func (ih *Ihandle) TextConvertLinColToPos(lin, col int) int {
 	pos := new(C.int)
-	C.IupTextConvertLinColToPos(ih.h, C.int(lin), C.int(col), pos)
+	C.IupTextConvertLinColToPos(ih.H, C.int(lin), C.int(col), pos)
 	return int(*pos)
 }
 
@@ -255,7 +254,7 @@ func (ih *Ihandle) TextConvertPosToLinCol(pos int) (int, int) {
 	lin := new(C.int)
 	col := new(C.int)
 
-	C.IupTextConvertPosToLinCol(ih.h, C.int(pos), lin, col)
+	C.IupTextConvertPosToLinCol(ih.H, C.int(pos), lin, col)
 
 	return int(*lin), int(*col)
 }
@@ -264,7 +263,7 @@ func Toggle(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 
-	ih := &Ihandle{h: C.IupToggle(cTitle, nil)}
+	ih := &Ihandle{H: C.IupToggle(cTitle, nil)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -283,7 +282,7 @@ func Toggle(title string, opts ...interface{}) *Ihandle {
 }
 
 func Tree(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupTree()}
+	ih := &Ihandle{H: C.IupTree()}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -299,7 +298,7 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 	cOrientation := C.CString(orientation)
 	defer C.free(unsafe.Pointer(cOrientation))
 
-	ih := &Ihandle{h: C.IupVal(cOrientation)}
+	ih := &Ihandle{H: C.IupVal(cOrientation)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -320,17 +319,10 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 **
 *******************************************************************************/
 
-func ensureControlLibOpened() {
-	if controlsLibOpened == false {
-		C.IupControlsOpen()
-		controlsLibOpened = true
-	}
-}
-
 func Cells(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
+	OpenControlLib()
 
-	ih := &Ihandle{h: C.IupCells()}
+	ih := &Ihandle{H: C.IupCells()}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -343,9 +335,9 @@ func Cells(opts ...interface{}) *Ihandle {
 }
 
 func Colorbar(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
+	OpenControlLib()
 
-	ih := &Ihandle{h: C.IupColorbar()}
+	ih := &Ihandle{H: C.IupColorbar()}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -358,9 +350,9 @@ func Colorbar(opts ...interface{}) *Ihandle {
 }
 
 func ColorBrowser(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
+	OpenControlLib()
 
-	ih := &Ihandle{h: C.IupColorBrowser()}
+	ih := &Ihandle{H: C.IupColorBrowser()}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -373,12 +365,12 @@ func ColorBrowser(opts ...interface{}) *Ihandle {
 }
 
 func Dial(orientation string, opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
+	OpenControlLib()
 
 	cOrientation := C.CString(orientation)
 	defer C.free(unsafe.Pointer(cOrientation))
 
-	ih := &Ihandle{h: C.IupDial(cOrientation)}
+	ih := &Ihandle{H: C.IupDial(cOrientation)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -391,9 +383,9 @@ func Dial(orientation string, opts ...interface{}) *Ihandle {
 }
 
 func Matrix(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
+	OpenControlLib()
 
-	ih := &Ihandle{h: C.IupMatrix(nil)}
+	ih := &Ihandle{H: C.IupMatrix(nil)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -409,7 +401,7 @@ func (ih *Ihandle) MatSetAttribute(name string, lin int, col int, value unsafe.P
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupMatSetAttribute(ih.h, cName, C.int(lin), C.int(col), (*C.char)(value))
+	C.IupMatSetAttribute(ih.H, cName, C.int(lin), C.int(col), (*C.char)(value))
 }
 
 func (ih *Ihandle) MatStoreAttribute(name string, lin int, col int, value string) {
@@ -419,28 +411,28 @@ func (ih *Ihandle) MatStoreAttribute(name string, lin int, col int, value string
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
 
-	C.IupMatStoreAttribute(ih.h, cName, C.int(lin), C.int(col), cValue)
+	C.IupMatStoreAttribute(ih.H, cName, C.int(lin), C.int(col), cValue)
 }
 
 func (ih *Ihandle) MatGetAttribute(name string, lin int, col int) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return C.GoString(C.IupMatGetAttribute(ih.h, cName, C.int(lin), C.int(col)))
+	return C.GoString(C.IupMatGetAttribute(ih.H, cName, C.int(lin), C.int(col)))
 }
 
 func (ih *Ihandle) MatGetInt(name string, lin int, col int) int64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return int64(C.IupMatGetInt(ih.h, cName, C.int(lin), C.int(col)))
+	return int64(C.IupMatGetInt(ih.H, cName, C.int(lin), C.int(col)))
 }
 
 func (ih *Ihandle) MatGetFloat(name string, lin int, col int) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return float64(C.IupMatGetFloat(ih.h, cName, C.int(lin), C.int(col)))
+	return float64(C.IupMatGetFloat(ih.H, cName, C.int(lin), C.int(col)))
 }
 
 func (ih *Ihandle) MatSetfAttribute(name string, lin int, col int, format string, args ...interface{}) {

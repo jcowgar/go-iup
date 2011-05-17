@@ -39,7 +39,7 @@ func (ih *Ihandle) StoreAttribute(name, value string) {
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
 
-	C.IupStoreAttribute(ih.h, cName, cValue)
+	C.IupStoreAttribute(ih.H, cName, cValue)
 }
 
 func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
@@ -49,21 +49,21 @@ func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
 
-	C.IupStoreAttributeId(ih.h, cName, C.int(id), cValue)
+	C.IupStoreAttributeId(ih.H, cName, C.int(id), cValue)
 }
 
 func (ih *Ihandle) SetAttribute(name string, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupSetAttribute(ih.h, cName, (*C.char)(value))
+	C.IupSetAttribute(ih.H, cName, (*C.char)(value))
 }
 
 func (ih *Ihandle) SetAttributeId(name string, id int, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupSetAttributeId(ih.h, cName, C.int(id), (*C.char)(value))
+	C.IupSetAttributeId(ih.H, cName, C.int(id), (*C.char)(value))
 }
 
 func (ih *Ihandle) SetfAttribute(name, format string, args ...interface{}) {
@@ -81,21 +81,21 @@ func (ih *Ihandle) SetfAttributeId2(name string, lin int, col int, format string
 	cValue := C.CString(fmt.Sprintf(format, args...))
 	defer C.free(unsafe.Pointer(cValue))
 
-	C._IupSetfAttributeId2(ih.h, cName, C.int(lin), C.int(col), cValue)
+	C._IupSetfAttributeId2(ih.H, cName, C.int(lin), C.int(col), cValue)
 }
 
 func (ih *Ihandle) SetAttributes(values string) {
 	cValues := C.CString(values)
 	defer C.free(unsafe.Pointer(cValues))
 
-	C.IupSetAttributes(ih.h, cValues)
+	C.IupSetAttributes(ih.H, cValues)
 }
 
 func (ih *Ihandle) ResetAttribute(name string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupResetAttribute(ih.h, cName)
+	C.IupResetAttribute(ih.H, cName)
 }
 
 // Warning: handle_name is ignored
@@ -128,60 +128,60 @@ func (ih *Ihandle) SetAttributeHandle(name string, ihNamed *Ihandle) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupSetAttributeHandle(ih.h, cName, ihNamed.h)
+	C.IupSetAttributeHandle(ih.H, cName, ihNamed.H)
 }
 
 func (ih *Ihandle) GetAttributeHandle(name string) *Ihandle {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return &Ihandle{h: C.IupGetAttributeHandle(ih.h, cName)}
+	return &Ihandle{H: C.IupGetAttributeHandle(ih.H, cName)}
 }
 
 func (ih *Ihandle) GetAttribute(name string) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return C.GoString(C.IupGetAttribute(ih.h, cName))
+	return C.GoString(C.IupGetAttribute(ih.H, cName))
 }
 
 func (ih *Ihandle) GetAttributeId(name string, id int) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return C.GoString(C.IupGetAttributeId(ih.h, cName, C.int(id)))
+	return C.GoString(C.IupGetAttributeId(ih.H, cName, C.int(id)))
 }
 
 func (ih *Ihandle) GetIntId(name string, id int) int {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return int(C.IupGetIntId(ih.h, cName, C.int(id)))
+	return int(C.IupGetIntId(ih.H, cName, C.int(id)))
 }
 
 func (ih *Ihandle) GetFloatId(name string, id int) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return float64(C.IupGetFloatId(ih.h, cName, C.int(id)))
+	return float64(C.IupGetFloatId(ih.H, cName, C.int(id)))
 }
 
 func (ih *Ihandle) GetAttributes() string {
-	return C.GoString(C.IupGetAttributes(ih.h))
+	return C.GoString(C.IupGetAttributes(ih.H))
 }
 
 func (ih *Ihandle) GetFloat(name string) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return float64(C.IupGetFloat(ih.h, cName))
+	return float64(C.IupGetFloat(ih.H, cName))
 }
 
 func (ih *Ihandle) GetInt(name string) int64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return int64(C.IupGetInt(ih.h, cName))
+	return int64(C.IupGetInt(ih.H, cName))
 }
 
 func StoreGlobal(name, value string) {

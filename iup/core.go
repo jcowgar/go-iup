@@ -26,6 +26,7 @@ package iup
 
 #include <stdlib.h>
 #include <iup.h>
+#include <iupcontrols.h>
 */
 import "C"
 
@@ -36,6 +37,14 @@ import (
 
 func Open() int {
 	return int(C.IupOpen(nil, nil))
+}
+
+var controlsLibOpened = false
+func OpenControlLib() {
+	if controlsLibOpened == false {
+		C.IupControlsOpen()
+		controlsLibOpened = true
+	}
 }
 
 func Close() {

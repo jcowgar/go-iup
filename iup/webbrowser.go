@@ -63,11 +63,11 @@ func goIupCompletedCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	
 	goUrl := C.GoString((*C.char)(url))
 	
-	return f(&Ihandle{h: (*C.Ihandle)(ih)}, goUrl)
+	return f(&Ihandle{H: (*C.Ihandle)(ih)}, goUrl)
 }
 
 func (ih *Ihandle) SetCompletedFunc(f CompletedFunc) {
-	C.goIupSetCompletedFunc(ih.h, unsafe.Pointer(&f))
+	C.goIupSetCompletedFunc(ih.H, unsafe.Pointer(&f))
 }
 
 type ErrorFunc func(*Ihandle, string) int
@@ -82,11 +82,11 @@ func goIupErrorCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	
 	goUrl := C.GoString((*C.char)(url))
 	
-	return f(&Ihandle{h: (*C.Ihandle)(ih)}, goUrl)
+	return f(&Ihandle{H: (*C.Ihandle)(ih)}, goUrl)
 }
 
 func (ih *Ihandle) SetErrorFunc(f ErrorFunc) {
-	C.goIupSetErrorFunc(ih.h, unsafe.Pointer(&f))
+	C.goIupSetErrorFunc(ih.H, unsafe.Pointer(&f))
 }
 
 type NavigateFunc func(*Ihandle, string) int
@@ -101,11 +101,11 @@ func goIupNavigateCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	
 	goUrl := C.GoString((*C.char)(url))
 	
-	return f(&Ihandle{h: (*C.Ihandle)(ih)}, goUrl)
+	return f(&Ihandle{H: (*C.Ihandle)(ih)}, goUrl)
 }
 
 func (ih *Ihandle) SetNavigateFunc(f NavigateFunc) {
-	C.goIupSetNavigateFunc(ih.h, unsafe.Pointer(&f))
+	C.goIupSetNavigateFunc(ih.H, unsafe.Pointer(&f))
 }
 
 type NewWindowFunc func(*Ihandle, string) int
@@ -120,11 +120,11 @@ func goIupNewWindowCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	
 	goUrl := C.GoString((*C.char)(url))
 	
-	return f(&Ihandle{h: (*C.Ihandle)(ih)}, goUrl)
+	return f(&Ihandle{H: (*C.Ihandle)(ih)}, goUrl)
 }
 
 func (ih *Ihandle) SetNewWindowFunc(f NewWindowFunc) {
-	C.goIupSetNewWindowFunc(ih.h, unsafe.Pointer(&f))
+	C.goIupSetNewWindowFunc(ih.H, unsafe.Pointer(&f))
 }
 
 func WebBrowser(opts ...interface{}) *Ihandle {
@@ -133,7 +133,7 @@ func WebBrowser(opts ...interface{}) *Ihandle {
 		webBrowserLibOpened = true
 	}
 
-	ih := &Ihandle{h: C.IupWebBrowser()}
+	ih := &Ihandle{H: C.IupWebBrowser()}
 
 	for _, o := range opts {
 		switch v := o.(type) {

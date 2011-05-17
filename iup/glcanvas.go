@@ -27,9 +27,9 @@ package iup
 import "C"
 
 func GLCanvas(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-
-	ih := &Ihandle{h: C.IupGLCanvas(nil)}
+	OpenControlLib()
+	
+	ih := &Ihandle{H: C.IupGLCanvas(nil)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -42,23 +42,23 @@ func GLCanvas(opts ...interface{}) *Ihandle {
 }
 
 func (ih *Ihandle) GLMakeCurrent() {
-	C.IupGLMakeCurrent(ih.h)
+	C.IupGLMakeCurrent(ih.H)
 }
 
 func (ih *Ihandle) GLIsCurrent() int {
-	return int(C.IupGLIsCurrent(ih.h))
+	return int(C.IupGLIsCurrent(ih.H))
 }
 
 func (ih *Ihandle) GLSwapBuffers() {
-	C.IupGLSwapBuffers(ih.h)
+	C.IupGLSwapBuffers(ih.H)
 }
 
 func (ih *Ihandle) GLPalette(index int, r, g, b float64) {
-	C.IupGLPalette(ih.h, C.int(index), C.float(r), C.float(g), C.float(b))
+	C.IupGLPalette(ih.H, C.int(index), C.float(r), C.float(g), C.float(b))
 }
 
 func (ih *Ihandle) GLUseFont(first, count, list_base int) {
-	C.IupGLUseFont(ih.h, C.int(first), C.int(count), C.int(list_base))
+	C.IupGLUseFont(ih.H, C.int(first), C.int(count), C.int(list_base))
 }
 
 func GLWait(gl int) {

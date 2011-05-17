@@ -59,26 +59,26 @@ func UnMapFont(driverfont string) string {
 func Image(width, height int, pixels []byte) *Ihandle {
 	cPixels := byteArrayToCUCharArray(pixels)
 
-	return &Ihandle{h: C.IupImage(C.int(width), C.int(height), &cPixels[0])}
+	return &Ihandle{H: C.IupImage(C.int(width), C.int(height), &cPixels[0])}
 }
 
 func ImageRGB(width, height int, pixels []byte) *Ihandle {
 	cPixels := byteArrayToCUCharArray(pixels)
 
-	return &Ihandle{h: C.IupImageRGB(C.int(width), C.int(height), &cPixels[0])}
+	return &Ihandle{H: C.IupImageRGB(C.int(width), C.int(height), &cPixels[0])}
 }
 
 func ImageRGBA(width, height int, pixels []byte) *Ihandle {
 	cPixels := byteArrayToCUCharArray(pixels)
 
-	return &Ihandle{h: C.IupImageRGBA(C.int(width), C.int(height), &cPixels[0])}
+	return &Ihandle{H: C.IupImageRGBA(C.int(width), C.int(height), &cPixels[0])}
 }
 
 func LoadImage(file_name string) *Ihandle {
 	cFile_Name := C.CString(file_name)
 	defer C.free(unsafe.Pointer(cFile_Name))
 
-	return &Ihandle{h: C.IupLoadImage(cFile_Name)}
+	return &Ihandle{H: C.IupLoadImage(cFile_Name)}
 }
 
 func (ih *Ihandle) SaveImage(file_name, format string) int {
@@ -88,7 +88,7 @@ func (ih *Ihandle) SaveImage(file_name, format string) int {
 	cFormat := C.CString(format)
 	defer C.free(unsafe.Pointer(cFormat))
 
-	return int(C.IupSaveImage(ih.h, cFile_Name, cFormat))
+	return int(C.IupSaveImage(ih.H, cFile_Name, cFormat))
 }
 
 func (ih *Ihandle) SaveImageAsText(file_name, format, name string) int {
@@ -101,7 +101,7 @@ func (ih *Ihandle) SaveImageAsText(file_name, format, name string) int {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return int(C.IupSaveImageAsText(ih.h, cFile_Name, cFormat, cName))
+	return int(C.IupSaveImageAsText(ih.H, cFile_Name, cFormat, cName))
 }
 
 /*******************************************************************************
@@ -111,19 +111,19 @@ func (ih *Ihandle) SaveImageAsText(file_name, format, name string) int {
 *******************************************************************************/
 
 func (ih *Ihandle) NextField() *Ihandle {
-	return &Ihandle{h: C.IupNextField(ih.h)}
+	return &Ihandle{H: C.IupNextField(ih.H)}
 }
 
 func (ih *Ihandle) PreviousField() *Ihandle {
-	return &Ihandle{h: C.IupPreviousField(ih.h)}
+	return &Ihandle{H: C.IupPreviousField(ih.H)}
 }
 
 func GetFocus() *Ihandle {
-	return &Ihandle{h: C.IupGetFocus()}
+	return &Ihandle{H: C.IupGetFocus()}
 }
 
 func (ih *Ihandle) SetFocus() *Ihandle {
-	return &Ihandle{h: C.IupSetFocus(ih.h)}
+	return &Ihandle{H: C.IupSetFocus(ih.H)}
 }
 
 /*******************************************************************************
@@ -136,7 +136,7 @@ func Item(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 
-	ih := &Ihandle{h: C.IupItem(cTitle, nil)}
+	ih := &Ihandle{H: C.IupItem(cTitle, nil)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -152,7 +152,7 @@ func Item(title string, opts ...interface{}) *Ihandle {
 }
 
 func menuv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupMenuv(&ihs[0])}
+	return &Ihandle{H: C.IupMenuv(&ihs[0])}
 }
 
 func Menu(args ...*Ihandle) *Ihandle {
@@ -173,14 +173,14 @@ func Menuv(args []*Ihandle, opts ...interface{}) *Ihandle {
 }
 
 func Separator() *Ihandle {
-	return &Ihandle{h: C.IupSeparator()}
+	return &Ihandle{H: C.IupSeparator()}
 }
 
 func Submenu(title string, menu *Ihandle, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 
-	ih := &Ihandle{h: C.IupSubmenu(cTitle, menu.h)}
+	ih := &Ihandle{H: C.IupSubmenu(cTitle, menu.H)}
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -199,19 +199,19 @@ func Submenu(title string, menu *Ihandle, opts ...interface{}) *Ihandle {
 *******************************************************************************/
 
 func Clipboard() *Ihandle {
-	return &Ihandle{h: C.IupClipboard()}
+	return &Ihandle{H: C.IupClipboard()}
 }
 
 func Timer() *Ihandle {
-	return &Ihandle{h: C.IupTimer()}
+	return &Ihandle{H: C.IupTimer()}
 }
 
 func TuioClient(port int) *Ihandle {
-	return &Ihandle{h: C.IupTuioClient(C.int(port))}
+	return &Ihandle{H: C.IupTuioClient(C.int(port))}
 }
 
 func User() *Ihandle {
-	return &Ihandle{h: C.IupUser()}
+	return &Ihandle{H: C.IupUser()}
 }
 
 func Help(url string) int {

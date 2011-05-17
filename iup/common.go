@@ -39,7 +39,7 @@ const (
 
 // Primary widget handle type.
 type Ihandle struct {
-	h *C.Ihandle
+	H *C.Ihandle
 }
 
 func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
@@ -47,7 +47,7 @@ func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
 	result := make([]*C.Ihandle, max+1)
 
 	for k, v := range ihs {
-		result[k] = v.h
+		result[k] = v.H
 	}
 	result[max] = nil
 

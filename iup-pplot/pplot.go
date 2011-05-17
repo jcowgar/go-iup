@@ -17,9 +17,13 @@
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package iup
+package pplot
 
 /*
+#cgo LDFLAGS: -liupcontrols -liupcd -liup_pplot
+#cgo linux LDFLAGS: -liupgtk
+#cgo windows LDFLAGS: -liup -lgdi32 -lole32 -lcomdlg32 -lcomctl32
+
 #include <stdlib.h>
 #include <iup.h>
 #include <iupcontrols.h>
@@ -27,71 +31,73 @@ package iup
 */
 import "C"
 import "unsafe"
+import . "github.com/jcowgar/go-iup"
 
 var pplotLibOpened = false
 
 func PPlot(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
+	OpenControlLib()
 	
 	if pplotLibOpened == false {
 		C.IupPPlotOpen()
 		pplotLibOpened = true
 	}
 
-	ih := &Ihandle{h: C.IupPPlot()}
-
+	ih := &Ihandle{H: C.IupPPlot()}
+	
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(ih, o)
+			//iup.Decorate(ih, o)
 		}
 	}
 
 	return ih
 }
 
-func (ih *Ihandle) PlotBegin(strXdata int) {
-	C.IupPlotBegin(ih.h, C.int(strXdata))
+func PlotBegin(ih *Ihandle, strXdata int) {
+	C.IupPlotBegin(ih.H, C.int(strXdata))
 }
 
-func (ih *Ihandle) PlotAdd(x, y float64) {
-	C.IupPlotAdd(ih.h, C.float(x), C.float(y))
+func PlotAdd(ih *Ihandle, x, y float64) {
+	C.IupPlotAdd(ih.H, C.float(x), C.float(y))
 }
 
-func (ih *Ihandle) PlotAddStr(x string, y float64) {
+func PlotAddStr(ih *Ihandle, x string, y float64) {
 	cX := C.CString(x)
 	defer C.free(unsafe.Pointer(cX))
 
-	C.IupPlotAddStr(ih.h, cX, C.float(y))
+	C.IupPlotAddStr(ih.H, cX, C.float(y))
 }
 
-func (ih *Ihandle) PlotEnd() {
-	C.IupPlotEnd(ih.h)
+func PlotEnd(ih *Ihandle) {
+	C.IupPlotEnd(ih.H)
 }
 
-func (ih *Ihandle) PlotInsert(index, sample_index int, x, y float64) {
-	C.IupPlotInsert(ih.h, C.int(index), C.int(sample_index), C.float(x), C.float(y))
+func PlotInsert(ih *Ihandle, index, sample_index int, x, y float64) {
+	C.IupPlotInsert(ih.H, C.int(index), C.int(sample_index), C.float(x), C.float(y))
 }
 
-func (ih *Ihandle) PlotInsertStr(index, sample_index int, x string, y float64) {
+func PlotInsertStr(ih *Ihandle, index, sample_index int, x string, y float64) {
 	cX := C.CString(x)
 	defer C.free(unsafe.Pointer(cX))
 
-	C.IupPlotInsertStr(ih.h, C.int(index), C.int(sample_index), cX, C.float(y))
+	C.IupPlotInsertStr(ih.H, C.int(index), C.int(sample_index), cX, C.float(y))
 }
 
+/*
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func (ih *Ihandle) PlotInsertPoints(index, sample_index int, x, y []float64) {
+func PlotInsertPoints(ih *iup.Ihandle, index, sample_index int, x, y []float64) {
 	count := len(x)
 	cX := float64ArrayToC(x)
 	cY := float64ArrayToC(y)
 
-	C.IupPlotInsertPoints(ih.h, C.int(index), C.int(sample_index), &cX[0], &cY[0],
+	C.IupPlotInsertPoints(ih.H, C.int(index), C.int(sample_index), &cX[0], &cY[0],
 		C.int(count))
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func (ih *Ihandle) PlotInsertStrPoints(index, sample_index int, x []string, y []float64) {
+func PlotInsertStrPoints(ih *iup.Ihandle, index, sample_index int, x []string, y []float64) {
 	count := len(x)
 
 	cX := stringArrayToC(x)
@@ -99,20 +105,20 @@ func (ih *Ihandle) PlotInsertStrPoints(index, sample_index int, x []string, y []
 
 	cY := float64ArrayToC(y)
 
-	C.IupPlotInsertStrPoints(ih.h, C.int(index), C.int(sample_index), &cX[0], &cY[0], C.int(count))
+	C.IupPlotInsertStrPoints(ih.H, C.int(index), C.int(sample_index), &cX[0], &cY[0], C.int(count))
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func (ih *Ihandle) PlotAddPoints(index int, x, y []float64) {
+func PlotAddPoints(ih *iup.Ihandle, index int, x, y []float64) {
 	count := len(x)
 	cX := float64ArrayToC(x)
 	cY := float64ArrayToC(y)
 
-	C.IupPlotAddPoints(ih.h, C.int(index), &cX[0], &cY[0], C.int(count))
+	C.IupPlotAddPoints(ih.H, C.int(index), &cX[0], &cY[0], C.int(count))
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func (ih *Ihandle) PlotAddStrPoints(index int, x []string, y []float64) {
+func PlotAddStrPoints(ih *iup.Ihandle, index int, x []string, y []float64) {
 	count := len(x)
 
 	cX := stringArrayToC(x)
@@ -120,14 +126,16 @@ func (ih *Ihandle) PlotAddStrPoints(index int, x []string, y []float64) {
 
 	cY := float64ArrayToC(y)
 
-	C.IupPlotAddStrPoints(ih.h, C.int(index), &cX[0], &cY[0], C.int(count))
+	C.IupPlotAddStrPoints(ih.H, C.int(index), &cX[0], &cY[0], C.int(count))
 }
 
-func (ih *Ihandle) PlotTransform(x, y float64) (int, int) {
+func PlotTransform(ih *iup.Ihandle, x, y float64) (int, int) {
 	cIX := new(C.int)
 	cIY := new(C.int)
 
-	C.IupPlotTransform(ih.h, C.float(x), C.float(y), cIX, cIY)
+	C.IupPlotTransform(ih.H, C.float(x), C.float(y), cIX, cIY)
 
 	return int(*cIX), int(*cIY)
 }
+*/
+

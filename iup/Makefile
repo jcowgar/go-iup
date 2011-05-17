@@ -32,7 +32,6 @@ CGOFILES=\
 	dialog.go \
 	controls.go \
 	resources.go \
-	pplot.go \
 	webbrowser.go \
 	glcanvas.go
 

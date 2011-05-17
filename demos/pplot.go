@@ -21,36 +21,37 @@ package main
 
 import (
 	"github.com/jcowgar/go-iup"
+	"github.com/jcowgar/go-iup/pplot"
 )
 
 func main() {
 	iup.Open()
 	defer iup.Close()
 	
-	pplot := iup.PPlot("EXPAND=YES")
-	pplot.StoreAttribute("TITLE", "Bar Mode")
-	pplot.StoreAttribute("TITLEFONTSIZE", "16")
-	pplot.StoreAttribute("MARGINTOP", "40")
-	pplot.StoreAttribute("MARGINLEFT", "30")
-	pplot.StoreAttribute("MARGINBOTTOM","65")
+	p := pplot.PPlot("EXPAND=YES")
+	p.StoreAttribute("TITLE", "Bar Mode")
+	p.StoreAttribute("TITLEFONTSIZE", "16")
+	p.StoreAttribute("MARGINTOP", "40")
+	p.StoreAttribute("MARGINLEFT", "30")
+	p.StoreAttribute("MARGINBOTTOM","65")
 	
 	labels := []string{
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}
 	values := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 	
-	pplot.PlotBegin(1)
+	pplot.PlotBegin(p, 1)
 	for i := 0; i < len(labels); i++ {
-		pplot.PlotAddStr(labels[i], values[i])
+		pplot.PlotAddStr(p, labels[i], values[i])
 	}
-	pplot.PlotEnd()
-	pplot.StoreAttribute("DS_MODE", "BAR")
-	pplot.StoreAttribute("DS_COLOR", "100 100 200")
+	pplot.PlotEnd(p)
+	p.StoreAttribute("DS_MODE", "BAR")
+	p.StoreAttribute("DS_COLOR", "100 100 200")
 	
-	dlg := iup.Dialog(pplot, "SIZE=200x200,TITLE=\"PPlot Example\"")
+	dlg := iup.Dialog(p, "SIZE=200x200,TITLE=\"PPlot Example\"")
 	dlg.Show()
 	
-	pplot.StoreAttribute("REDRAW", "")
+	p.StoreAttribute("REDRAW", "")
 	
 	iup.MainLoop()
 }
