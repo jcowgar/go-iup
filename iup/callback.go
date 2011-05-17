@@ -24,43 +24,43 @@ package iup
 #include <iup.h>
 
 extern int goIupMapCB(void *);
-void goIupMapFunc(Ihandle *ih, void *f) {
+void goIupSetMapFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_MAP_CB", f);
 	IupSetCallback(ih, "MAP_CB", (Icallback) goIupMapCB);
 }
 
 extern int goIupUnmapCB(void *);
-void goIupUnmapFunc(Ihandle *ih, void *f) {
+void goIupSetUnmapFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_UNMAP_CB", f);
 	IupSetCallback(ih, "UNMAP_CB", (Icallback) goIupUnmapCB);
 }
 
 extern int goIupDestroyCB(void *);
-void goIupDestroyFunc(Ihandle *ih, void *f) {
+void goIupSetDestroyFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_DESTROY_CB", f);
 	IupSetCallback(ih, "DESTROY_CB", (Icallback) goIupDestroyCB);
 }
 
 extern int goIupGetFocusCB(void *);
-void goIupGetFocusFunc(Ihandle *ih, void *f) {
+void goIupSetGetFocusFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_GETFOCUS_CB", f);
 	IupSetCallback(ih, "GETFOCUS_CB", (Icallback) goIupGetFocusCB);
 }
 
 extern int goIupKillFocusCB(void *);
-void goIupKillFocusFunc(Ihandle *ih, void *f) {
+void goIupSetKillFocusFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_KILLFOCUS_CB", f);
 	IupSetCallback(ih, "KILLFOCUS_CB", (Icallback) goIupKillFocusCB);
 }
 
 extern int goIupEnterWindowCB(void *);
-void goIupEnterWindowFunc(Ihandle *ih, void *f) {
+void goIupSetEnterWindowFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_ENTERWINDOW_CB", f);
 	IupSetCallback(ih, "ENTERWINDOW_CB", (Icallback) goIupEnterWindowCB);
 }
 
 extern int goIupLeaveWindowCB(void *);
-void goIupLeaveWindowFunc(Ihandle *ih, void *f) {
+void goIupSetLeaveWindowFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_LEAVEWINDOW_CB", f);
 	IupSetCallback(ih, "LEAVEWINDOW_CB", (Icallback) goIupLeaveWindowCB);
 }
@@ -72,7 +72,7 @@ void goIupSetKAnyFunc(Ihandle *ih, void *f) {
 }
 
 extern int goIupHelpCB(void *);
-void goIupHelpFunc(Ihandle *ih, void *f) {
+void goIupSetHelpFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_HELP_CB", f);
 	IupSetCallback(ih, "HELP_CB", (Icallback) goIupHelpCB);
 }
@@ -107,6 +107,10 @@ func goIupMapCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
 
+func (ih *Ihandle) SetMapFunc(f MapFunc) {
+	C.goIupSetMapFunc(ih.h, unsafe.Pointer(&f))
+}
+
 type UnmapFunc func(*Ihandle) int
 
 //export goIupUnmapCB
@@ -117,6 +121,10 @@ func goIupUnmapCB(ih unsafe.Pointer) int {
 
 	f := *(*UnmapFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
+}
+
+func (ih *Ihandle) SetUnmapFunc(f UnmapFunc) {
+	C.goIupSetUnmapFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type DestroyFunc func(*Ihandle) int
@@ -131,6 +139,10 @@ func goIupDestroyCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
 
+func (ih *Ihandle) SetDestroyFunc(f DestroyFunc) {
+	C.goIupSetDestroyFunc(ih.h, unsafe.Pointer(&f))
+}
+
 type GetFocusFunc func(*Ihandle) int
 
 //export goIupGetFocusCB
@@ -141,6 +153,10 @@ func goIupGetFocusCB(ih unsafe.Pointer) int {
 
 	f := *(*GetFocusFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
+}
+
+func (ih *Ihandle) SetGetFocusFunc(f GetFocusFunc) {
+	C.goIupSetGetFocusFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type KillFocusFunc func(*Ihandle) int
@@ -155,6 +171,10 @@ func goIupKillFocusCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
 
+func (ih *Ihandle) SetKillFocusFunc(f KillFocusFunc) {
+	C.goIupSetKillFocusFunc(ih.h, unsafe.Pointer(&f))
+}
+
 type EnterWindowFunc func(*Ihandle) int
 
 //export goIupEnterWindowCB
@@ -167,6 +187,10 @@ func goIupEnterWindowCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
 }
 
+func (ih *Ihandle) SetEnterWindowFunc(f EnterWindowFunc) {
+	C.goIupSetEnterWindowFunc(ih.h, unsafe.Pointer(&f))
+}
+
 type LeaveWindowFunc func(*Ihandle) int
 
 //export goIupLeaveWindowCB
@@ -177,6 +201,10 @@ func goIupLeaveWindowCB(ih unsafe.Pointer) int {
 
 	f := *(*LeaveWindowFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
+}
+
+func (ih *Ihandle) SetLeaveWindowFunc(f LeaveWindowFunc) {
+	C.goIupSetLeaveWindowFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type KAnyFunc func(*Ihandle, int) int
@@ -205,6 +233,10 @@ func goIupHelpCB(ih unsafe.Pointer) int {
 
 	f := *(*HelpFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
 	return f(&Ihandle{h: (*C.Ihandle)(ih)})
+}
+
+func (ih *Ihandle) SetHelpFunc(f HelpFunc) {
+	C.goIupSetHelpFunc(ih.h, unsafe.Pointer(&f))
 }
 
 type ActionFunc func(*Ihandle) int

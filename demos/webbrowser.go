@@ -57,7 +57,7 @@ func main() {
 		})
 	}
 
-	urlentry    = iup.Text("EXPAND=HORIZONTAL")
+	urlentry    = iup.Text("EXPAND=HORIZONTAL", (iup.KAnyFunc)(onUrlEntryKey))
 	browser     = iup.WebBrowser("EXPAND=YES", (iup.NavigateFunc)(updateUrlEntry), (iup.CompletedFunc)(updateUrlEntry))
 	backbutton := iup.Button("<<",     browserFunc("BACKFORWARD", "-1"))
 	forbutton  := iup.Button(">>",     browserFunc("BACKFORWARD", "1"))
@@ -68,7 +68,6 @@ func main() {
 	dialog     := iup.Dialog(iup.Vbox(toolbar,browser), "SIZE=500x300,TITLE=\"go-iup Web Browser\"")
 	dialog.Show()
 	
-	urlentry.SetKAnyFunc(onUrlEntryKey)	
 	browser.StoreAttribute("VALUE", "http://github.com/jcowgar/go-iup")
 
 	iup.MainLoop()

@@ -39,6 +39,33 @@ func decorate(ih *Ihandle, opt interface{}) {
 	switch v := opt.(type) {
 	case string:
 		ih.SetAttributes(v)
+		
+	case MapFunc:
+		ih.SetMapFunc(v)
+		
+	case UnmapFunc:
+		ih.SetUnmapFunc(v)
+		
+	case DestroyFunc:
+		ih.SetDestroyFunc(v)
+		
+	case GetFocusFunc:
+		ih.SetGetFocusFunc(v)
+		
+	case KillFocusFunc:
+		ih.SetKillFocusFunc(v)
+		
+	case EnterWindowFunc:
+		ih.SetEnterWindowFunc(v)
+		
+	case LeaveWindowFunc:
+		ih.SetLeaveWindowFunc(v)
+		
+	case KAnyFunc:
+		ih.SetKAnyFunc(v)
+		
+	case HelpFunc:
+		ih.SetHelpFunc(v)
 	}
 }
 
