@@ -142,6 +142,12 @@ void goIupSetTextActionFunc(Ihandle *ih, void *f) {
 	IupSetCallback(ih, "_GO_ACTION", f);
 	IupSetCallback(ih, "ACTION", (Icallback) goIupTextActionCB);
 }
+
+extern int goIupToggleActionCB(void *, int state);
+void goIupSetToggleActionFunc(Ihandle *ih, void *f) {
+	IupSetCallback(ih, "_GO_TOGGLE_ACTION_CB", f);
+	IupSetCallback(ih, "ACTION", (Icallback) goIupToggleActionCB);
+}
 */
 import "C"
 import "unsafe"
@@ -478,4 +484,20 @@ func goIupTextActionCB(ih unsafe.Pointer, ch int, newValue unsafe.Pointer) int {
 
 func (ih *Ihandle) SetTextActionFunc(f TextActionFunc) {
 	C.goIupSetTextActionFunc(ih.h, unsafe.Pointer(&f))
+}
+
+type ToggleActionFunc func(ih *Ihandle, state int) int
+
+//export goIupToggleActionCB
+func goIupToggleActionCB(ih unsafe.Pointer, state int) int {
+	h := (*C.Ihandle)(ih)
+	cName := C.CString("_GO_ACTION")
+	defer C.free(unsafe.Pointer(cName))
+
+	f := *(*ToggleActionFunc)(unsafe.Pointer(C.IupGetAttribute(h, cName)))
+	return f(&Ihandle{h: (*C.Ihandle)(ih)}, state)
+}
+
+func (ih *Ihandle) SetToggleActionFunc(f ToggleActionFunc) {
+	C.goIupSetToggleActionFunc(ih.h, unsafe.Pointer(&f))
 }
