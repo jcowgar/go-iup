@@ -20,8 +20,8 @@
 package iup
 
 /*
-#cgo LDFLAGS: -liupcontrols -liupcd -liup_pplot -liupgl -liuptuio -liupim -liupweb
-#cgo linux LDFLAGS: -liupgtk -lwebkitgtk-1.0
+#cgo LDFLAGS: -liupcontrols -liupcd -liuptuio -liupim
+#cgo linux LDFLAGS: -liupgtk
 #cgo windows LDFLAGS: -liup -lgdi32 -lole32 -lcomdlg32 -lcomctl32
 
 #include <stdlib.h>

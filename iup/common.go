@@ -40,6 +40,10 @@ const (
 // Primary widget handle type.
 type Ihandle C.Ihandle
 
+func (ih *Ihandle) C() *C.Ihandle {
+	return (*C.Ihandle)(ih)
+}
+
 func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
 	max := len(ihs)
 	result := make([]*C.Ihandle, max+1)

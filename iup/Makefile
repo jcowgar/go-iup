@@ -31,9 +31,7 @@ CGOFILES=\
 	layout.go \
 	dialog.go \
 	controls.go \
-	resources.go \
-	webbrowser.go \
-	glcanvas.go
+	resources.go
 
 GOFILES=\
 	doc.go

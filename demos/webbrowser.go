@@ -21,6 +21,7 @@ package main
 
 import (
 	"github.com/jcowgar/go-iup"
+	"github.com/jcowgar/go-iup/webbrowser"
 )
 
 var urlentry, browser *iup.Ihandle
@@ -58,7 +59,9 @@ func main() {
 	}
 
 	urlentry    = iup.Text("EXPAND=HORIZONTAL", (iup.KAnyFunc)(onUrlEntryKey))
-	browser     = iup.WebBrowser("EXPAND=YES", (iup.NavigateFunc)(updateUrlEntry), (iup.CompletedFunc)(updateUrlEntry))
+	browser     = webbrowser.WebBrowser("EXPAND=YES", 
+		(webbrowser.NavigateFunc)(updateUrlEntry), 
+		(webbrowser.CompletedFunc)(updateUrlEntry))
 	backbutton := iup.Button("<<",     browserFunc("BACKFORWARD", "-1"))
 	forbutton  := iup.Button(">>",     browserFunc("BACKFORWARD", "1"))
 	relbutton  := iup.Button("Reload", browserFunc("RELOAD", "1"))

@@ -38,7 +38,7 @@ import "unsafe"
 // Differs from IupDialog in that any number of parameters may be passed after the child
 // widget. Strings will be interpreted as attributes to set on the newly created dialog.
 func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
-	ih := &Ihandle{H: C.IupDialog(child.H)}
+	ih := (*Ihandle)(C.IupDialog(child.C()))
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -51,19 +51,19 @@ func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
 }
 
 func Show(ih *Ihandle) int {
-	return int(C.IupShow(ih.H))
+	return int(C.IupShow(ih.C()))
 }
 
 func ShowXY(ih *Ihandle, x, y int) int {
-	return int(C.IupShowXY(ih.H, C.int(x), C.int(y)))
+	return int(C.IupShowXY(ih.C(), C.int(x), C.int(y)))
 }
 
 func Hide(ih *Ihandle) int {
-	return int(C.IupHide(ih.H))
+	return int(C.IupHide(ih.C()))
 }
 
 func Popup(ih *Ihandle, x, y int) int {
-	return int(C.IupPopup(ih.H, C.int(x), C.int(y)))
+	return int(C.IupPopup(ih.C(), C.int(x), C.int(y)))
 }
 
 /*******************************************************************************
@@ -73,7 +73,7 @@ func Popup(ih *Ihandle, x, y int) int {
 *******************************************************************************/
 
 func FileDlg(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{H: C.IupFileDlg()}
+	ih := (*Ihandle)(C.IupFileDlg())
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -86,7 +86,7 @@ func FileDlg(opts ...interface{}) *Ihandle {
 }
 
 func MessageDlg(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{H: C.IupMessageDlg()}
+	ih := (*Ihandle)(C.IupMessageDlg())
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -99,7 +99,7 @@ func MessageDlg(opts ...interface{}) *Ihandle {
 }
 
 func ColorDlg(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{H: C.IupColorDlg()}
+	ih := (*Ihandle)(C.IupColorDlg())
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -112,7 +112,7 @@ func ColorDlg(opts ...interface{}) *Ihandle {
 }
 
 func FontDlg(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{H: C.IupFontDlg()}
+	ih := (*Ihandle)(C.IupFontDlg())
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -318,7 +318,7 @@ func Message(title, message string) {
 }
 
 func LayoutDialog(ih *Ihandle, opts ...interface{}) *Ihandle {
-	newih := &Ihandle{H: C.IupLayoutDialog(ih.H)}
+	newih := (*Ihandle)(C.IupLayoutDialog(ih.C()))
 	
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -331,7 +331,7 @@ func LayoutDialog(ih *Ihandle, opts ...interface{}) *Ihandle {
 }
 
 func ElementPropertiesDialog(ih *Ihandle, opts ...interface{}) *Ihandle {
-	newih := &Ihandle{H: C.IupElementPropertiesDialog(ih.H)}
+	newih := (*Ihandle)(C.IupElementPropertiesDialog(ih.C()))
 	
 	for _, o := range opts {
 		switch v := o.(type) {
