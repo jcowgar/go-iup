@@ -32,7 +32,7 @@ import "unsafe"
 import "fmt"
 import "bytes"
 
-func (ih *Ihandle) StoreAttribute(name, value string) {
+func StoreAttribute(ih *Ihandle, name, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
@@ -42,7 +42,7 @@ func (ih *Ihandle) StoreAttribute(name, value string) {
 	C.IupStoreAttribute(ih.H, cName, cValue)
 }
 
-func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
+func StoreAttributeId(ih *Ihandle, name string, id int, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
@@ -52,29 +52,29 @@ func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
 	C.IupStoreAttributeId(ih.H, cName, C.int(id), cValue)
 }
 
-func (ih *Ihandle) SetAttribute(name string, value unsafe.Pointer) {
+func SetAttribute(ih *Ihandle, name string, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	C.IupSetAttribute(ih.H, cName, (*C.char)(value))
 }
 
-func (ih *Ihandle) SetAttributeId(name string, id int, value unsafe.Pointer) {
+func SetAttributeId(ih *Ihandle, name string, id int, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	C.IupSetAttributeId(ih.H, cName, C.int(id), (*C.char)(value))
 }
 
-func (ih *Ihandle) SetfAttribute(name, format string, args ...interface{}) {
-	ih.StoreAttribute(name, fmt.Sprintf(format, args...))
+func SetfAttribute(ih *Ihandle, name, format string, args ...interface{}) {
+	StoreAttribute(ih, name, fmt.Sprintf(format, args...))
 }
 
-func (ih *Ihandle) SetfAttributeId(name string, id int, format string, args ...interface{}) {
-	ih.StoreAttributeId(name, id, fmt.Sprintf(format, args...))
+func SetfAttributeId(ih *Ihandle, name string, id int, format string, args ...interface{}) {
+	StoreAttributeId(ih, name, id, fmt.Sprintf(format, args...))
 }
 
-func (ih *Ihandle) SetfAttributeId2(name string, lin int, col int, format string, args ...interface{}) {
+func SetfAttributeId2(ih *Ihandle, name string, lin int, col int, format string, args ...interface{}) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
@@ -84,14 +84,14 @@ func (ih *Ihandle) SetfAttributeId2(name string, lin int, col int, format string
 	C._IupSetfAttributeId2(ih.H, cName, C.int(lin), C.int(col), cValue)
 }
 
-func (ih *Ihandle) SetAttributes(values string) {
+func SetAttributes(ih *Ihandle, values string) {
 	cValues := C.CString(values)
 	defer C.free(unsafe.Pointer(cValues))
 
 	C.IupSetAttributes(ih.H, cValues)
 }
 
-func (ih *Ihandle) ResetAttribute(name string) {
+func ResetAttribute(ih *Ihandle, name string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
@@ -99,7 +99,7 @@ func (ih *Ihandle) ResetAttribute(name string) {
 }
 
 // Warning: handle_name is ignored
-func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
+func SetAtt(ih *Ihandle, handle_name string, args ...string) *Ihandle {
 	attrs := bytes.NewBufferString("")
 	for i := 0; i < len(args); i += 2 {
 		if i > 0 {
@@ -108,7 +108,7 @@ func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
 		attrs.WriteString(fmt.Sprintf("%s=\"%s\"", args[i], args[i+1]))
 	}
 
-	ih.SetAttributes(attrs.String())
+	SetAttributes(ih, attrs.String())
 
 	return ih
 }
@@ -120,64 +120,64 @@ func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
 //
 // C Iup provides SetAtt for this purpose but in Go Iup SetAttrs is an easier method to
 // accomplish this task due to no necessity of handle_name.
-func (ih *Ihandle) SetAttrs(args ...string) *Ihandle {
-	return ih.SetAtt("", args...)
+func SetAttrs(ih *Ihandle, args ...string) *Ihandle {
+	return SetAtt(ih, "", args...)
 }
 
-func (ih *Ihandle) SetAttributeHandle(name string, ihNamed *Ihandle) {
+func SetAttributeHandle(ih *Ihandle, name string, ihNamed *Ihandle) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	C.IupSetAttributeHandle(ih.H, cName, ihNamed.H)
 }
 
-func (ih *Ihandle) GetAttributeHandle(name string) *Ihandle {
+func GetAttributeHandle(ih *Ihandle, name string) *Ihandle {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return &Ihandle{H: C.IupGetAttributeHandle(ih.H, cName)}
 }
 
-func (ih *Ihandle) GetAttribute(name string) string {
+func GetAttribute(ih *Ihandle, name string) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return C.GoString(C.IupGetAttribute(ih.H, cName))
 }
 
-func (ih *Ihandle) GetAttributeId(name string, id int) string {
+func GetAttributeId(ih *Ihandle, name string, id int) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return C.GoString(C.IupGetAttributeId(ih.H, cName, C.int(id)))
 }
 
-func (ih *Ihandle) GetIntId(name string, id int) int {
+func GetIntId(ih *Ihandle, name string, id int) int {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return int(C.IupGetIntId(ih.H, cName, C.int(id)))
 }
 
-func (ih *Ihandle) GetFloatId(name string, id int) float64 {
+func GetFloatId(ih *Ihandle, name string, id int) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return float64(C.IupGetFloatId(ih.H, cName, C.int(id)))
 }
 
-func (ih *Ihandle) GetAttributes() string {
+func GetAttributes(ih *Ihandle) string {
 	return C.GoString(C.IupGetAttributes(ih.H))
 }
 
-func (ih *Ihandle) GetFloat(name string) float64 {
+func GetFloat(ih *Ihandle, name string) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return float64(C.IupGetFloat(ih.H, cName))
 }
 
-func (ih *Ihandle) GetInt(name string) int64 {
+func GetInt(ih *Ihandle, name string) int64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 

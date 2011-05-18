@@ -31,12 +31,12 @@ func nameKeyEntry(ih *iup.Ihandle, ch int, newValue string) int {
 }
 
 func sayHello(ih *iup.Ihandle) int {
-	fmt.Printf("Hello, %s!\n", ih.GetAttribute("TO_WHO"))
+	fmt.Printf("Hello, %s!\n", iup.GetAttribute(ih, "TO_WHO"))
 	return 0
 }
 
 func sayHelloToSomeone(ih *iup.Ihandle) int {
-	fmt.Printf("Hello, %s!\n", someone.GetAttribute("VALUE"))
+	fmt.Printf("Hello, %s!\n", iup.GetAttribute(someone, "VALUE"))
 	return 0
 }
 
@@ -50,7 +50,7 @@ func main() {
 		(iup.ActionFunc)(sayHelloToSomeone))
 
 	line1 := iup.Hbox(iup.Label("Name:"), someone, helloSomeone)
-	line1.SetAttributes("ALIGNMENT=ACENTER,GAP=5")
+	iup.SetAttributes(line1, "ALIGNMENT=ACENTER,GAP=5")
 
 	// Line two contains two pre-defined hello buttons
 	helloJohn := iup.Button("Hello John",
@@ -62,13 +62,13 @@ func main() {
 		"TO_WHO=\"Jim Doe\"")
 
 	line2 := iup.Hbox(iup.Label("Predefined greeters:"), helloJohn, helloJim)
-	line2.SetAttributes("ALIGNMENT=ACENTER,GAP=5")
+	iup.SetAttributes(line2, "ALIGNMENT=ACENTER,GAP=5")
 
 	form := iup.Vbox(line1, line2)
-	form.SetAttributes("GAP=5,MARGIN=3x3")
+	iup.SetAttributes(form, "GAP=5,MARGIN=3x3")
 
 	dlg := iup.Dialog(form, "TITLE=Greeter")
-	dlg.Show()
+	iup.Show(dlg)
 
 	iup.MainLoop()
 }

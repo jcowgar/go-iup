@@ -26,13 +26,13 @@ import (
 var urlentry, browser *iup.Ihandle
 
 func updateUrlEntry(ih *iup.Ihandle, url string) int {
-	urlentry.StoreAttribute("VALUE", url)
+	iup.StoreAttribute(urlentry, "VALUE", url)
 	
 	return iup.DEFAULT
 }
 
 func onGo(ih *iup.Ihandle) int {
-	browser.StoreAttribute("VALUE", urlentry.GetAttribute("VALUE"))
+	iup.StoreAttribute(browser, "VALUE", iup.GetAttribute(urlentry, "VALUE"))
 	
 	return iup.DEFAULT
 }
@@ -52,7 +52,7 @@ func main() {
 	
 	browserFunc := func(attr, val string) iup.ActionFunc {
 		return (iup.ActionFunc)(func(ih *iup.Ihandle) int {
-				browser.StoreAttribute(attr, val)
+				iup.StoreAttribute(browser, attr, val)
 				return iup.DEFAULT
 		})
 	}
@@ -64,11 +64,11 @@ func main() {
 	relbutton  := iup.Button("Reload", browserFunc("RELOAD", "1"))
 	gobutton   := iup.Button("Go...",  (iup.ActionFunc)(onGo))
 	stopbutton := iup.Button("Stop",   browserFunc("STOP", "1"))
-	toolbar    := iup.Hbox(backbutton,forbutton,relbutton,urlentry,gobutton,stopbutton).SetAttrs("MARGIN","5x5","GAP","3")
+	toolbar    := iup.SetAttrs(iup.Hbox(backbutton,forbutton,relbutton,urlentry,gobutton,stopbutton), "MARGIN","5x5","GAP","3")
 	dialog     := iup.Dialog(iup.Vbox(toolbar,browser), "SIZE=500x300,TITLE=\"go-iup Web Browser\"")
-	dialog.Show()
+	iup.Show(dialog)
 	
-	browser.StoreAttribute("VALUE", "http://github.com/jcowgar/go-iup")
+	iup.StoreAttribute(browser, "VALUE", "http://github.com/jcowgar/go-iup")
 
 	iup.MainLoop()
 }

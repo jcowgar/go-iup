@@ -52,14 +52,14 @@ func rot13(s string) string {
 
 func onLoadFile(ih *iup.Ihandle) int {
 	dlg := iup.FileDlg("ALLOWNEW=NO,DIALOGTYPE=Open,TITLE=Open")
-	dlg.SetAttributeHandle("PARENTDIALOG", mainDlg)
+	iup.SetAttributeHandle(dlg, "PARENTDIALOG", mainDlg)
 	iup.Popup(dlg, iup.CENTER, iup.CENTER)
-	if dlg.GetInt("STATUS") == -1 {
+	if iup.GetInt(dlg, "STATUS") == -1 {
 		return iup.IGNORE
 	}
 
-	filename := dlg.GetAttribute("VALUE")
-	dlg.Destroy()
+	filename := iup.GetAttribute(dlg, "VALUE")
+	iup.Destroy(dlg)
 
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -67,15 +67,15 @@ func onLoadFile(ih *iup.Ihandle) int {
 		return iup.IGNORE
 	}
 
-	text.StoreAttribute("VALUE", string(content))
+	iup.StoreAttribute(text, "VALUE", string(content))
 
 	return iup.IGNORE
 }
 
 func onRotate(ih *iup.Ihandle) int {
-	content := text.GetAttribute("VALUE")
+	content := iup.GetAttribute(text, "VALUE")
 	content = rot13(content)
-	text.StoreAttribute("VALUE", string(content))
+	iup.StoreAttribute(text, "VALUE", string(content))
 
 	return iup.DEFAULT
 }
@@ -112,19 +112,20 @@ func main() {
 				iup.Item("About go-iup", (iup.ActionFunc)(onAboutIupGo)))))
 
 	text = iup.Text("MULTILINE=YES,EXPAND=YES,WORDWRAP=YES,SIZE=250x100,SCROLLBAR=YES")
-	mainBox := iup.Vbox(
+	mainBox := iup.SetAttrs(iup.Vbox(
 		iup.Label("Text to be rotated:"),
 		text,
-		iup.Hbox(
+		iup.SetAttrs(iup.Hbox(
 			iup.Button("Load File", "PADDING=3x3", (iup.ActionFunc)(onLoadFile)),
 			iup.Button("Rotate", "PADDING=3x3", (iup.ActionFunc)(onRotate)),
 			iup.Button("Quit", "PADDING=3x3", (iup.ActionFunc)(onQuit)),
-		).SetAttrs("MARGIN", "0x0"),
-	).SetAttrs("MARGIN", "5x5", "GAP", "3")
+		), "MARGIN", "0x0"),
+	), "MARGIN", "5x5", "GAP", "3")
 
-	mainDlg = iup.Dialog(mainBox).SetAttrs("TITLE", "Rot 13")
-	mainDlg.SetAttributeHandle("MENU", menu)
-	mainDlg.Show()
+	mainDlg = iup.SetAttrs(iup.Dialog(mainBox), "TITLE", "Rot 13")
+	iup.SetAttributeHandle(mainDlg, "MENU", menu)
+	iup.Show(mainDlg)
 
 	iup.MainLoop()
 }
+

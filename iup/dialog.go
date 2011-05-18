@@ -43,22 +43,22 @@ func Dialog(child *Ihandle, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case string:
-			ih.SetAttributes(v)
+			SetAttributes(ih, v)
 		}
 	}
 
 	return ih
 }
 
-func (ih *Ihandle) Show() int {
+func Show(ih *Ihandle) int {
 	return int(C.IupShow(ih.H))
 }
 
-func (ih *Ihandle) ShowXY(x, y int) int {
+func ShowXY(ih *Ihandle, x, y int) int {
 	return int(C.IupShowXY(ih.H, C.int(x), C.int(y)))
 }
 
-func (ih *Ihandle) Hide() int {
+func Hide(ih *Ihandle) int {
 	return int(C.IupHide(ih.H))
 }
 

@@ -241,7 +241,7 @@ func goIupMapCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetMapFunc(f MapFunc) {
+func SetMapFunc(ih *Ihandle, f MapFunc) {
 	C.goIupSetMapFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -254,7 +254,7 @@ func goIupUnmapCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetUnmapFunc(f UnmapFunc) {
+func SetUnmapFunc(ih *Ihandle, f UnmapFunc) {
 	C.goIupSetUnmapFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -267,7 +267,7 @@ func goIupDestroyCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetDestroyFunc(f DestroyFunc) {
+func SetDestroyFunc(ih *Ihandle, f DestroyFunc) {
 	C.goIupSetDestroyFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -280,7 +280,7 @@ func goIupGetFocusCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetGetFocusFunc(f GetFocusFunc) {
+func SetGetFocusFunc(ih *Ihandle, f GetFocusFunc) {
 	C.goIupSetGetFocusFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -293,7 +293,7 @@ func goIupKillFocusCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetKillFocusFunc(f KillFocusFunc) {
+func SetKillFocusFunc(ih *Ihandle, f KillFocusFunc) {
 	C.goIupSetKillFocusFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -306,7 +306,7 @@ func goIupEnterWindowCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetEnterWindowFunc(f EnterWindowFunc) {
+func SetEnterWindowFunc(ih *Ihandle, f EnterWindowFunc) {
 	C.goIupSetEnterWindowFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -319,7 +319,7 @@ func goIupLeaveWindowCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetLeaveWindowFunc(f LeaveWindowFunc) {
+func SetLeaveWindowFunc(ih *Ihandle, f LeaveWindowFunc) {
 	C.goIupSetLeaveWindowFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -332,7 +332,7 @@ func goIupKAnyCB(ih unsafe.Pointer, c C.int) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, int(c))
 }
 
-func (ih *Ihandle) SetKAnyFunc(f KAnyFunc) {
+func SetKAnyFunc(ih *Ihandle, f KAnyFunc) {
 	C.goIupSetKAnyFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -345,7 +345,7 @@ func goIupHelpCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetHelpFunc(f HelpFunc) {
+func SetHelpFunc(ih *Ihandle, f HelpFunc) {
 	C.goIupSetHelpFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -359,7 +359,7 @@ func goIupButtonCB(ih unsafe.Pointer, button, pressed, x, y int, status unsafe.P
 	return f(&Ihandle{h}, button, pressed, x, y, goStatus)
 }
 
-func (ih *Ihandle) SetButtonFunc(f ButtonFunc) {
+func SetButtonFunc(ih *Ihandle, f ButtonFunc) {
 	C.goIupSetButtonFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -373,7 +373,7 @@ func goIupDropFilesCB(ih, filename unsafe.Pointer, num, x, y int) int {
 	return f(&Ihandle{h}, goFilename, int(num), int(x), int(y))
 }
 
-func (ih *Ihandle) SetDropFilesFunc(f DropFilesFunc) {
+func SetDropFilesFunc(ih *Ihandle, f DropFilesFunc) {
 	C.goIupSetDropFilesFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -386,7 +386,7 @@ func goIupActionCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetActionFunc(f ActionFunc) {
+func SetActionFunc(ih *Ihandle, f ActionFunc) {
 	C.goIupSetActionFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -400,7 +400,7 @@ func goIupListActionCB(ih, text unsafe.Pointer, item, state int) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, goText, int(item), int(state))
 }
 
-func (ih *Ihandle) SetListActionFunc(f ListActionFunc) {
+func SetListActionFunc(ih *Ihandle, f ListActionFunc) {
 	C.goIupSetListActionFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -413,7 +413,7 @@ func goIupCaretCB(ih unsafe.Pointer, lin, col, pos int) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, int(lin), int(col), int(pos))
 }
 
-func (ih *Ihandle) SetCaretFunc(f CaretFunc) {
+func SetCaretFunc(ih *Ihandle, f CaretFunc) {
 	C.goIupSetCaretFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -427,7 +427,7 @@ func goIupDblclickCB(ih unsafe.Pointer, item int, text unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, int(item), goText)
 }
 
-func (ih *Ihandle) SetDblclickFunc(f DblclickFunc) {
+func SetDblclickFunc(ih *Ihandle, f DblclickFunc) {
 	C.goIupSetDblclickFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -441,7 +441,7 @@ func goIupEditCB(ih unsafe.Pointer, item int, text unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, item, goText)
 }
 
-func (ih *Ihandle) SetEditFunc(f EditFunc) {
+func SetEditFunc(ih *Ihandle, f EditFunc) {
 	C.goIupSetEditFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -455,7 +455,7 @@ func goIupMotionCB(ih unsafe.Pointer, x, y int, status unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, x, y, goStatus)
 }
 
-func (ih *Ihandle) SetMotionFunc(f MotionFunc) {
+func SetMotionFunc(ih *Ihandle, f MotionFunc) {
 	C.goIupSetMotionFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -469,7 +469,7 @@ func goIupMultiselectCB(ih, text unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, goText)
 }
 
-func (ih *Ihandle) SetMultiselectFunc(f MultiselectFunc) {
+func SetMultiselectFunc(ih *Ihandle, f MultiselectFunc) {
 	C.goIupSetMultiselectFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -482,7 +482,7 @@ func goIupValueChangedCB(ih unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)})
 }
 
-func (ih *Ihandle) SetValueChangedFunc(f ValueChangedFunc) {
+func SetValueChangedFunc(ih *Ihandle, f ValueChangedFunc) {
 	C.goIupSetValueChangedFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -496,7 +496,7 @@ func goIupTextActionCB(ih unsafe.Pointer, ch int, newValue unsafe.Pointer) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, ch, goNewValue)
 }
 
-func (ih *Ihandle) SetTextActionFunc(f TextActionFunc) {
+func SetTextActionFunc(ih *Ihandle, f TextActionFunc) {
 	C.goIupSetTextActionFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -509,7 +509,7 @@ func goIupToggleActionCB(ih unsafe.Pointer, state int) int {
 	return f(&Ihandle{H: (*C.Ihandle)(ih)}, state)
 }
 
-func (ih *Ihandle) SetToggleActionFunc(f ToggleActionFunc) {
+func SetToggleActionFunc(ih *Ihandle, f ToggleActionFunc) {
 	C.goIupSetToggleActionFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -522,7 +522,7 @@ func goIupTabChangeCB(ih, new_tab, old_tab unsafe.Pointer) int {
 	return f(&Ihandle{h}, &Ihandle{(*C.Ihandle)(new_tab)}, &Ihandle{(*C.Ihandle)(old_tab)})
 }
 
-func (ih *Ihandle) SetTabChangeFunc(f TabChangeFunc) {
+func SetTabChangeFunc(ih *Ihandle, f TabChangeFunc) {
 	C.goIupSetTabChangeFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -535,7 +535,7 @@ func goIupTabChangePosCB(ih unsafe.Pointer, new_pos, old_pos int) int {
 	return f(&Ihandle{h}, new_pos, old_pos)
 }
 
-func (ih *Ihandle) SetTabChangePosFunc(f TabChangePosFunc) {
+func SetTabChangePosFunc(ih *Ihandle, f TabChangePosFunc) {
 	C.goIupSetTabChangePosFunc(ih.H, unsafe.Pointer(&f))
 }
 
@@ -548,6 +548,6 @@ func goIupSpinCB(ih unsafe.Pointer, inc int) int {
 	return f(&Ihandle{h}, inc)
 }
 
-func (ih *Ihandle) SetSpinFunc(f SpinFunc) {
+func SetSpinFunc(ih *Ihandle, f SpinFunc) {
 	C.goIupSetSpinFunc(ih.H, unsafe.Pointer(&f))
 }

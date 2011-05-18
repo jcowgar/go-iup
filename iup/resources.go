@@ -81,7 +81,7 @@ func LoadImage(file_name string) *Ihandle {
 	return &Ihandle{H: C.IupLoadImage(cFile_Name)}
 }
 
-func (ih *Ihandle) SaveImage(file_name, format string) int {
+func SaveImage(ih *Ihandle, file_name, format string) int {
 	cFile_Name := C.CString(file_name)
 	defer C.free(unsafe.Pointer(cFile_Name))
 
@@ -91,7 +91,7 @@ func (ih *Ihandle) SaveImage(file_name, format string) int {
 	return int(C.IupSaveImage(ih.H, cFile_Name, cFormat))
 }
 
-func (ih *Ihandle) SaveImageAsText(file_name, format, name string) int {
+func SaveImageAsText(ih *Ihandle, file_name, format, name string) int {
 	cFile_Name := C.CString(file_name)
 	defer C.free(unsafe.Pointer(cFile_Name))
 
@@ -110,11 +110,11 @@ func (ih *Ihandle) SaveImageAsText(file_name, format, name string) int {
 **
 *******************************************************************************/
 
-func (ih *Ihandle) NextField() *Ihandle {
+func NextField(ih *Ihandle) *Ihandle {
 	return &Ihandle{H: C.IupNextField(ih.H)}
 }
 
-func (ih *Ihandle) PreviousField() *Ihandle {
+func PreviousField(ih *Ihandle) *Ihandle {
 	return &Ihandle{H: C.IupPreviousField(ih.H)}
 }
 
@@ -122,7 +122,7 @@ func GetFocus() *Ihandle {
 	return &Ihandle{H: C.IupGetFocus()}
 }
 
-func (ih *Ihandle) SetFocus() *Ihandle {
+func SetFocus(ih *Ihandle) *Ihandle {
 	return &Ihandle{H: C.IupSetFocus(ih.H)}
 }
 
@@ -140,11 +140,11 @@ func Item(title string, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-
 		case ActionFunc:
-			ih.SetActionFunc(v)
+			SetActionFunc(ih, v)
+			
+		default:
+			decorate(ih, v)
 		}
 	}
 
@@ -164,8 +164,8 @@ func Menuv(args []*Ihandle, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, v)
 		}
 	}
 
@@ -184,8 +184,8 @@ func Submenu(title string, menu *Ihandle, opts ...interface{}) *Ihandle {
 
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			decorate(ih, v)
 		}
 	}
 

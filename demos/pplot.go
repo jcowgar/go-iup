@@ -29,11 +29,11 @@ func main() {
 	defer iup.Close()
 	
 	p := pplot.PPlot("EXPAND=YES")
-	p.StoreAttribute("TITLE", "Bar Mode")
-	p.StoreAttribute("TITLEFONTSIZE", "16")
-	p.StoreAttribute("MARGINTOP", "40")
-	p.StoreAttribute("MARGINLEFT", "30")
-	p.StoreAttribute("MARGINBOTTOM","65")
+	iup.StoreAttribute(p, "TITLE", "Bar Mode")
+	iup.StoreAttribute(p, "TITLEFONTSIZE", "16")
+	iup.StoreAttribute(p, "MARGINTOP", "40")
+	iup.StoreAttribute(p, "MARGINLEFT", "30")
+	iup.StoreAttribute(p, "MARGINBOTTOM","65")
 	
 	labels := []string{
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
@@ -45,13 +45,13 @@ func main() {
 		pplot.PlotAddStr(p, labels[i], values[i])
 	}
 	pplot.PlotEnd(p)
-	p.StoreAttribute("DS_MODE", "BAR")
-	p.StoreAttribute("DS_COLOR", "100 100 200")
+	iup.StoreAttribute(p, "DS_MODE", "BAR")
+	iup.StoreAttribute(p, "DS_COLOR", "100 100 200")
 	
 	dlg := iup.Dialog(p, "SIZE=200x200,TITLE=\"PPlot Example\"")
-	dlg.Show()
+	iup.Show(dlg)
 	
-	p.StoreAttribute("REDRAW", "")
+	iup.StoreAttribute(p, "REDRAW", "")
 	
 	iup.MainLoop()
 }

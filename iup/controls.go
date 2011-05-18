@@ -37,37 +37,37 @@ var webBrowserLibOpened = false
 func decorate(ih *Ihandle, opt interface{}) {
 	switch v := opt.(type) {
 	case string:
-		ih.SetAttributes(v)
+		SetAttributes(ih, v)
 		
 	case MapFunc:
-		ih.SetMapFunc(v)
+		SetMapFunc(ih, v)
 		
 	case UnmapFunc:
-		ih.SetUnmapFunc(v)
+		SetUnmapFunc(ih, v)
 		
 	case DestroyFunc:
-		ih.SetDestroyFunc(v)
+		SetDestroyFunc(ih, v)
 		
 	case GetFocusFunc:
-		ih.SetGetFocusFunc(v)
+		SetGetFocusFunc(ih, v)
 		
 	case KillFocusFunc:
-		ih.SetKillFocusFunc(v)
+		SetKillFocusFunc(ih, v)
 		
 	case EnterWindowFunc:
-		ih.SetEnterWindowFunc(v)
+		SetEnterWindowFunc(ih, v)
 		
 	case LeaveWindowFunc:
-		ih.SetLeaveWindowFunc(v)
+		SetLeaveWindowFunc(ih, v)
 		
 	case KAnyFunc:
-		ih.SetKAnyFunc(v)
+		SetKAnyFunc(ih, v)
 		
 	case HelpFunc:
-		ih.SetHelpFunc(v)
+		SetHelpFunc(ih, v)
 		
 	case ButtonFunc:
-		ih.SetButtonFunc(v)
+		SetButtonFunc(ih, v)
 	}
 }
 
@@ -86,7 +86,7 @@ func Button(title string, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case ActionFunc:
-			ih.SetActionFunc(v)
+			SetActionFunc(ih, v)
 			
 		default:
 			decorate(ih, o)
@@ -131,7 +131,7 @@ func Label(title string, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case DropFilesFunc:
-			ih.SetDropFilesFunc(v)
+			SetDropFilesFunc(ih, v)
 			
 		default:
 			decorate(ih, o)
@@ -147,25 +147,25 @@ func List(opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case ListActionFunc:
-			ih.SetListActionFunc(v)
+			SetListActionFunc(ih, v)
 			
 		case CaretFunc:
-			ih.SetCaretFunc(v)
+			SetCaretFunc(ih, v)
 			
 		case DblclickFunc:
-			ih.SetDblclickFunc(v)
+			SetDblclickFunc(ih, v)
 			
 		case EditFunc:
-			ih.SetEditFunc(v)
+			SetEditFunc(ih, v)
 			
 		case MotionFunc:
-			ih.SetMotionFunc(v)
+			SetMotionFunc(ih, v)
 			
 		case MultiselectFunc:
-			ih.SetMultiselectFunc(v)
+			SetMultiselectFunc(ih, v)
 			
 		case ValueChangedFunc:
-			ih.SetValueChangedFunc(v)
+			SetValueChangedFunc(ih, v)
 			
 		default:
 			decorate(ih, o)
@@ -215,10 +215,10 @@ func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case TabChangeFunc:
-			ih.SetTabChangeFunc(v)
+			SetTabChangeFunc(ih, v)
 			
 		case TabChangePosFunc:
-			ih.SetTabChangePosFunc(v)
+			SetTabChangePosFunc(ih, v)
 			
 		default:
 			decorate(ih, o)
@@ -234,7 +234,7 @@ func Text(opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case TextActionFunc:
-			ih.SetTextActionFunc(v)
+			SetTextActionFunc(ih, v)
 
 		default:
 			decorate(ih, o)
@@ -244,13 +244,13 @@ func Text(opts ...interface{}) *Ihandle {
 	return ih
 }
 
-func (ih *Ihandle) TextConvertLinColToPos(lin, col int) int {
+func TextConvertLinColToPos(ih *Ihandle, lin, col int) int {
 	pos := new(C.int)
 	C.IupTextConvertLinColToPos(ih.H, C.int(lin), C.int(col), pos)
 	return int(*pos)
 }
 
-func (ih *Ihandle) TextConvertPosToLinCol(pos int) (int, int) {
+func TextConvertPosToLinCol(ih *Ihandle, pos int) (int, int) {
 	lin := new(C.int)
 	col := new(C.int)
 
@@ -268,10 +268,10 @@ func Toggle(title string, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case ToggleActionFunc:
-			ih.SetToggleActionFunc(v)
+			SetToggleActionFunc(ih, v)
 			
 		case ValueChangedFunc:
-			ih.SetValueChangedFunc(v)
+			SetValueChangedFunc(ih, v)
 			
 		default:
 			decorate(ih, o)
@@ -303,7 +303,7 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		case ValueChangedFunc:
-			ih.SetValueChangedFunc(v)
+			SetValueChangedFunc(ih, v)
 			
 		default:
 			decorate(ih, o)
@@ -397,14 +397,14 @@ func Matrix(opts ...interface{}) *Ihandle {
 	return ih
 }
 
-func (ih *Ihandle) MatSetAttribute(name string, lin int, col int, value unsafe.Pointer) {
+func MatSetAttribute(ih *Ihandle, name string, lin int, col int, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	C.IupMatSetAttribute(ih.H, cName, C.int(lin), C.int(col), (*C.char)(value))
 }
 
-func (ih *Ihandle) MatStoreAttribute(name string, lin int, col int, value string) {
+func MatStoreAttribute(ih *Ihandle, name string, lin int, col int, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
@@ -414,29 +414,29 @@ func (ih *Ihandle) MatStoreAttribute(name string, lin int, col int, value string
 	C.IupMatStoreAttribute(ih.H, cName, C.int(lin), C.int(col), cValue)
 }
 
-func (ih *Ihandle) MatGetAttribute(name string, lin int, col int) string {
+func MatGetAttribute(ih *Ihandle, name string, lin int, col int) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return C.GoString(C.IupMatGetAttribute(ih.H, cName, C.int(lin), C.int(col)))
 }
 
-func (ih *Ihandle) MatGetInt(name string, lin int, col int) int64 {
+func MatGetInt(ih *Ihandle, name string, lin int, col int) int64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return int64(C.IupMatGetInt(ih.H, cName, C.int(lin), C.int(col)))
 }
 
-func (ih *Ihandle) MatGetFloat(name string, lin int, col int) float64 {
+func MatGetFloat(ih *Ihandle, name string, lin int, col int) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	return float64(C.IupMatGetFloat(ih.H, cName, C.int(lin), C.int(col)))
 }
 
-func (ih *Ihandle) MatSetfAttribute(name string, lin int, col int, format string, args ...interface{}) {
-	ih.MatStoreAttribute(name, lin, col, fmt.Sprintf(format, args...))
+func MatSetfAttribute(ih *Ihandle, name string, lin int, col int, format string, args ...interface{}) {
+	MatStoreAttribute(ih, name, lin, col, fmt.Sprintf(format, args...))
 }
 
 func OleControl(opts ...interface{}) *Ihandle {

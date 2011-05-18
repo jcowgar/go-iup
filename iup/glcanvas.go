@@ -41,23 +41,23 @@ func GLCanvas(opts ...interface{}) *Ihandle {
 	return ih
 }
 
-func (ih *Ihandle) GLMakeCurrent() {
+func GLMakeCurrent(ih *Ihandle) {
 	C.IupGLMakeCurrent(ih.H)
 }
 
-func (ih *Ihandle) GLIsCurrent() int {
+func GLIsCurrent(ih *Ihandle) int {
 	return int(C.IupGLIsCurrent(ih.H))
 }
 
-func (ih *Ihandle) GLSwapBuffers() {
+func GLSwapBuffers(ih *Ihandle) {
 	C.IupGLSwapBuffers(ih.H)
 }
 
-func (ih *Ihandle) GLPalette(index int, r, g, b float64) {
+func GLPalette(ih *Ihandle, index int, r, g, b float64) {
 	C.IupGLPalette(ih.H, C.int(index), C.float(r), C.float(g), C.float(b))
 }
 
-func (ih *Ihandle) GLUseFont(first, count, list_base int) {
+func GLUseFont(ih *Ihandle, first, count, list_base int) {
 	C.IupGLUseFont(ih.H, C.int(first), C.int(count), C.int(list_base))
 }
 
