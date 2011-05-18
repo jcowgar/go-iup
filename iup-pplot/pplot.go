@@ -33,6 +33,44 @@ import "C"
 import "unsafe"
 import . "github.com/jcowgar/go-iup"
 
+/*
+ Duplicate utility functions until C types can be exported in Go
+ */
+
+func stringArrayToC(strs []string) []*C.char {
+	max := len(strs)
+	result := make([]*C.char, max+1)
+
+	for k, v := range strs {
+		result[k] = C.CString(v)
+	}
+	result[max] = nil
+
+	return result
+}
+
+func freeCStringArray(strs []*C.char) {
+	for _, v := range strs {
+		if v != nil {
+			C.free(unsafe.Pointer(v))
+		}
+	}
+}
+
+func float64ArrayToC(nums []float64) []C.float {
+	result := make([]C.float, len(nums))
+
+	for k, v := range nums {
+		result[k] = C.float(v)
+	}
+
+	return result
+}
+
+/*
+ Actual library code
+ */
+
 var pplotLibOpened = false
 
 func PPlot(opts ...interface{}) *Ihandle {
@@ -85,12 +123,11 @@ func PlotInsertStr(ih *Ihandle, index, sample_index int, x string, y float64) {
 	C.IupPlotInsertStr(ih.C(), C.int(index), C.int(sample_index), cX, C.float(y))
 }
 
-/*
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
 func PlotInsertPoints(ih *Ihandle, index, sample_index int, x, y []float64) {
 	count := len(x)
-	cX := Float64ArrayToC(x)
-	cY := Float64ArrayToC(y)
+	cX := float64ArrayToC(x)
+	cY := float64ArrayToC(y)
 
 	C.IupPlotInsertPoints(ih.C(), C.int(index), C.int(sample_index), &cX[0], &cY[0],
 		C.int(count))
@@ -100,10 +137,10 @@ func PlotInsertPoints(ih *Ihandle, index, sample_index int, x, y []float64) {
 func PlotInsertStrPoints(ih *Ihandle, index, sample_index int, x []string, y []float64) {
 	count := len(x)
 
-	cX := StringArrayToC(x)
-	defer FreeCStringArray(cX)
+	cX := stringArrayToC(x)
+	defer freeCStringArray(cX)
 
-	cY := Float64ArrayToC(y)
+	cY := float64ArrayToC(y)
 
 	C.IupPlotInsertStrPoints(ih.C(), C.int(index), C.int(sample_index), &cX[0], &cY[0], C.int(count))
 }
@@ -111,8 +148,8 @@ func PlotInsertStrPoints(ih *Ihandle, index, sample_index int, x []string, y []f
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
 func PlotAddPoints(ih *Ihandle, index int, x, y []float64) {
 	count := len(x)
-	cX := Float64ArrayToC(x)
-	cY := Float64ArrayToC(y)
+	cX := float64ArrayToC(x)
+	cY := float64ArrayToC(y)
 
 	C.IupPlotAddPoints(ih.C(), C.int(index), &cX[0], &cY[0], C.int(count))
 }
@@ -121,10 +158,10 @@ func PlotAddPoints(ih *Ihandle, index int, x, y []float64) {
 func PlotAddStrPoints(ih *Ihandle, index int, x []string, y []float64) {
 	count := len(x)
 
-	cX := StringArrayToC(x)
-	defer FreeCStringArray(cX)
+	cX := stringArrayToC(x)
+	defer freeCStringArray(cX)
 
-	cY := Float64ArrayToC(y)
+	cY := float64ArrayToC(y)
 
 	C.IupPlotAddStrPoints(ih.C(), C.int(index), &cX[0], &cY[0], C.int(count))
 }
@@ -137,4 +174,4 @@ func PlotTransform(ih *Ihandle, x, y float64) (int, int) {
 
 	return int(*cIX), int(*cIY)
 }
-*/
+
