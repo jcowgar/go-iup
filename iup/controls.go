@@ -205,11 +205,11 @@ func tabsv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Tabs(args ...*Ihandle) *Ihandle {
-	return tabsv(iHandleArrayToC(args))
+	return tabsv(IHandleArrayToC(args))
 }
 
 func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
-	ih := tabsv(iHandleArrayToC(args))
+	ih := tabsv(IHandleArrayToC(args))
 
 	for _, o := range opts {
 		switch v := o.(type) {

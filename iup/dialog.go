@@ -198,10 +198,10 @@ func ListDialog(typ int, title string, list []string, opt, max_col, max_lin int,
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
 
-	cList := stringArrayToC(list)
-	defer freeCStringArray(cList)
+	cList := StringArrayToC(list)
+	defer FreeCStringArray(cList)
 
-	cMarks := intArrayToC(marks)
+	cMarks := IntArrayToC(marks)
 
 	result := C.IupListDialog(C.int(typ), cTitle, C.int(len(list)), &cList[0], C.int(opt), C.int(max_col),
 		C.int(max_lin), &cMarks[0])

@@ -37,8 +37,8 @@ func Createv(classname string, args []string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
 
-	cArgs := stringArrayToC(args)
-	defer freeCStringArray(cArgs)
+	cArgs := StringArrayToC(args)
+	defer FreeCStringArray(cArgs)
 
 	return (*Ihandle)(C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0]))))
 }
@@ -47,8 +47,8 @@ func Createp(classname string, args ...string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
 
-	cArgs := stringArrayToC(args)
-	defer freeCStringArray(cArgs)
+	cArgs := StringArrayToC(args)
+	defer FreeCStringArray(cArgs)
 
 	return (*Ihandle)(C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0]))))
 }
@@ -125,11 +125,11 @@ func hboxv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Hbox(args ...*Ihandle) *Ihandle {
-	return hboxv(iHandleArrayToC(args))
+	return hboxv(IHandleArrayToC(args))
 }
 
 func Hboxv(args []*Ihandle) *Ihandle {
-	return hboxv(iHandleArrayToC(args))
+	return hboxv(IHandleArrayToC(args))
 }
 
 func vboxv(ihs []*C.Ihandle) *Ihandle {
@@ -137,11 +137,11 @@ func vboxv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Vbox(args ...*Ihandle) *Ihandle {
-	return vboxv(iHandleArrayToC(args))
+	return vboxv(IHandleArrayToC(args))
 }
 
 func Vboxv(args []*Ihandle) *Ihandle {
-	return vboxv(iHandleArrayToC(args))
+	return vboxv(IHandleArrayToC(args))
 }
 
 func zboxv(ihs []*C.Ihandle) *Ihandle {
@@ -149,11 +149,11 @@ func zboxv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Zbox(args ...*Ihandle) *Ihandle {
-	return zboxv(iHandleArrayToC(args))
+	return zboxv(IHandleArrayToC(args))
 }
 
 func Zboxv(args []*Ihandle) *Ihandle {
-	return zboxv(iHandleArrayToC(args))
+	return zboxv(IHandleArrayToC(args))
 }
 
 func Radio(child *Ihandle) *Ihandle {
@@ -165,11 +165,11 @@ func normalizerv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Normalizer(args ...*Ihandle) *Ihandle {
-	return normalizerv(iHandleArrayToC(args))
+	return normalizerv(IHandleArrayToC(args))
 }
 
 func Normalizerv(args []*Ihandle) *Ihandle {
-	return normalizerv(iHandleArrayToC(args))
+	return normalizerv(IHandleArrayToC(args))
 }
 
 func cboxv(ihs []*C.Ihandle) *Ihandle {
@@ -177,11 +177,11 @@ func cboxv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Cbox(args ...*Ihandle) *Ihandle {
-	return cboxv(iHandleArrayToC(args))
+	return cboxv(IHandleArrayToC(args))
 }
 
 func Cboxv(args []*Ihandle) *Ihandle {
-	return cboxv(iHandleArrayToC(args))
+	return cboxv(IHandleArrayToC(args))
 }
 
 func Sbox(child *Ihandle) *Ihandle {

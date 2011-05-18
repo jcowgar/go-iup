@@ -56,19 +56,19 @@ func UnMapFont(driverfont string) string {
 *******************************************************************************/
 
 func Image(width, height int, pixels []byte) *Ihandle {
-	cPixels := byteArrayToCUCharArray(pixels)
+	cPixels := ByteArrayToCUCharArray(pixels)
 
 	return (*Ihandle)(C.IupImage(C.int(width), C.int(height), &cPixels[0]))
 }
 
 func ImageRGB(width, height int, pixels []byte) *Ihandle {
-	cPixels := byteArrayToCUCharArray(pixels)
+	cPixels := ByteArrayToCUCharArray(pixels)
 
 	return (*Ihandle)(C.IupImageRGB(C.int(width), C.int(height), &cPixels[0]))
 }
 
 func ImageRGBA(width, height int, pixels []byte) *Ihandle {
-	cPixels := byteArrayToCUCharArray(pixels)
+	cPixels := ByteArrayToCUCharArray(pixels)
 
 	return (*Ihandle)(C.IupImageRGBA(C.int(width), C.int(height), &cPixels[0]))
 }
@@ -155,11 +155,11 @@ func menuv(ihs []*C.Ihandle) *Ihandle {
 }
 
 func Menu(args ...*Ihandle) *Ihandle {
-	return menuv(iHandleArrayToC(args))
+	return menuv(IHandleArrayToC(args))
 }
 
 func Menuv(args []*Ihandle, opts ...interface{}) *Ihandle {
-	ih := menuv(iHandleArrayToC(args))
+	ih := menuv(IHandleArrayToC(args))
 
 	for _, o := range opts {
 		switch v := o.(type) {

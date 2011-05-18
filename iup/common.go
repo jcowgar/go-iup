@@ -44,7 +44,7 @@ func (ih *Ihandle) C() *C.Ihandle {
 	return (*C.Ihandle)(ih)
 }
 
-func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
+func IHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
 	max := len(ihs)
 	result := make([]*C.Ihandle, max+1)
 
@@ -56,7 +56,7 @@ func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
 	return result
 }
 
-func stringArrayToC(strs []string) []*C.char {
+func StringArrayToC(strs []string) []*C.char {
 	max := len(strs)
 	result := make([]*C.char, max+1)
 
@@ -68,7 +68,7 @@ func stringArrayToC(strs []string) []*C.char {
 	return result
 }
 
-func freeCStringArray(strs []*C.char) {
+func FreeCStringArray(strs []*C.char) {
 	for _, v := range strs {
 		if v != nil {
 			C.free(unsafe.Pointer(v))
@@ -76,7 +76,7 @@ func freeCStringArray(strs []*C.char) {
 	}
 }
 
-func float64ArrayToC(nums []float64) []C.float {
+func Float64ArrayToC(nums []float64) []C.float {
 	result := make([]C.float, len(nums))
 
 	for k, v := range nums {
@@ -86,7 +86,7 @@ func float64ArrayToC(nums []float64) []C.float {
 	return result
 }
 
-func byteArrayToCUCharArray(content []byte) []C.uchar {
+func ByteArrayToCUCharArray(content []byte) []C.uchar {
 	cContent := make([]C.uchar, len(content))
 	for i, v := range content {
 		cContent[i] = (C.uchar)(v)
@@ -96,7 +96,7 @@ func byteArrayToCUCharArray(content []byte) []C.uchar {
 	return cContent
 }
 
-func intArrayToC(nums []int) []C.int {
+func IntArrayToC(nums []int) []C.int {
 	result := make([]C.int, len(nums))
 
 	for k, v := range nums {

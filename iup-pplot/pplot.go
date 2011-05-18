@@ -1,7 +1,7 @@
 /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
 
-	This file is part of go-iup.
+	This file is part of go-
 
 	go-iup is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as
@@ -14,7 +14,7 @@
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU Lesser General Public
-	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
+	License along with go-  If not, see <http://www.gnu.org/licenses/>.
 */
 
 package pplot
@@ -87,49 +87,49 @@ func PlotInsertStr(ih *Ihandle, index, sample_index int, x string, y float64) {
 
 /*
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func PlotInsertPoints(ih *iup.Ihandle, index, sample_index int, x, y []float64) {
+func PlotInsertPoints(ih *Ihandle, index, sample_index int, x, y []float64) {
 	count := len(x)
-	cX := float64ArrayToC(x)
-	cY := float64ArrayToC(y)
+	cX := Float64ArrayToC(x)
+	cY := Float64ArrayToC(y)
 
 	C.IupPlotInsertPoints(ih.C(), C.int(index), C.int(sample_index), &cX[0], &cY[0],
 		C.int(count))
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func PlotInsertStrPoints(ih *iup.Ihandle, index, sample_index int, x []string, y []float64) {
+func PlotInsertStrPoints(ih *Ihandle, index, sample_index int, x []string, y []float64) {
 	count := len(x)
 
-	cX := stringArrayToC(x)
-	defer freeCStringArray(cX)
+	cX := StringArrayToC(x)
+	defer FreeCStringArray(cX)
 
-	cY := float64ArrayToC(y)
+	cY := Float64ArrayToC(y)
 
 	C.IupPlotInsertStrPoints(ih.C(), C.int(index), C.int(sample_index), &cX[0], &cY[0], C.int(count))
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func PlotAddPoints(ih *iup.Ihandle, index int, x, y []float64) {
+func PlotAddPoints(ih *Ihandle, index int, x, y []float64) {
 	count := len(x)
-	cX := float64ArrayToC(x)
-	cY := float64ArrayToC(y)
+	cX := Float64ArrayToC(x)
+	cY := Float64ArrayToC(y)
 
 	C.IupPlotAddPoints(ih.C(), C.int(index), &cX[0], &cY[0], C.int(count))
 }
 
 // Differs from IupPlotInsertPoints as `count' is determined automatically in this case
-func PlotAddStrPoints(ih *iup.Ihandle, index int, x []string, y []float64) {
+func PlotAddStrPoints(ih *Ihandle, index int, x []string, y []float64) {
 	count := len(x)
 
-	cX := stringArrayToC(x)
-	defer freeCStringArray(cX)
+	cX := StringArrayToC(x)
+	defer FreeCStringArray(cX)
 
-	cY := float64ArrayToC(y)
+	cY := Float64ArrayToC(y)
 
 	C.IupPlotAddStrPoints(ih.C(), C.int(index), &cX[0], &cY[0], C.int(count))
 }
 
-func PlotTransform(ih *iup.Ihandle, x, y float64) (int, int) {
+func PlotTransform(ih *Ihandle, x, y float64) (int, int) {
 	cIX := new(C.int)
 	cIY := new(C.int)
 
