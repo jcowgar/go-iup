@@ -143,7 +143,7 @@ func Item(title string, opts ...interface{}) *Ihandle {
 			SetActionFunc(ih, v)
 			
 		default:
-			decorate(ih, v)
+			Decorate(ih, v)
 		}
 	}
 
@@ -164,7 +164,7 @@ func Menuv(args []*Ihandle, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(ih, v)
+			Decorate(ih, v)
 		}
 	}
 
@@ -184,7 +184,7 @@ func Submenu(title string, menu *Ihandle, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(ih, v)
+			Decorate(ih, v)
 		}
 	}
 

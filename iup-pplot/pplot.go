@@ -48,7 +48,7 @@ func PPlot(opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			//iup.Decorate(ih, o)
+			Decorate(ih, o)
 		}
 	}
 

@@ -29,40 +29,40 @@ package iup
 #include <iupgl.h>
 */
 import "C"
-import "github.com/jcowgar/go-iup"
+import . "github.com/jcowgar/go-iup"
 
-func GLCanvas(opts ...interface{}) *iup.Ihandle {
-	iup.OpenControlLib()
+func GLCanvas(opts ...interface{}) *Ihandle {
+	OpenControlLib()
 	
-	ih := (*iup.Ihandle)(C.IupGLCanvas(nil))
+	ih := (*Ihandle)(C.IupGLCanvas(nil))
 
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			//decorate(ih, o)
+			Decorate(ih, o)
 		}
 	}
 
 	return ih
 }
 
-func GLMakeCurrent(ih *iup.Ihandle) {
+func GLMakeCurrent(ih *Ihandle) {
 	C.IupGLMakeCurrent(ih.C())
 }
 
-func GLIsCurrent(ih *iup.Ihandle) int {
+func GLIsCurrent(ih *Ihandle) int {
 	return int(C.IupGLIsCurrent(ih.C()))
 }
 
-func GLSwapBuffers(ih *iup.Ihandle) {
+func GLSwapBuffers(ih *Ihandle) {
 	C.IupGLSwapBuffers(ih.C())
 }
 
-func GLPalette(ih *iup.Ihandle, index int, r, g, b float64) {
+func GLPalette(ih *Ihandle, index int, r, g, b float64) {
 	C.IupGLPalette(ih.C(), C.int(index), C.float(r), C.float(g), C.float(b))
 }
 
-func GLUseFont(ih *iup.Ihandle, first, count, list_base int) {
+func GLUseFont(ih *Ihandle, first, count, list_base int) {
 	C.IupGLUseFont(ih.C(), C.int(first), C.int(count), C.int(list_base))
 }
 

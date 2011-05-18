@@ -78,7 +78,7 @@ func FileDlg(opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(ih, o)
+			Decorate(ih, o)
 		}
 	}
 
@@ -91,7 +91,7 @@ func MessageDlg(opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(ih, o)
+			Decorate(ih, o)
 		}
 	}
 
@@ -104,7 +104,7 @@ func ColorDlg(opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(ih, o)
+			Decorate(ih, o)
 		}
 	}
 
@@ -117,7 +117,7 @@ func FontDlg(opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(ih, o)
+			Decorate(ih, o)
 		}
 	}
 
@@ -323,7 +323,7 @@ func LayoutDialog(ih *Ihandle, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(newih, o)
+			Decorate(newih, o)
 		}
 	}
 	
@@ -336,7 +336,7 @@ func ElementPropertiesDialog(ih *Ihandle, opts ...interface{}) *Ihandle {
 	for _, o := range opts {
 		switch v := o.(type) {
 		default:
-			decorate(newih, o)
+			Decorate(newih, o)
 		}
 	}
 	

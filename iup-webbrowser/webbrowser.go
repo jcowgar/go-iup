@@ -65,73 +65,73 @@ void goIupSetNewWindowFunc(Ihandle *ih, void *f) {
 */
 import "C"
 import "unsafe"
-import "github.com/jcowgar/go-iup"
+import . "github.com/jcowgar/go-iup"
 
 var webBrowserLibOpened = false
 
-type CompletedFunc func(*iup.Ihandle, string) int
+type CompletedFunc func(*Ihandle, string) int
 
 //export goIupCompletedCB
 func goIupCompletedCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	f := *(*CompletedFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_COMPLETED_CB)))
 	goUrl := C.GoString((*C.char)(url))
-	return f((*iup.Ihandle)(ih), goUrl)
+	return f((*Ihandle)(ih), goUrl)
 }
 
-func SetCompletedFunc(ih *iup.Ihandle, f CompletedFunc) {
+func SetCompletedFunc(ih *Ihandle, f CompletedFunc) {
 	C.goIupSetCompletedFunc((*C.Ihandle)(ih), unsafe.Pointer(&f))
 }
 
-type ErrorFunc func(*iup.Ihandle, string) int
+type ErrorFunc func(*Ihandle, string) int
 
 //export goIupErrorCB
 func goIupErrorCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	f := *(*ErrorFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_ERROR_CB)))
 	goUrl := C.GoString((*C.char)(url))
-	return f((*iup.Ihandle)(ih), goUrl)
+	return f((*Ihandle)(ih), goUrl)
 }
 
-func SetErrorFunc(ih *iup.Ihandle, f ErrorFunc) {
+func SetErrorFunc(ih *Ihandle, f ErrorFunc) {
 	C.goIupSetErrorFunc((*C.Ihandle)(ih), unsafe.Pointer(&f))
 }
 
-type NavigateFunc func(*iup.Ihandle, string) int
+type NavigateFunc func(*Ihandle, string) int
 
 //export goIupNavigateCB
 func goIupNavigateCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	f := *(*NavigateFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_NAVIGATE_CB)))
 	goUrl := C.GoString((*C.char)(url))
-	return f((*iup.Ihandle)(ih), goUrl)
+	return f((*Ihandle)(ih), goUrl)
 }
 
-func SetNavigateFunc(ih *iup.Ihandle, f NavigateFunc) {
+func SetNavigateFunc(ih *Ihandle, f NavigateFunc) {
 	C.goIupSetNavigateFunc((*C.Ihandle)(ih), unsafe.Pointer(&f))
 }
 
-type NewWindowFunc func(*iup.Ihandle, string) int
+type NewWindowFunc func(*Ihandle, string) int
 
 //export goIupNewWindowCB
 func goIupNewWindowCB(ih unsafe.Pointer, url unsafe.Pointer) int {
 	h := (*C.Ihandle)(ih)
 	f := *(*NewWindowFunc)(unsafe.Pointer(C.IupGetAttribute(h, C.GO_NEWWINDOW_CB)))
 	goUrl := C.GoString((*C.char)(url))
-	return f((*iup.Ihandle)(ih), goUrl)
+	return f((*Ihandle)(ih), goUrl)
 }
 
-func SetNewWindowFunc(ih *iup.Ihandle, f NewWindowFunc) {
+func SetNewWindowFunc(ih *Ihandle, f NewWindowFunc) {
 	C.goIupSetNewWindowFunc((*C.Ihandle)(ih), unsafe.Pointer(&f))
 }
 
-func WebBrowser(opts ...interface{}) *iup.Ihandle {
+func WebBrowser(opts ...interface{}) *Ihandle {
 	if webBrowserLibOpened == false {
 		C.IupWebBrowserOpen()
 		webBrowserLibOpened = true
 	}
 
-	ih := (*iup.Ihandle)(C.IupWebBrowser())
+	ih := (*Ihandle)(C.IupWebBrowser())
 
 	for _, o := range opts {
 		switch v := o.(type) {
@@ -148,7 +148,7 @@ func WebBrowser(opts ...interface{}) *iup.Ihandle {
 			SetNewWindowFunc(ih, v)
 		
 		default:
-			//decorate(ih, o)
+			Decorate(ih, o)
 		}
 	}
 
