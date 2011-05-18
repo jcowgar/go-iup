@@ -22,7 +22,6 @@ package iup
 /*
 #include <stdlib.h>
 #include <iup.h>
-#include <iuptuio.h>
 #include <iupim.h>
 */
 import "C"
@@ -204,10 +203,6 @@ func Clipboard() *Ihandle {
 
 func Timer() *Ihandle {
 	return (*Ihandle)(C.IupTimer())
-}
-
-func TuioClient(port int) *Ihandle {
-	return (*Ihandle)(C.IupTuioClient(C.int(port)))
 }
 
 func User() *Ihandle {

@@ -20,7 +20,7 @@
 package iup
 
 /*
-#cgo LDFLAGS: -liupcontrols -liupcd -liuptuio -liupim
+#cgo LDFLAGS: -liupcontrols -liupcd -liupim
 #cgo linux LDFLAGS: -liupgtk
 #cgo windows LDFLAGS: -liup -lgdi32 -lole32 -lcomdlg32 -lcomctl32
 
