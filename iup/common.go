@@ -38,16 +38,14 @@ const (
 )
 
 // Primary widget handle type.
-type Ihandle struct {
-	H *C.Ihandle
-}
+type Ihandle C.Ihandle
 
 func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
 	max := len(ihs)
 	result := make([]*C.Ihandle, max+1)
 
 	for k, v := range ihs {
-		result[k] = v.H
+		result[k] = (*C.Ihandle)(v)
 	}
 	result[max] = nil
 
