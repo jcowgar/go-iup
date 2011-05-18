@@ -15,16 +15,12 @@ the Go language.
    iup package name. So, IupOpen becomes iup.Open(), IupVersion() becomes iup.Version(), etc...
 2. IUP_ has been dropped from the constant names for the same reason as #1. Thus, IUP_IGNORE becomes
    iup.IGNORE, IUP_DEFAULT becomes iup.DEFAULT, etc...
-3. Functions that work directly on an Ihandle pointer are referenced as a receiver. For example
-   IupSetAttribute(textWidget, "VALUE", "Hello, World!") becomes 
-   textWidget.SetAttribute("VALUE", "Hello, World!"). IupShow(dialog) becomes dialog.Show(), 
-   etc...
-4. Anything as of Iup 3.5 that has been marked as deprecated has not and will not be wrapped in
+3. Anything as of Iup 3.5 that has been marked as deprecated has not and will not be wrapped in
    go-iup. No sense in wrapping it and then next release removing it. Just don't even start with it.
-5. The old ACTION name has been replaced by a SetCallback method in Iup. Thus, any widget that
+4. The old ACTION name has been replaced by a SetCallback method in Iup. Thus, any widget that
    expects an ACTION name on control creation in Iup C does not in go-iup. For example, 
    IupButton("Press Me", "PRESS_ME_ACTION") no longer takes the "PRESS_ME_ACTION" parameter.
-6. All widgets can accept a variable number of optional parameters. These parameters, if a string,
+5. All widgets can accept a variable number of optional parameters. These parameters, if a string,
    are considered attributes to be set on the newly created widget. If a valid Icallback type, then
    they are considered callbacks to be set on the newly created widget.
 
