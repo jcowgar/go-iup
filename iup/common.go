@@ -1,18 +1,18 @@
 /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
-	
+
 	This file is part of go-iup.
 
 	go-iup is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as
 	published by the Free Software Foundation, either version 3 of
 	the License, or (at your option) any later version.
-	
+
 	go-iup is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -38,35 +38,37 @@ const (
 )
 
 // Primary widget handle type.
-type Ihandle struct {
-	h *C.Ihandle
+type Ihandle C.Ihandle
+
+func (ih *Ihandle) C() *C.Ihandle {
+	return (*C.Ihandle)(ih)
 }
 
-func iHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
+func IHandleArrayToC(ihs []*Ihandle) []*C.Ihandle {
 	max := len(ihs)
-	result := make([]*C.Ihandle, max + 1)
-	
+	result := make([]*C.Ihandle, max+1)
+
 	for k, v := range ihs {
-		result[k] = v.h
-	}	
+		result[k] = (*C.Ihandle)(v)
+	}
 	result[max] = nil
-	
+
 	return result
 }
 
-func stringArrayToC(strs []string) []*C.char {
+func StringArrayToC(strs []string) []*C.char {
 	max := len(strs)
-	result := make([]*C.char, max + 1)
-	
+	result := make([]*C.char, max+1)
+
 	for k, v := range strs {
 		result[k] = C.CString(v)
 	}
 	result[max] = nil
-	
+
 	return result
 }
 
-func freeCStringArray(strs []*C.char) {
+func FreeCStringArray(strs []*C.char) {
 	for _, v := range strs {
 		if v != nil {
 			C.free(unsafe.Pointer(v))
@@ -74,22 +76,32 @@ func freeCStringArray(strs []*C.char) {
 	}
 }
 
-func float64ArrayToC(nums []float64) []C.float {
+func Float64ArrayToC(nums []float64) []C.float {
 	result := make([]C.float, len(nums))
-	
+
 	for k, v := range nums {
 		result[k] = C.float(v)
 	}
-	
+
 	return result
 }
 
-func byteArrayToCUCharArray(content []byte) []C.uchar {
+func ByteArrayToCUCharArray(content []byte) []C.uchar {
 	cContent := make([]C.uchar, len(content))
 	for i, v := range content {
 		cContent[i] = (C.uchar)(v)
 	}
 	cContent[len(content)] = 0
-	
+
 	return cContent
+}
+
+func IntArrayToC(nums []int) []C.int {
+	result := make([]C.int, len(nums))
+
+	for k, v := range nums {
+		result[k] = C.int(v)
+	}
+
+	return result
 }

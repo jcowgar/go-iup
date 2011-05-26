@@ -2,7 +2,7 @@
 
 set -eux
 
-for d in iup demos
+for d in iup iup-glcanvas iup-pplot iup-tuio iup-webbrowser demos 
 do
 	gomake -j 4 -C $d "$@"
 done

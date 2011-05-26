@@ -1,18 +1,18 @@
 /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
-	
+
 	This file is part of go-iup.
 
 	go-iup is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as
 	published by the Free Software Foundation, either version 3 of
 	the License, or (at your option) any later version.
-	
+
 	go-iup is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -29,72 +29,72 @@ import "unsafe"
 func Create(classname string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
-	return &Ihandle{h: C.IupCreate(cClassname)}
+
+	return (*Ihandle)(C.IupCreate(cClassname))
 }
 
 func Createv(classname string, args []string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
-	cArgs := stringArrayToC(args)
-	defer freeCStringArray(cArgs)
-		
-	return &Ihandle{h: C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0])))}
+
+	cArgs := StringArrayToC(args)
+	defer FreeCStringArray(cArgs)
+
+	return (*Ihandle)(C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0]))))
 }
 
 func Createp(classname string, args ...string) *Ihandle {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
-	cArgs := stringArrayToC(args)
-	defer freeCStringArray(cArgs)
-	
-	return &Ihandle{h: C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0])))}
+
+	cArgs := StringArrayToC(args)
+	defer FreeCStringArray(cArgs)
+
+	return (*Ihandle)(C.IupCreatev(cClassname, (*unsafe.Pointer)(unsafe.Pointer(&cArgs[0]))))
 }
 
-func (ih *Ihandle) Destroy() {
-	C.IupDestroy(ih.h)
+func Destroy(ih *Ihandle) {
+	C.IupDestroy(ih.C())
 }
 
-func (ih *Ihandle) Map() int {
-	return int(C.IupMap(ih.h))
+func Map(ih *Ihandle) int {
+	return int(C.IupMap(ih.C()))
 }
 
-func (ih *Ihandle) Unmap() {
-	C.IupUnmap(ih.h)
+func Unmap(ih *Ihandle) {
+	C.IupUnmap(ih.C())
 }
 
-func (ih *Ihandle) GetClassName() string {
-	return C.GoString(C.IupGetClassName(ih.h))
+func GetClassName(ih *Ihandle) string {
+	return C.GoString(C.IupGetClassName(ih.C()))
 }
 
-func (ih *Ihandle) GetClassType() string {
-	return C.GoString(C.IupGetClassType(ih.h))
+func GetClassType(ih *Ihandle) string {
+	return C.GoString(C.IupGetClassType(ih.C()))
 }
 
-func (ih *Ihandle) ClassMatch(classname string) bool {
+func ClassMatch(ih *Ihandle, classname string) bool {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
-	return int(C.IupClassMatch(ih.h, cClassname)) == 1
+
+	return int(C.IupClassMatch(ih.C(), cClassname)) == 1
 }
 
-func (ih *Ihandle) SaveClassAttributes() {
-	C.IupSaveClassAttributes(ih.h)
+func SaveClassAttributes(ih *Ihandle) {
+	C.IupSaveClassAttributes(ih.C())
 }
 
-func (ih *Ihandle) CopyClassAttributes(dest *Ihandle) {
-	C.IupCopyClassAttributes(ih.h, dest.h)
+func CopyClassAttributes(ih, dest *Ihandle) {
+	C.IupCopyClassAttributes(ih.C(), dest.C())
 }
 
 func SetClassDefaultAttribute(classname, name, value string) {
 	cClassname := C.CString(classname)
 	defer C.free(unsafe.Pointer(cClassname))
-	
+
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
 
@@ -108,96 +108,96 @@ func SetClassDefaultAttribute(classname, name, value string) {
 *******************************************************************************/
 
 func Fill(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupFill()}
-	
+	ih := (*Ihandle)(C.IupFill())
+
 	for _, o := range opts {
 		switch v := o.(type) {
 		case string:
-			ih.SetAttributes(v)
+			SetAttributes(ih, v)
 		}
 	}
-		
+
 	return ih
 }
 
 func hboxv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupHboxv(&ihs[0])}
+	return (*Ihandle)(C.IupHboxv(&ihs[0]))
 }
 
 func Hbox(args ...*Ihandle) *Ihandle {
-	return hboxv(iHandleArrayToC(args))
+	return hboxv(IHandleArrayToC(args))
 }
 
 func Hboxv(args []*Ihandle) *Ihandle {
-	return hboxv(iHandleArrayToC(args))
+	return hboxv(IHandleArrayToC(args))
 }
 
 func vboxv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupVboxv(&ihs[0])}
+	return (*Ihandle)(C.IupVboxv(&ihs[0]))
 }
 
 func Vbox(args ...*Ihandle) *Ihandle {
-	return vboxv(iHandleArrayToC(args))
+	return vboxv(IHandleArrayToC(args))
 }
 
 func Vboxv(args []*Ihandle) *Ihandle {
-	return vboxv(iHandleArrayToC(args))
+	return vboxv(IHandleArrayToC(args))
 }
 
 func zboxv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupZboxv(&ihs[0])}
+	return (*Ihandle)(C.IupZboxv(&ihs[0]))
 }
 
 func Zbox(args ...*Ihandle) *Ihandle {
-	return zboxv(iHandleArrayToC(args))
+	return zboxv(IHandleArrayToC(args))
 }
 
 func Zboxv(args []*Ihandle) *Ihandle {
-	return zboxv(iHandleArrayToC(args))
+	return zboxv(IHandleArrayToC(args))
 }
 
 func Radio(child *Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupRadio(child.h)}
+	return (*Ihandle)(C.IupRadio(child.C()))
 }
 
 func normalizerv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupNormalizerv(&ihs[0])}
+	return (*Ihandle)(C.IupNormalizerv(&ihs[0]))
 }
 
 func Normalizer(args ...*Ihandle) *Ihandle {
-	return normalizerv(iHandleArrayToC(args))
+	return normalizerv(IHandleArrayToC(args))
 }
 
 func Normalizerv(args []*Ihandle) *Ihandle {
-	return normalizerv(iHandleArrayToC(args))
+	return normalizerv(IHandleArrayToC(args))
 }
 
 func cboxv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupCboxv(&ihs[0])}
+	return (*Ihandle)(C.IupCboxv(&ihs[0]))
 }
 
 func Cbox(args ...*Ihandle) *Ihandle {
-	return cboxv(iHandleArrayToC(args))
+	return cboxv(IHandleArrayToC(args))
 }
 
 func Cboxv(args []*Ihandle) *Ihandle {
-	return cboxv(iHandleArrayToC(args))
+	return cboxv(IHandleArrayToC(args))
 }
 
 func Sbox(child *Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupSbox(child.h)}
+	return (*Ihandle)(C.IupSbox(child.C()))
 }
 
 func Split(child1, child2 *Ihandle, opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupSplit(child1.h, child2.h)}
-	
+	ih := (*Ihandle)(C.IupSplit(child1.C(), child2.C()))
+
 	for _, o := range opts {
 		switch v := o.(type) {
 		case string:
-			ih.SetAttributes(v)
+			SetAttributes(ih, v)
 		}
 	}
-		
+
 	return ih
 }
 
@@ -207,65 +207,65 @@ func Split(child1, child2 *Ihandle, opts ...interface{}) *Ihandle {
 **
 *******************************************************************************/
 
-func (ih *Ihandle) Append(new_child *Ihandle) *Ihandle {
-	result := C.IupAppend(ih.h, new_child.h)
+func Append(ih, new_child *Ihandle) *Ihandle {
+	result := C.IupAppend(ih.C(), new_child.C())
 	if result == nil {
 		return nil
 	}
-	
+
 	return ih
 }
 
-func (ih *Ihandle) Detach() {
-	C.IupDetach(ih.h)
+func Detach(ih *Ihandle) {
+	C.IupDetach(ih.C())
 }
 
-func (ih *Ihandle) Insert(ref_child, new_child *Ihandle) *Ihandle {
-	result := C.IupInsert(ih.h, ref_child.h, new_child.h)
+func Insert(ih, ref_child, new_child *Ihandle) *Ihandle {
+	result := C.IupInsert(ih.C(), ref_child.C(), new_child.C())
 	if result == nil {
 		return nil
 	}
-	
+
 	return ih
 }
 
-func (child *Ihandle) Reparent(new_parent, ref_child *Ihandle) int {
-	return int(C.IupReparent(child.h, new_parent.h, ref_child.h))
+func Reparent(child, new_parent, ref_child *Ihandle) int {
+	return int(C.IupReparent(child.C(), new_parent.C(), ref_child.C()))
 }
 
-func (ih *Ihandle) GetParent() *Ihandle {
-	return &Ihandle{h: C.IupGetParent(ih.h)}
+func GetParent(ih *Ihandle) *Ihandle {
+	return (*Ihandle)(C.IupGetParent(ih.C()))
 }
 
-func (ih *Ihandle) GetChild(pos int) *Ihandle {
-	return &Ihandle{h: C.IupGetChild(ih.h, C.int(pos))}
+func GetChild(ih *Ihandle, pos int) *Ihandle {
+	return (*Ihandle)(C.IupGetChild(ih.C(), C.int(pos)))
 }
 
-func (ih *Ihandle) GetChildPos(child *Ihandle) int {
-	return int(C.IupGetChildPos(ih.h, child.h))
+func GetChildPos(ih *Ihandle, child *Ihandle) int {
+	return int(C.IupGetChildPos(ih.C(), child.C()))
 }
 
-func (ih *Ihandle) GetChildCount() int {
-	return int(C.IupGetChildCount(ih.h))
+func GetChildCount(ih *Ihandle) int {
+	return int(C.IupGetChildCount(ih.C()))
 }
 
-func (ih *Ihandle) GetNextChild(child *Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupGetNextChild(ih.h, child.h)}
+func GetNextChild(ih, child *Ihandle) *Ihandle {
+	return (*Ihandle)(C.IupGetNextChild(ih.C(), child.C()))
 }
 
-func (ih *Ihandle) GetBrother() *Ihandle {
-	return &Ihandle{h: C.IupGetBrother(ih.h)}
+func GetBrother(ih *Ihandle) *Ihandle {
+	return (*Ihandle)(C.IupGetBrother(ih.C()))
 }
 
-func (ih *Ihandle) GetDialog() *Ihandle {
-	return &Ihandle{h: C.IupGetDialog(ih.h)}
+func GetDialog(ih *Ihandle) *Ihandle {
+	return (*Ihandle)(C.IupGetDialog(ih.C()))
 }
 
-func (ih *Ihandle) GetDialogChild(name string) *Ihandle {
+func GetDialogChild(ih *Ihandle, name string) *Ihandle {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
-	return &Ihandle{h: C.IupGetDialogChild(ih.h, cName)}
+
+	return (*Ihandle)(C.IupGetDialogChild(ih.C(), cName))
 }
 
 /*******************************************************************************
@@ -274,32 +274,31 @@ func (ih *Ihandle) GetDialogChild(name string) *Ihandle {
 **
 *******************************************************************************/
 
-func (ih *Ihandle) Refresh() {
-	C.IupRefresh(ih.h)
+func Refresh(ih *Ihandle) {
+	C.IupRefresh(ih.C())
 }
 
-func (ih *Ihandle) RefreshChildren() {
-	C.IupRefreshChildren(ih.h)
+func RefreshChildren(ih *Ihandle) {
+	C.IupRefreshChildren(ih.C())
 }
 
-func (ih *Ihandle) Update() {
-	C.IupUpdate(ih.h)
+func Update(ih *Ihandle) {
+	C.IupUpdate(ih.C())
 }
 
-func (ih *Ihandle) UpdateChildren() {
-	C.IupUpdateChildren(ih.h)
+func UpdateChildren(ih *Ihandle) {
+	C.IupUpdateChildren(ih.C())
 }
 
-func (ih *Ihandle) Redraw(children bool) {
+func Redraw(ih *Ihandle, children bool) {
 	updateChildren := 0
 	if children {
 		updateChildren = 1
 	}
-	
-	C.IupRedraw(ih.h, C.int(updateChildren))
+
+	C.IupRedraw(ih.C(), C.int(updateChildren))
 }
 
-func (ih *Ihandle) ConvertXYToPos(x, y int) int {
-	return int(C.IupConvertXYToPos(ih.h, C.int(x), C.int(y)))
+func ConvertXYToPos(ih *Ihandle, x, y int) int {
+	return int(C.IupConvertXYToPos(ih.C(), C.int(x), C.int(y)))
 }
-

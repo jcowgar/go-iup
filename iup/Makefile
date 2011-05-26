@@ -31,8 +31,7 @@ CGOFILES=\
 	layout.go \
 	dialog.go \
 	controls.go \
-	resources.go \
-	pplot.go
+	resources.go
 
 GOFILES=\
 	doc.go

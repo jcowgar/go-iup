@@ -15,34 +15,12 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 
+# Use "gomake install" to build and install
+
 include $(GOROOT)/src/Make.inc
 
-ifeq ($(GOOS),windows)
-EXE=.exe
-else
-EXE=
-endif
+TARG=github.com/jcowgar/go-iup/webbrowser
+DEPS=../iup
+CGOFILES=webbrowser.go
 
-ALL = \
-	test$(EXE) \
-	versions$(EXE) \
-	hello$(EXE) \
-	greeter$(EXE) \
-	rot13$(EXE) \
-	getparam$(EXE) \
-	alarm$(EXE) \
-	dlgs$(EXE) \
-	webbrowser$(EXE) \
-	pplot$(EXE)
-
-INC_DIRS=-I../iup/_obj -I../iup-pplot/_obj -I../iup-webbrowser/_obj
-LIB_DIRS=-L../iup/_obj -L../iup-pplot/_obj -L../iup-webbrowser/_obj
-
-all: $(ALL)
-
-clean:
-	rm -rf *.[68] $(ALL)
-
-%$(EXE): %.go
-	$(GC) $(INC_DIRS) $*.go
-	$(LD) $(LIB_DIRS) -o $@ $*.$O
+include $(GOROOT)/src/Make.pkg

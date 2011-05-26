@@ -1,18 +1,18 @@
 /* 
 	Copyright (C) 2011 by Jeremy Cowgar <jeremy@cowgar.com>
-	
+
 	This file is part of go-iup.
 
 	go-iup is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as
 	published by the Free Software Foundation, either version 3 of
 	the License, or (at your option) any later version.
-	
+
 	go-iup is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU Lesser General Public
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -23,15 +23,52 @@ package iup
 #include <stdlib.h>
 #include <iup.h>
 #include <iupcontrols.h>
-//#include <iupweb.h>
-#include <iup_pplot.h>
-#include <iupgl.h>
 */
 import "C"
 import "unsafe"
 import "fmt"
 
-var controlsLibOpened = false
+
+/*******************************************************************************
+ * Supporting Methods
+ */
+
+func Decorate(ih *Ihandle, opt interface{}) {
+	switch v := opt.(type) {
+	case string:
+		SetAttributes(ih, v)
+		
+	case MapFunc:
+		SetMapFunc(ih, v)
+		
+	case UnmapFunc:
+		SetUnmapFunc(ih, v)
+		
+	case DestroyFunc:
+		SetDestroyFunc(ih, v)
+		
+	case GetFocusFunc:
+		SetGetFocusFunc(ih, v)
+		
+	case KillFocusFunc:
+		SetKillFocusFunc(ih, v)
+		
+	case EnterWindowFunc:
+		SetEnterWindowFunc(ih, v)
+		
+	case LeaveWindowFunc:
+		SetLeaveWindowFunc(ih, v)
+		
+	case KAnyFunc:
+		SetKAnyFunc(ih, v)
+		
+	case HelpFunc:
+		SetHelpFunc(ih, v)
+		
+	case ButtonFunc:
+		SetButtonFunc(ih, v)
+	}
+}
 
 /*******************************************************************************
 **
@@ -42,19 +79,16 @@ var controlsLibOpened = false
 func Button(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
-	
-	ih := &Ihandle{h: C.IupButton(cTitle, nil)}
+
+	ih := (*Ihandle)(C.IupButton(cTitle, nil))
 	
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-			
 		case ActionFunc:
-			ih.SetActionFunc(v)
-				
+			SetActionFunc(ih, v)
+			
 		default:
-			// TODO: Do something here, runtime error?
+			Decorate(ih, o)
 		}
 	}
 	
@@ -62,67 +96,91 @@ func Button(title string, opts ...interface{}) *Ihandle {
 }
 
 func Canvas(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupCanvas(nil)}
-	
+	ih := (*Ihandle)(C.IupCanvas(nil))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
 func Frame(child *Ihandle, opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupFrame(child.h)}
-	
+	ih := (*Ihandle)(C.IupFrame(child.C()))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
-	
+
 func Label(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
-	
-	ih := &Ihandle{h: C.IupLabel(cTitle)}
-	
+
+	ih := (*Ihandle)(C.IupLabel(cTitle))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		case DropFilesFunc:
+			SetDropFilesFunc(ih, v)
+			
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
 func List(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupList(nil)}
-	
+	ih := (*Ihandle)(C.IupList(nil))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		case ListActionFunc:
+			SetListActionFunc(ih, v)
+			
+		case CaretFunc:
+			SetCaretFunc(ih, v)
+			
+		case DblclickFunc:
+			SetDblclickFunc(ih, v)
+			
+		case EditFunc:
+			SetEditFunc(ih, v)
+			
+		case MotionFunc:
+			SetMotionFunc(ih, v)
+			
+		case MultiselectFunc:
+			SetMultiselectFunc(ih, v)
+			
+		case ValueChangedFunc:
+			SetValueChangedFunc(ih, v)
+			
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
 func ProgressBar(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupProgressBar()}
-	
+	ih := (*Ihandle)(C.IupProgressBar())
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
 	
@@ -130,12 +188,12 @@ func ProgressBar(opts ...interface{}) *Ihandle {
 }
 
 func Spin(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupSpin()}
-	
+	ih := (*Ihandle)(C.IupSpin())
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
 	
@@ -143,103 +201,115 @@ func Spin(opts ...interface{}) *Ihandle {
 }
 
 func tabsv(ihs []*C.Ihandle) *Ihandle {
-	return &Ihandle{h: C.IupTabsv(&ihs[0])}
+	return (*Ihandle)(C.IupTabsv(&ihs[0]))
 }
 
 func Tabs(args ...*Ihandle) *Ihandle {
-	return tabsv(iHandleArrayToC(args))
+	return tabsv(IHandleArrayToC(args))
 }
 
 func Tabsv(args []*Ihandle, opts ...interface{}) *Ihandle {
-	ih := tabsv(iHandleArrayToC(args))
-	
-	for _, o := range opts {
-		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-		}
-	}
-	
-	return ih	
-}
+	ih := tabsv(IHandleArrayToC(args))
 
-func Text(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupText(nil)}
-	
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		case TabChangeFunc:
+			SetTabChangeFunc(ih, v)
 			
-		case TextActionFunc:
-			ih.SetTextActionFunc(v)
+		case TabChangePosFunc:
+			SetTabChangePosFunc(ih, v)
 			
 		default:
-			// TODO: Do something here, runtime error?
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
-func (ih *Ihandle) TextConvertLinColToPos(lin, col int) int {
+func Text(opts ...interface{}) *Ihandle {
+	ih := (*Ihandle)(C.IupText(nil))
+
+	for _, o := range opts {
+		switch v := o.(type) {
+		case TextActionFunc:
+			SetTextActionFunc(ih, v)
+
+		default:
+			Decorate(ih, o)
+		}
+	}
+
+	return ih
+}
+
+func TextConvertLinColToPos(ih *Ihandle, lin, col int) int {
 	pos := new(C.int)
-	C.IupTextConvertLinColToPos(ih.h, C.int(lin), C.int(col), pos)	
+	C.IupTextConvertLinColToPos(ih.C(), C.int(lin), C.int(col), pos)
 	return int(*pos)
 }
 
-func (ih *Ihandle) TextConvertPosToLinCol(pos int) (int, int) {
+func TextConvertPosToLinCol(ih *Ihandle, pos int) (int, int) {
 	lin := new(C.int)
 	col := new(C.int)
-	
-	C.IupTextConvertPosToLinCol(ih.h, C.int(pos), lin, col)
-	
+
+	C.IupTextConvertPosToLinCol(ih.C(), C.int(pos), lin, col)
+
 	return int(*lin), int(*col)
 }
 
 func Toggle(title string, opts ...interface{}) *Ihandle {
 	cTitle := C.CString(title)
 	defer C.free(unsafe.Pointer(cTitle))
-	
-	ih := &Ihandle{h: C.IupToggle(cTitle, nil)}
-	
+
+	ih := (*Ihandle)(C.IupToggle(cTitle, nil))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		case ToggleActionFunc:
+			SetToggleActionFunc(ih, v)
+			
+		case ValueChangedFunc:
+			SetValueChangedFunc(ih, v)
+			
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
-	return ih	
+
+	return ih
 }
 
 func Tree(opts ...interface{}) *Ihandle {
-	ih := &Ihandle{h: C.IupTree()}
-	
+	ih := (*Ihandle)(C.IupTree())
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
 func Val(orientation string, opts ...interface{}) *Ihandle {
 	cOrientation := C.CString(orientation)
 	defer C.free(unsafe.Pointer(cOrientation))
-	
-	ih := &Ihandle{h: C.IupVal(cOrientation)}
-	
+
+	ih := (*Ihandle)(C.IupVal(cOrientation))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		case ValueChangedFunc:
+			SetValueChangedFunc(ih, v)
+			
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
-	return ih	
+
+	return ih
 }
 
 /*******************************************************************************
@@ -248,183 +318,128 @@ func Val(orientation string, opts ...interface{}) *Ihandle {
 **
 *******************************************************************************/
 
-func ensureControlLibOpened() {
-	if controlsLibOpened == false {
-		C.IupControlsOpen()
-		controlsLibOpened = true
-	}
-}
-
 func Cells(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-	
-	ih := &Ihandle{h: C.IupCells()}
-	
+	OpenControlLib()
+
+	ih := (*Ihandle)(C.IupCells())
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
 func Colorbar(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-	
-	ih := &Ihandle{h: C.IupColorbar()}
-	
+	OpenControlLib()
+
+	ih := (*Ihandle)(C.IupColorbar())
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
 func ColorBrowser(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-	
-	ih := &Ihandle{h: C.IupColorBrowser()}
-	
+	OpenControlLib()
+
+	ih := (*Ihandle)(C.IupColorBrowser())
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
 func Dial(orientation string, opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-	
+	OpenControlLib()
+
 	cOrientation := C.CString(orientation)
 	defer C.free(unsafe.Pointer(cOrientation))
-	
-	ih := &Ihandle{h: C.IupDial(cOrientation)}
-	
+
+	ih := (*Ihandle)(C.IupDial(cOrientation))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
-	return ih	
+
+	return ih
 }
 
 func Matrix(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-	
-	ih := &Ihandle{h: C.IupMatrix(nil)}
-	
+	OpenControlLib()
+
+	ih := (*Ihandle)(C.IupMatrix(nil))
+
 	for _, o := range opts {
 		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
+		default:
+			Decorate(ih, o)
 		}
 	}
-	
+
 	return ih
 }
 
-func (ih *Ihandle) MatSetAttribute(name string, lin int, col int, value unsafe.Pointer) {
+func MatSetAttribute(ih *Ihandle, name string, lin int, col int, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
-	C.IupMatSetAttribute(ih.h, cName, C.int(lin), C.int(col), (*C.char)(value))
+
+	C.IupMatSetAttribute(ih.C(), cName, C.int(lin), C.int(col), (*C.char)(value))
 }
 
-func (ih *Ihandle) MatStoreAttribute(name string, lin int, col int, value string) {
+func MatStoreAttribute(ih *Ihandle, name string, lin int, col int, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
-	
-	C.IupMatStoreAttribute(ih.h, cName, C.int(lin), C.int(col), cValue)
+
+	C.IupMatStoreAttribute(ih.C(), cName, C.int(lin), C.int(col), cValue)
 }
 
-func (ih *Ihandle) MatGetAttribute(name string, lin int, col int) string {
+func MatGetAttribute(ih *Ihandle, name string, lin int, col int) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
-	return C.GoString(C.IupMatGetAttribute(ih.h, cName, C.int(lin), C.int(col)))
+
+	return C.GoString(C.IupMatGetAttribute(ih.C(), cName, C.int(lin), C.int(col)))
 }
 
-func (ih *Ihandle) MatGetInt(name string, lin int, col int) int64 {
+func MatGetInt(ih *Ihandle, name string, lin int, col int) int64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
-	return int64(C.IupMatGetInt(ih.h, cName, C.int(lin), C.int(col)))	
+
+	return int64(C.IupMatGetInt(ih.C(), cName, C.int(lin), C.int(col)))
 }
 
-func (ih *Ihandle) MatGetFloat(name string, lin int, col int) float64 {
+func MatGetFloat(ih *Ihandle, name string, lin int, col int) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
-	return float64(C.IupMatGetFloat(ih.h, cName, C.int(lin), C.int(col)))
+
+	return float64(C.IupMatGetFloat(ih.C(), cName, C.int(lin), C.int(col)))
 }
 
-func (ih *Ihandle) MatSetfAttribute(name string, lin int, col int, format string, args ...interface{}) {
-	ih.MatStoreAttribute(name, lin, col, fmt.Sprintf(format, args...))
-}
-
-func GLCanvas(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-	
-	ih := &Ihandle{h: C.IupGLCanvas(nil)}
-	
-	for _, o := range opts {
-		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-		}
-	}
-	
-	return ih
-}
-
-func PPlot(opts ...interface{}) *Ihandle {
-	ensureControlLibOpened()
-	
-	ih := &Ihandle{h: C.IupPPlot()}
-	
-	for _, o := range opts {
-		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-		}
-	}
-	
-	return ih
+func MatSetfAttribute(ih *Ihandle, name string, lin int, col int, format string, args ...interface{}) {
+	MatStoreAttribute(ih, name, lin, col, fmt.Sprintf(format, args...))
 }
 
 func OleControl(opts ...interface{}) *Ihandle {
 	panic("OleControl is not yet implemented")
-	
-	return nil
-}
 
-func WebBrowser(opts ...interface{}) *Ihandle {
-	panic("WebBrowser is not yet implemented")
-	
 	return nil
-	/*
-	ih := &Ihandle{h: C.IupWebBrowser()}
-	
-	for _, o := range opts {
-		switch v := o.(type) {
-		case string:
-			ih.SetAttributes(v)
-		}
-	}
-	
-	return ih
-	*/
 }

@@ -32,74 +32,74 @@ import "unsafe"
 import "fmt"
 import "bytes"
 
-func (ih *Ihandle) StoreAttribute(name, value string) {
+func StoreAttribute(ih *Ihandle, name, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
 
-	C.IupStoreAttribute(ih.h, cName, cValue)
+	C.IupStoreAttribute((*C.Ihandle)(ih), cName, cValue)
 }
 
-func (ih *Ihandle) StoreAttributeId(name string, id int, value string) {
+func StoreAttributeId(ih *Ihandle, name string, id int, value string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
 	cValue := C.CString(value)
 	defer C.free(unsafe.Pointer(cValue))
 
-	C.IupStoreAttributeId(ih.h, cName, C.int(id), cValue)
+	C.IupStoreAttributeId((*C.Ihandle)(ih), cName, C.int(id), cValue)
 }
 
-func (ih *Ihandle) SetAttribute(name string, value unsafe.Pointer) {
+func SetAttribute(ih *Ihandle, name string, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupSetAttribute(ih.h, cName, (*C.char)(value))
+	C.IupSetAttribute((*C.Ihandle)(ih), cName, (*C.char)(value))
 }
 
-func (ih *Ihandle) SetAttributeId(name string, id int, value unsafe.Pointer) {
+func SetAttributeId(ih *Ihandle, name string, id int, value unsafe.Pointer) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupSetAttributeId(ih.h, cName, C.int(id), (*C.char)(value))
+	C.IupSetAttributeId((*C.Ihandle)(ih), cName, C.int(id), (*C.char)(value))
 }
 
-func (ih *Ihandle) SetfAttribute(name, format string, args ...interface{}) {
-	ih.StoreAttribute(name, fmt.Sprintf(format, args...))
+func SetfAttribute(ih *Ihandle, name, format string, args ...interface{}) {
+	StoreAttribute(ih, name, fmt.Sprintf(format, args...))
 }
 
-func (ih *Ihandle) SetfAttributeId(name string, id int, format string, args ...interface{}) {
-	ih.StoreAttributeId(name, id, fmt.Sprintf(format, args...))
+func SetfAttributeId(ih *Ihandle, name string, id int, format string, args ...interface{}) {
+	StoreAttributeId(ih, name, id, fmt.Sprintf(format, args...))
 }
 
-func (ih *Ihandle) SetfAttributeId2(name string, lin int, col int, format string, args ...interface{}) {
+func SetfAttributeId2(ih *Ihandle, name string, lin int, col int, format string, args ...interface{}) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	cValue := C.CString(fmt.Sprintf(format, args...))
 	defer C.free(unsafe.Pointer(cValue))
 
-	C._IupSetfAttributeId2(ih.h, cName, C.int(lin), C.int(col), cValue)
+	C._IupSetfAttributeId2((*C.Ihandle)(ih), cName, C.int(lin), C.int(col), cValue)
 }
 
-func (ih *Ihandle) SetAttributes(values string) {
+func SetAttributes(ih *Ihandle, values string) {
 	cValues := C.CString(values)
 	defer C.free(unsafe.Pointer(cValues))
 
-	C.IupSetAttributes(ih.h, cValues)
+	C.IupSetAttributes((*C.Ihandle)(ih), cValues)
 }
 
-func (ih *Ihandle) ResetAttribute(name string) {
+func ResetAttribute(ih *Ihandle, name string) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupResetAttribute(ih.h, cName)
+	C.IupResetAttribute((*C.Ihandle)(ih), cName)
 }
 
 // Warning: handle_name is ignored
-func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
+func SetAtt(ih *Ihandle, handle_name string, args ...string) *Ihandle {
 	attrs := bytes.NewBufferString("")
 	for i := 0; i < len(args); i += 2 {
 		if i > 0 {
@@ -107,9 +107,9 @@ func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
 		}
 		attrs.WriteString(fmt.Sprintf("%s=\"%s\"", args[i], args[i+1]))
 	}
-	
-	ih.SetAttributes(attrs.String())
-	
+
+	SetAttributes(ih, attrs.String())
+
 	return ih
 }
 
@@ -120,68 +120,68 @@ func (ih *Ihandle) SetAtt(handle_name string, args ...string) *Ihandle {
 //
 // C Iup provides SetAtt for this purpose but in Go Iup SetAttrs is an easier method to
 // accomplish this task due to no necessity of handle_name.
-func (ih *Ihandle) SetAttrs(args ...string) *Ihandle {
-	return ih.SetAtt("", args...)
+func SetAttrs(ih *Ihandle, args ...string) *Ihandle {
+	return SetAtt(ih, "", args...)
 }
 
-func (ih *Ihandle) SetAttributeHandle(name string, ihNamed *Ihandle) {
+func SetAttributeHandle(ih *Ihandle, name string, ihNamed *Ihandle) {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	C.IupSetAttributeHandle(ih.h, cName, ihNamed.h)
+	C.IupSetAttributeHandle((*C.Ihandle)(ih), cName, (*C.Ihandle)(ihNamed))
 }
 
-func (ih *Ihandle) GetAttributeHandle(name string) *Ihandle {
-	cName := C.CString(name)
-	defer C.free(unsafe.Pointer(cName))
-	
-	return &Ihandle{h: C.IupGetAttributeHandle(ih.h, cName)}
-}
-
-func (ih *Ihandle) GetAttribute(name string) string {
+func GetAttributeHandle(ih *Ihandle, name string) *Ihandle {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return C.GoString(C.IupGetAttribute(ih.h, cName))
+	return (*Ihandle)(C.IupGetAttributeHandle((*C.Ihandle)(ih), cName))
 }
 
-func (ih *Ihandle) GetAttributeId(name string, id int) string {
+func GetAttribute(ih *Ihandle, name string) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return C.GoString(C.IupGetAttributeId(ih.h, cName, C.int(id)))
+	return C.GoString(C.IupGetAttribute((*C.Ihandle)(ih), cName))
 }
 
-func (ih *Ihandle) GetIntId(name string, id int) int {
+func GetAttributeId(ih *Ihandle, name string, id int) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return int(C.IupGetIntId(ih.h, cName, C.int(id)))
+	return C.GoString(C.IupGetAttributeId((*C.Ihandle)(ih), cName, C.int(id)))
 }
 
-func (ih *Ihandle) GetFloatId(name string, id int) float64 {
+func GetIntId(ih *Ihandle, name string, id int) int {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return float64(C.IupGetFloatId(ih.h, cName, C.int(id)))
+	return int(C.IupGetIntId((*C.Ihandle)(ih), cName, C.int(id)))
 }
 
-func (ih *Ihandle) GetAttributes() string {
-	return C.GoString(C.IupGetAttributes(ih.h))
-}
-
-func (ih *Ihandle) GetFloat(name string) float64 {
+func GetFloatId(ih *Ihandle, name string, id int) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return float64(C.IupGetFloat(ih.h, cName))
+	return float64(C.IupGetFloatId((*C.Ihandle)(ih), cName, C.int(id)))
 }
 
-func (ih *Ihandle) GetInt(name string) int64 {
+func GetAttributes(ih *Ihandle) string {
+	return C.GoString(C.IupGetAttributes((*C.Ihandle)(ih)))
+}
+
+func GetFloat(ih *Ihandle, name string) float64 {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
 
-	return int64(C.IupGetInt(ih.h, cName))
+	return float64(C.IupGetFloat((*C.Ihandle)(ih), cName))
+}
+
+func GetInt(ih *Ihandle, name string) int64 {
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+
+	return int64(C.IupGetInt((*C.Ihandle)(ih), cName))
 }
 
 func StoreGlobal(name, value string) {
@@ -201,9 +201,9 @@ func SetGlobal(name string, value unsafe.Pointer) {
 	C.IupSetGlobal(cName, (*C.char)(value))
 }
 
-func GetGlobal(name string) string {	
+func GetGlobal(name string) string {
 	cName := C.CString(name)
 	defer C.free(unsafe.Pointer(cName))
-	
+
 	return C.GoString(C.IupGetGlobal(cName))
 }

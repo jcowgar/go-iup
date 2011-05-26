@@ -17,24 +17,30 @@
 	License along with go-iup.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package iup
+package pplot
 
 /*
+#cgo LDFLAGS: -liupcontrols -liuptuio
+#cgo linux LDFLAGS: -liupgtk
+#cgo windows LDFLAGS: -liup -lgdi32 -lole32 -lcomdlg32 -lcomctl32
+
+#include <stdlib.h>
 #include <iup.h>
+#include <iupcontrols.h>
+#include <iuptuio.h>
 */
 import "C"
+import . "github.com/jcowgar/go-iup"
 
-const DEFAULT = C.IUP_DEFAULT
-const CLOSE = C.IUP_CLOSE
-const IGNORE = C.IUP_IGNORE
-const CONTINUE = C.IUP_CONTINUE
+var tuioLibOpened = false
 
-const LEFT = C.IUP_LEFT
-const CENTER = C.IUP_CENTER
-const RIGHT = C.IUP_RIGHT
-const MOUSEPOS = C.IUP_MOUSEPOS
-const CENTERPARENT = C.IUP_CENTERPARENT
-const CURRENT = C.IUP_CURRENT
-
-const RECBINARY = C.IUP_RECBINARY
-const RECTEXT = C.IUP_RECTEXT
+func TuioClient(port int) *Ihandle {
+	OpenControlLib()
+	
+	if tuioLibOpened == false {
+		C.IupTuioOpen()
+		tuioLibOpened = true
+	}
+	
+	return (*Ihandle)(C.IupTuioClient(C.int(port)))
+}
